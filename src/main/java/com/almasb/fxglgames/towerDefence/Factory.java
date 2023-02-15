@@ -14,7 +14,7 @@ public class Factory implements EntityFactory {
     public Entity newTestEntity(SpawnData data)
     {
         Entity entity = FXGL.entityBuilder(data)
-            .view(new Circle(20, Color.GREEN))
+            .view(new Circle(20, Color.RED))
             .type(TowerDefenceApp.Type.TEST)//Types are defined in TowerDefenceApp.java
             .anchorFromCenter()
             .with(new TestEntityComponent(5))
