@@ -97,8 +97,10 @@ public class TowerDefenceApp extends GameApplication {
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new Factory());
+        //Level entities must be spawned AFTER setting the level
+        setLevelFromMap("tmx/FirstTilemapHACK.tmx");
 
-        testEntity = spawn("testEntity", getAppCenter());
+        testEntity = spawn("testEntity", getAppWidth()-45,getAppHeight()/2);
     }
 
     @Override
