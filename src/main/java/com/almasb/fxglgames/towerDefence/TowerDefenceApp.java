@@ -68,7 +68,7 @@ public class TowerDefenceApp extends GameApplication {
             protected void onActionBegin() {
                 if(getInput().getMousePositionWorld().distance(testEntity.getCenter()) < 0.5 * 40)
                     dragging = true;
-                    System.out.println("mousedown");
+                System.out.println("mousedown");
             }
 
             @Override
@@ -98,9 +98,9 @@ public class TowerDefenceApp extends GameApplication {
     protected void initGame() {
         getGameWorld().addEntityFactory(new Factory());
         //Level entities must be spawned AFTER setting the level
-        setLevelFromMap("tmx/FirstTilemapHACK.tmx");
+        setLevelFromMap("tmx/FirstTilemap.tmx");
 
-        testEntity = spawn("testEntity", getAppWidth()-45,getAppHeight()/2);
+        testEntity = spawn("testEntity", getAppWidth()-45,0.5*getAppHeight());
     }
 
     @Override
