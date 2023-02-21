@@ -5,7 +5,7 @@ plugins {
 }
 
 application {
-    mainModule = 'toweDefence.main'
+    mainModule = 'towerDefence.main'
     mainClass = 'com.almasb.fxglgames.towerDefence.TowerDefenceApp'
 }
 
