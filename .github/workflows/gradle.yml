@@ -41,4 +41,4 @@ jobs:
         gradle-version: current
     
     - name: Execute Gradle build
-      run: ./gradlew build --debug
+      run: ./gradlew build
