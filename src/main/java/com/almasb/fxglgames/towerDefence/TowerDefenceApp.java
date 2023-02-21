@@ -8,9 +8,11 @@ package com.almasb.fxglgames.towerDefence;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
@@ -31,11 +33,12 @@ public class TowerDefenceApp extends GameApplication {
         TOWER, ENEMY, PROJECTILE, TEST
     }
     Entity testEntity;
+    Entity testTower;
 
     @Override
     protected void initSettings(GameSettings settings) {
         // initialize common game / window settings.
-        settings.setTitle("Tower Defence");
+        settings.setTitle("Tower Defense");
         settings.setVersion("0.01");
         settings.setWidth(1080);
         settings.setHeight(720);
@@ -56,6 +59,7 @@ public class TowerDefenceApp extends GameApplication {
             @Override
             protected void onAction() {
                 testEntity.getComponent(TestEntityComponent.class).moveUp();
+                testTower.getComponent(TestTower.class).moveUp();
                 //System.out.println("keydown");
 
             }
@@ -66,20 +70,31 @@ public class TowerDefenceApp extends GameApplication {
             boolean dragging = false;
             @Override
             protected void onActionBegin() {
-                if(getInput().getMousePositionWorld().distance(testEntity.getCenter()) < 0.5 * 40)
+                if(getInput().getMousePositionWorld().distance(testEntity.getCenter()) < 0.5 * 40) {
                     dragging = true;
+                }else if(getInput().getMousePositionWorld().distance(testTower.getCenter()) < 0.5 * 40){
+                    testTower.getComponent(TestTower.class).setDragStatus(true);
+                    //testTower.getComponent(TestTower.class).moveToPos((getInput().getMousePositionWorld()));
+                    //dragging = true;
+                }
                 System.out.println("mousedown");
             }
 
             @Override
             protected void onAction() {
-                if(dragging)
+                if(dragging){
                     testEntity.getComponent(TestEntityComponent.class).moveToPos(getInput().getMousePositionWorld());
+                }else if(testTower.getComponent(TestTower.class).getDragStatus()){
+                    testTower.getComponent(TestTower.class).moveToPos(getInput().getMousePositionWorld());
+                }
+
             }
 
             @Override
             protected void onActionEnd() {
                 dragging = false;
+                Point2D initPoint = new Point2D(getAppWidth() -45,getAppHeight() * 0.6);
+                testTower.getComponent(TestTower.class).moveToPos(initPoint);
                 // Check if the tile that the mouse is positioned over is placeable.
 
                 // If so, move tower position to the center of that tile and activate it.
@@ -100,7 +115,8 @@ public class TowerDefenceApp extends GameApplication {
         //Level entities must be spawned AFTER setting the level
         setLevelFromMap("tmx/FirstTilemap.tmx");
 
-        testEntity = spawn("testEntity", getAppWidth()-45,0.5*getAppHeight());
+        testTower = spawn("testTower",getAppWidth() -45, 0.6 * getAppHeight());
+        testEntity = spawn("testEntity", getAppWidth()-45,0.5 * getAppHeight());
     }
 
     @Override

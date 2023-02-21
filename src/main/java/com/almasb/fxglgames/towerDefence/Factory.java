@@ -22,6 +22,19 @@ public class Factory implements EntityFactory {
 
         return entity;
     }
+    //creating entity of type TOWER
+    @Spawns("testTower")
+    public Entity newTestTower(SpawnData data)
+    {
+        Entity entity = FXGL.entityBuilder(data)
+                .view(new Circle(20,Color.RED))
+                .type(TowerDefenceApp.Type.TOWER)
+                .anchorFromCenter()
+                .with(new TestTower(5))
+                .build();
+
+        return entity;
+    }
 
     /*
      *  Map entities
