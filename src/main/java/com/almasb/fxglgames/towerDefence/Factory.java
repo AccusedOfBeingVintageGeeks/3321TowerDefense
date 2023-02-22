@@ -1,12 +1,19 @@
 package com.almasb.fxglgames.towerDefence;
 
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.dsl.components.WaypointMoveComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+
+import java.util.List;
+
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 
 public class Factory implements EntityFactory {
     @Spawns("testEntity")
@@ -18,6 +25,28 @@ public class Factory implements EntityFactory {
                 .anchorFromCenter()
                 //.zIndex(999)
                 .with(new TestEntityComponent(5))
+                .build();
+
+        return entity;
+    }
+
+    /*
+     *  Enemy entities
+     */
+    @Spawns("scrub")
+    public Entity newScrub(SpawnData data)
+    {
+        final int SPEED = 100;
+
+        Entity pathEntity = getGameWorld().getEntitiesByType(TowerDefenceApp.Type.PATH).get(0);
+        List<Point2D> waypoints = MapTools.getPointsFromPathEntity(pathEntity);
+
+        //List<Point2D>
+        Entity entity = FXGL.entityBuilder(data)
+                .type(TowerDefenceApp.Type.ENEMY)
+                .view(new Rectangle(45,45, Color.LIGHTGREEN))
+                .at(waypoints.get(0))
+                .with(new WaypointMoveComponent(SPEED, waypoints))
                 .build();
 
         return entity;
@@ -36,6 +65,7 @@ public class Factory implements EntityFactory {
     public Entity newPath(SpawnData data)
     {
         return FXGL.entityBuilder(data)
+                .type(TowerDefenceApp.Type.PATH)
                 .build();
     }
 }

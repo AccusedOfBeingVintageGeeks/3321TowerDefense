@@ -8,6 +8,7 @@ package com.almasb.fxglgames.towerDefence;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.dsl.components.WaypointMoveComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
@@ -28,9 +29,9 @@ public class TowerDefenceApp extends GameApplication {
      */
     public enum Type {
         // If we give Entities a Type we can reference entities of that type. Optional
-        TOWER, ENEMY, PROJECTILE, TEST
+        TOWER, ENEMY, PROJECTILE, PATH, TEST
     }
-    Entity testEntity;
+    Entity testEntity, scrub;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -39,6 +40,7 @@ public class TowerDefenceApp extends GameApplication {
         settings.setVersion("0.01");
         settings.setWidth(1080);
         settings.setHeight(720);
+        settings.setGameMenuEnabled(true);
     }
 
     @Override
@@ -101,6 +103,8 @@ public class TowerDefenceApp extends GameApplication {
         setLevelFromMap("tmx/FirstTilemap.tmx");
 
         testEntity = spawn("testEntity", getAppWidth()-45,0.5*getAppHeight());
+
+        scrub = spawn("scrub", 50,50);
     }
 
     @Override
@@ -112,6 +116,15 @@ public class TowerDefenceApp extends GameApplication {
     protected void onUpdate(double tpf) {
         // runs every frame, probably
         // tpf seems to be time per frame in seconds, or delta time between frames.
+
+        if(scrub.getComponent(WaypointMoveComponent.class).atDestinationProperty().get())
+        {
+            getGameController().pauseEngine();
+            //getDialogService().showMessageBox("GAME OVER");
+            getDialogService().showMessageBox("GAME OVER", () -> {
+                //Do something when player clicks 'OK'
+            });
+        }
     }
 
     public static void main(String[] args) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="22" height="16" tilewidth="45" tileheight="45" infinite="0" nextlayerid="4" nextobjectid="8">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="22" height="16" tilewidth="45" tileheight="45" infinite="0" nextlayerid="4" nextobjectid="23">
  <editorsettings>
   <export target="../FirstTilemap.json" format="json"/>
  </editorsettings>
@@ -27,31 +27,15 @@
 </data>
  </layer>
  <objectgroup id="2" name="Object Layer 1">
-  <object id="3" name="blocked_tile" class="blocked_tile" x="90" y="0" width="495" height="90">
-   <properties>
-    <property name="Type" value="blocked_tile"/>
-   </properties>
-  </object>
-  <object id="4" name="blocked_tile" class="blocked_tile" x="900" y="0" width="90" height="135">
-   <properties>
-    <property name="Type" value="blocked_tile"/>
-   </properties>
-  </object>
-  <object id="5" name="blocked_tile" class="blocked_tile" x="0" y="360" width="180" height="360">
-   <properties>
-    <property name="Type" value="blocked_tile"/>
-   </properties>
-  </object>
-  <object id="6" name="blocked_tile" class="blocked_tile" x="270" y="540" width="180" height="90">
-   <properties>
-    <property name="Type" value="blocked_tile"/>
-   </properties>
-  </object>
+  <object id="3" name="blocked_tiles" class="blocked_tile" x="90" y="0" width="495" height="90"/>
+  <object id="4" name="blocked_tiles" class="blocked_tile" x="900" y="0" width="90" height="135"/>
+  <object id="5" name="blocked_tiles" class="blocked_tile" x="0" y="360" width="180" height="360"/>
+  <object id="6" name="blocked_tile" class="blocked_tile" x="270" y="540" width="180" height="90"/>
   <object id="7" name="path" class="path" x="990" y="540">
-   <properties>
-    <property name="Type" value="path"/>
-   </properties>
    <polyline points="0,0 -180,0 -180,-405 -270,-405 -270,-270 -405,-270 -405,90 -765,90 -765,-45 -540,-45 -540,-450 -810,-450 -810,-225 -990,-225"/>
+  </object>
+  <object id="21" name="path_tiles" class="blocked_tile" x="990" y="540">
+   <polygon points="0,0 -135,0 -135,-405 -270,-405 -270,-270 -405,-270 -405,90 -720,90 -720,0 -495,0 -495,-450 -810,-450 -810,-225 -990,-225 -990,-180 -765,-180 -765,-405 -540,-405 -540,-45 -765,-45 -765,135 -360,135 -360,-225 -225,-225 -225,-360 -180,-360 -180,45 0,45"/>
   </object>
  </objectgroup>
 </map>
