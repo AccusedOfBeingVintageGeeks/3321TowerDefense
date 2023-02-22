@@ -12,4 +12,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - build.gradle
 - README
 - added git workflow
-- added TestTower class to familiarize with code
+- added TestTower class 
