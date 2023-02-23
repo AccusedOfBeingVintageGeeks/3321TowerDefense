@@ -20,16 +20,16 @@ permissions:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     
     - uses: actions/checkout@v3
     
-    - name: Set up JDK 11
+    - name: Set up JDK
       uses: actions/setup-java@v3
       with:
-        java-version: '11'
+        java-version: '17.0.2'
         distribution: 'temurin'
         
     - name: Make gradlew executable
@@ -37,6 +37,8 @@ jobs:
       
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
+      with:
+        gradle-version: current
     
     - name: Execute Gradle build
       run: ./gradlew build
