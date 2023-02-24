@@ -55,6 +55,13 @@ public class TowerDefenceApp extends GameApplication {
         //We can probably refactor later so that the UserActions below are initialized from methods in a UserActions class
 
         Input input = getInput();
+        UserAction shootTest = new UserAction("shoot") {
+            @Override
+            protected void onAction(){
+                towerComponent.getComponent(TowerComponent.class).shoot(testEntity);
+            }
+        };
+        input.addAction(shootTest,KeyCode.SPACE);
 
         UserAction moveUp = new UserAction("Move Up") {
             @Override
@@ -62,7 +69,6 @@ public class TowerDefenceApp extends GameApplication {
                 testEntity.getComponent(TestEntityComponent.class).moveUp();
                 towerComponent.getComponent(TowerComponent.class).moveUp();
                 //System.out.println("keydown");
-
             }
         };
 
@@ -75,10 +81,7 @@ public class TowerDefenceApp extends GameApplication {
                     dragging = true;
                 }else if(getInput().getMousePositionWorld().distance(towerComponent.getCenter()) < 0.5 * 40){
                     towerComponent.getComponent(TowerComponent.class).setDragStatus(true);
-                    //testTower.getComponent(TestTower.class).moveToPos((getInput().getMousePositionWorld()));
-                    //dragging = true;
                 }
-                System.out.println("mousedown");
             }
 
             @Override
@@ -87,9 +90,7 @@ public class TowerDefenceApp extends GameApplication {
                     testEntity.getComponent(TestEntityComponent.class).moveToPos(getInput().getMousePositionWorld());
                 }else if(towerComponent.getComponent(TowerComponent.class).getDragStatus()){
                     towerComponent.getComponent(TowerComponent.class).moveToPos(getInput().getMousePositionWorld());
-                    towerComponent.getComponent(TowerComponent.class).shoot(testEntity.getComponent(TestEntityComponent.class).getEntity());
                 }
-
             }
 
             @Override
@@ -98,7 +99,6 @@ public class TowerDefenceApp extends GameApplication {
                 Point2D initPoint = new Point2D(getAppWidth() -45,getAppHeight() * 0.6);
                 towerComponent.getComponent(TowerComponent.class).moveToPos(initPoint);
                 // Check if the tile that the mouse is positioned over is placeable.
-
                 // If so, move tower position to the center of that tile and activate it.
 
                 // If the tile isn't placeable, or if the mouse isn't positioned over any tile,
@@ -108,7 +108,6 @@ public class TowerDefenceApp extends GameApplication {
 
         input.addAction(moveUp, KeyCode.W);
         input.addAction(drag, MouseButton.PRIMARY);
-
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.almasb.fxglgames.towerDefence;
 
-
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.Entity;
 public class TowerProjectileComponent extends Component {
@@ -8,7 +7,7 @@ public class TowerProjectileComponent extends Component {
     private Entity tower;
     private Entity prey;
 
-    private int speed = 50;
+    private int speed = 500;
     //speed can probably put into a different class (data class) and be retrieved from there
     //this should make it easier to change game settings
 
@@ -24,12 +23,11 @@ public class TowerProjectileComponent extends Component {
             return;
         }
         if(entity.distanceBBox(prey) < speed * tpf){
-            //preyHit();
+            preyHit();
             return;
         }
         entity.translateTowards(prey.getCenter(),speed * tpf);
     }
-
 
 
     private void preyHit(){

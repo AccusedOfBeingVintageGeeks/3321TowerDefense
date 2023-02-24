@@ -7,6 +7,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
+import com.almasb.fxgl.physics.BoundingShape;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -42,19 +43,6 @@ public class Factory implements EntityFactory {
 
         return entity;
     }
-    /*
-    @Spawns("Bullet")
-    public Entity newBullet(SpawnData data){
-        //var texture = FXGL.texture("projectile1.png");
-        Node view = new Rectangle(10,10,Color.BLUE);
-        view.setRotate(90);
-        return entityBuilder(data)
-                //.view(texture)
-                .viewWithBBox(view)
-                .with(new ProjectileComponent(new Point2D(-1,0),5))
-                .build();
-    }
-    */
 
 
     @Spawns("Projectile")
@@ -76,16 +64,22 @@ public class Factory implements EntityFactory {
                 .build();
     }
 
-
-
     /*
      *  Map entities
      */
     @Spawns("blocked_tile")
     public Entity newBlockedTile(SpawnData data)
     {
-        return FXGL.entityBuilder(data)
+        final int
+                WIDTH = data.<Integer>get("width"),
+                HEIGHT = data.<Integer>get("height");
+
+        Entity entity = FXGL.entityBuilder(data)
+                .bbox(BoundingShape.box(WIDTH,HEIGHT))
+                .view(new Rectangle(WIDTH, HEIGHT, Color.color(1, 0, 0, 0.3)))
                 .build();
+
+        return entity;
     }
     @Spawns("path")
     public Entity newPath(SpawnData data)
