@@ -4,7 +4,14 @@ import java.util.Collections;
 import java.util.List;
 public class DataForTower {
 
-    public record TowerData(
+    /**
+     * is used as data storage for TowerComponent class
+     * @param name
+     * @param imageName
+     * @param projectileImageName
+     * @param effects
+     */
+    public record TowerData( //will be implemented later on
             String name,
             String imageName,
             String projectileImageName,

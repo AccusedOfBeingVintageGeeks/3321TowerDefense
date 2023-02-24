@@ -29,6 +29,10 @@ public class TowerComponent extends Component {
     public void setPlacedStatus(boolean placedStatus){ isPlaced = placedStatus; }
     //getDamage class
 
+    /**
+     * TowerDefense Tower can be dragged and dropped, once dropped, shoots nearest enemy
+     * @param speed
+     */
     public TowerComponent(double speed)
     {
         this.speed = speed;
@@ -55,6 +59,10 @@ public class TowerComponent extends Component {
         projectile.rotateToVector(aim);
     }
 
+    /**
+     * prototype method for placing Tower (subject to change)
+     * @param placeableTile
+     */
     public void placeTower(Entity placeableTile)
     {
         Point2D placingPoint = placeableTile.getCenter();
@@ -62,10 +70,10 @@ public class TowerComponent extends Component {
         isPlaced = true;
     }
 
-
-
-
-
+    /**
+     * enables Tower movement and gets the nearest enemy to shoot (shoots entities of type TEST right now)
+     * @param tpf time per frame
+     */
     @Override
     public void onUpdate(double tpf)
     {
@@ -81,10 +89,19 @@ public class TowerComponent extends Component {
                     });
         }
     }
+
+    /**
+     * test method to move TowerComponent vertically
+     */
     public void moveUp()
     {
         transformComponent.translateY(-speed * frameRateScalar);
     }
+
+    /**
+     * moves TowerComponent to 2D Point in WorldSpace
+     * @param posInWorldSpace
+     */
     public void moveToPos(Point2D posInWorldSpace)
     {
         transformComponent.setPosition(posInWorldSpace);

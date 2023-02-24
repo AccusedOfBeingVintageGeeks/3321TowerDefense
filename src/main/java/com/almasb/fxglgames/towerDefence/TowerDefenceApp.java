@@ -93,16 +93,15 @@ public class TowerDefenceApp extends GameApplication {
                 }
             }
 
+            /**
+             * let go of mousebutton -> Tower returns to menu bar
+             */
             @Override
             protected void onActionEnd() {
                 dragging = false;
                 Point2D initPoint = new Point2D(getAppWidth() -45,getAppHeight() * 0.6);
                 towerComponent.getComponent(TowerComponent.class).moveToPos(initPoint);
-                // Check if the tile that the mouse is positioned over is placeable.
-                // If so, move tower position to the center of that tile and activate it.
 
-                // If the tile isn't placeable, or if the mouse isn't positioned over any tile,
-                // then move the tower's position back to its initial position in the menu bar or whatever.
             }
         };
 
