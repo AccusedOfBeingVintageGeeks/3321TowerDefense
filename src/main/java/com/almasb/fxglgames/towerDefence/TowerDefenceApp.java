@@ -13,7 +13,6 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
@@ -34,7 +33,8 @@ public class TowerDefenceApp extends GameApplication {
         TOWER, ENEMY, PROJECTILE, TEST
     }
     Entity testEntity;
-    Entity towerComponent;
+    Entity towerEntity;
+    LevelMap testLevelMap;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -58,7 +58,7 @@ public class TowerDefenceApp extends GameApplication {
         UserAction shootTest = new UserAction("shoot") {
             @Override
             protected void onAction(){
-                towerComponent.getComponent(TowerComponent.class).shoot(testEntity);
+                towerEntity.getComponent(TowerComponent.class).shoot(testEntity);
             }
         };
         input.addAction(shootTest,KeyCode.SPACE);
@@ -67,7 +67,7 @@ public class TowerDefenceApp extends GameApplication {
             @Override
             protected void onAction() {
                 testEntity.getComponent(TestEntityComponent.class).moveUp();
-                towerComponent.getComponent(TowerComponent.class).moveUp();
+                towerEntity.getComponent(TowerComponent.class).moveUp();
                 //System.out.println("keydown");
             }
         };
@@ -75,12 +75,13 @@ public class TowerDefenceApp extends GameApplication {
         UserAction drag = new UserAction("Drag") {
             //For drag and drop
             boolean dragging = false;
+            Entity draggedEntity;//Maybe we should set this in onActionBegin
             @Override
             protected void onActionBegin() {
                 if(getInput().getMousePositionWorld().distance(testEntity.getCenter()) < 0.5 * 40) {
                     dragging = true;
-                }else if(getInput().getMousePositionWorld().distance(towerComponent.getCenter()) < 0.5 * 40){
-                    towerComponent.getComponent(TowerComponent.class).setDragStatus(true);
+                }else if(getInput().getMousePositionWorld().distance(towerEntity.getCenter()) < 0.5 * 40){
+                    towerEntity.getComponent(TowerComponent.class).setDragStatus(true);
                 }
             }
 
@@ -88,8 +89,8 @@ public class TowerDefenceApp extends GameApplication {
             protected void onAction() {
                 if(dragging){
                     testEntity.getComponent(TestEntityComponent.class).moveToPos(getInput().getMousePositionWorld());
-                }else if(towerComponent.getComponent(TowerComponent.class).getDragStatus()){
-                    towerComponent.getComponent(TowerComponent.class).moveToPos(getInput().getMousePositionWorld());
+                }else if(towerEntity.getComponent(TowerComponent.class).getDragStatus()){
+                    towerEntity.getComponent(TowerComponent.class).moveToPos(getInput().getMousePositionWorld());
                 }
             }
 
@@ -99,9 +100,19 @@ public class TowerDefenceApp extends GameApplication {
             @Override
             protected void onActionEnd() {
                 dragging = false;
-                Point2D initPoint = new Point2D(getAppWidth() -45,getAppHeight() * 0.6);
-                towerComponent.getComponent(TowerComponent.class).moveToPos(initPoint);
 
+                IndexPair tileIndices = testLevelMap.getTileIndexFromPoint(getInput().getMousePositionWorld());
+
+                if(testLevelMap.isTileFree(tileIndices)) {      //if tile(x,y) is free
+                    //The circle is anchored from the center so there's an offset
+                    float radiusOffset = 45f/2f;
+                    Point2D snappedPos = testLevelMap.getTilePosition(tileIndices, radiusOffset, radiusOffset);
+                    towerEntity.getComponent(TowerComponent.class).moveToPos(snappedPos);
+                }
+                else {
+                    Point2D initPoint = new Point2D(getAppWidth() - testLevelMap.tileSize,getAppHeight() * 0.6);
+                    towerEntity.getComponent(TowerComponent.class).moveToPos(initPoint);
+                }
             }
         };
 
@@ -115,8 +126,9 @@ public class TowerDefenceApp extends GameApplication {
         //Level entities must be spawned AFTER setting the level
         setLevelFromMap("tmx/FirstTilemap.tmx");
 
-        towerComponent = spawn("towerComponent",getAppWidth() -45, 0.6 * getAppHeight());
-        testEntity = spawn("testEntity", getAppWidth()-45,0.5 * getAppHeight());
+        testLevelMap = new LevelMap(45,22,16);
+        towerEntity = spawn("towerComponent",getAppWidth() - testLevelMap.tileSize, 0.6 * getAppHeight());
+        testEntity = spawn("testEntity", getAppWidth()- testLevelMap.tileSize,0.5 * getAppHeight());
         //spawn("Projectile", FXGLMath.randomPoint(new Rectangle2D(0,0,getAppWidth(),getAppHeight())));
     }
 
