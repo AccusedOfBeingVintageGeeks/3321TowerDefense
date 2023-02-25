@@ -14,7 +14,9 @@ import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.util.Duration;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
@@ -31,7 +33,7 @@ public class TowerDefenceApp extends GameApplication {
         // If we give Entities a Type we can reference entities of that type. Optional
         TOWER, ENEMY, PROJECTILE, PATH, TEST
     }
-    Entity testEntity, scrub;
+    Entity testEntity;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -104,7 +106,9 @@ public class TowerDefenceApp extends GameApplication {
 
         testEntity = spawn("testEntity", getAppWidth()-45,0.5*getAppHeight());
 
-        scrub = spawn("scrub", 50,50);
+        run(() -> {
+            spawn("scrub", 50,50);
+        }, Duration.millis(1000));
     }
 
     @Override
@@ -114,16 +118,20 @@ public class TowerDefenceApp extends GameApplication {
 
     @Override
     protected void onUpdate(double tpf) {
-        // runs every frame, probably
-        // tpf seems to be time per frame in seconds, or delta time between frames.
 
-        if(scrub.getComponent(WaypointMoveComponent.class).atDestinationProperty().get())
-        {
-            getGameController().pauseEngine();
-            //getDialogService().showMessageBox("GAME OVER");
-            getDialogService().showMessageBox("GAME OVER", () -> {
-                //Do something when player clicks 'OK'
-            });
+        List<Entity> scrubs = getGameWorld().getEntitiesByType(Type.ENEMY);
+        for (Entity enemy: scrubs) {
+            if(enemy.getComponent(WaypointMoveComponent.class).atDestinationProperty().get())
+            {
+                // An enemy has made it to the end.
+                // There's probably a more efficient way of checking this...
+
+                getGameController().pauseEngine();
+                //getDialogService().showMessageBox("GAME OVER");
+                getDialogService().showMessageBox("GAME OVER", () -> {
+                    //Do something when player clicks 'OK'
+                });
+            }
         }
     }
 
