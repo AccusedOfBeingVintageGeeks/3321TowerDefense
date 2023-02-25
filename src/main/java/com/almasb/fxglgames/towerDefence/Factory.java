@@ -48,8 +48,17 @@ public class Factory implements EntityFactory {
                 .at(waypoints.get(0))
                 .with(new WaypointMoveComponent(SPEED, waypoints))
                 .build();
+        entity.setReusable(true);
 
         return entity;
+    }
+    public static void reinitializeScrub(Entity scrubEntity/*, SpawnData data*/)
+    {
+        // Reset every property that needs to be reset here.
+        //scrubEntity.setPosition();
+        //scrubEntity.getComponent(WaypointMoveComponent.class).
+
+        // Will need to fill this out later
     }
 
     /*
@@ -62,12 +71,10 @@ public class Factory implements EntityFactory {
                 WIDTH = data.<Integer>get("width"),
                 HEIGHT = data.<Integer>get("height");
 
-        Entity entity = FXGL.entityBuilder(data)
+        return FXGL.entityBuilder(data)
                 .bbox(BoundingShape.box(WIDTH, HEIGHT))
                 //.view(new Rectangle(WIDTH, HEIGHT, Color.color(1, 0, 0, 0.3))) //uncomment for debugging
                 .build();
-
-        return entity;
     }
     @Spawns("path")
     public Entity newPath(SpawnData data)
