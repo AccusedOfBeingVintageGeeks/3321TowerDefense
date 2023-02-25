@@ -10,7 +10,6 @@ import com.almasb.fxgl.physics.BoundingShape;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class Factory implements EntityFactory {
         //List<Point2D>
         Entity entity = FXGL.entityBuilder(data)
                 .type(TowerDefenceApp.Type.ENEMY)
-                .view(new Rectangle(45,45, Color.LIGHTGREEN))
+                .view("scrub.png")
                 .at(waypoints.get(0))
                 .with(new WaypointMoveComponent(SPEED, waypoints))
                 .build();

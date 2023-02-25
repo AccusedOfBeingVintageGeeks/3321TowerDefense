@@ -27,3 +27,5 @@ build/
 *.log
 logs/
 system/
+/.vscode/launch.json
+/.vscode/settings.json

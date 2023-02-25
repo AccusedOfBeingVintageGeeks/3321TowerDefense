@@ -8,6 +8,7 @@ package com.almasb.fxglgames.towerDefence;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.core.pool.Pool;
 import com.almasb.fxgl.dsl.components.WaypointMoveComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.Input;
@@ -106,8 +107,15 @@ public class TowerDefenceApp extends GameApplication {
 
         testEntity = spawn("testEntity", getAppWidth()-45,0.5*getAppHeight());
 
+        Pool<Entity> entityPool = new Pool<>() {
+            @Override
+            protected Entity newObject() {
+                return spawn("scrub", 50,50);
+            }
+        };
+
         run(() -> {
-            spawn("scrub", 50,50);
+            entityPool.obtain();
         }, Duration.millis(1000));
     }
 
