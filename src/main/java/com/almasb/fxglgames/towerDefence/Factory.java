@@ -2,14 +2,19 @@ package com.almasb.fxglgames.towerDefence;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.WaypointMoveComponent;
+import com.almasb.fxgl.dsl.components.AutoRotationComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.physics.BoundingShape;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+
+import static com.almasb.fxgl.dsl.FXGL.*;
 
 import java.util.List;
 
@@ -25,6 +30,19 @@ public class Factory implements EntityFactory {
                 .anchorFromCenter()
                 //.zIndex(999)
                 .with(new TestEntityComponent(5))
+                .build();
+
+        return entity;
+    }
+    //creating entity of type TOWER
+    @Spawns("towerComponent")
+    public Entity newTestTower(SpawnData data)
+    {
+        Entity entity = FXGL.entityBuilder(data)
+                .view(new Circle(20,Color.RED))
+                .type(TowerDefenceApp.Type.TOWER)
+                .anchorFromCenter()
+                .with(new TowerComponent(5))
                 .build();
 
         return entity;
@@ -59,6 +77,26 @@ public class Factory implements EntityFactory {
         //scrubEntity.getComponent(WaypointMoveComponent.class).
 
         // Will need to fill this out later
+    }
+
+
+    @Spawns("Projectile")
+    public Entity newProjectile(SpawnData data){
+
+        Node view = new Rectangle(10,10,Color.BLUE);
+        //view.setRotate(90);
+
+        Entity tower = data.get("tower");
+        Entity prey = data.get("prey");
+
+        return entityBuilder(data)
+                .type(TowerDefenceApp.Type.PROJECTILE)
+                .viewWithBBox(view)
+                .collidable()
+                .with(new TowerProjectileComponent(tower,prey))
+                .with(new AutoRotationComponent())
+                //.zIndex(444)
+                .build();
     }
 
     /*
