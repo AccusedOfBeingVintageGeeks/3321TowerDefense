@@ -8,12 +8,15 @@ package com.almasb.fxglgames.towerDefence;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.dsl.components.WaypointMoveComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.util.Duration;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
@@ -28,7 +31,7 @@ public class TowerDefenceApp extends GameApplication {
      */
     public enum Type {
         // If we give Entities a Type we can reference entities of that type. Optional
-        TOWER, ENEMY, PROJECTILE, TEST
+        TOWER, ENEMY, PROJECTILE, PATH, TEST
     }
     Entity testEntity;
 
@@ -39,6 +42,7 @@ public class TowerDefenceApp extends GameApplication {
         settings.setVersion("0.01");
         settings.setWidth(1080);
         settings.setHeight(720);
+        settings.setGameMenuEnabled(true);
     }
 
     @Override
@@ -101,6 +105,12 @@ public class TowerDefenceApp extends GameApplication {
         setLevelFromMap("tmx/FirstTilemap.tmx");
 
         testEntity = spawn("testEntity", getAppWidth()-45,0.5*getAppHeight());
+
+
+        run(() -> {
+            Entity scrubEntity = spawn("scrub", 50,50);
+            Factory.reinitializeScrub(scrubEntity);
+        }, Duration.millis(1000));
     }
 
     @Override
@@ -110,8 +120,21 @@ public class TowerDefenceApp extends GameApplication {
 
     @Override
     protected void onUpdate(double tpf) {
-        // runs every frame, probably
-        // tpf seems to be time per frame in seconds, or delta time between frames.
+
+        List<Entity> scrubs = getGameWorld().getEntitiesByType(Type.ENEMY);
+        for (Entity enemy: scrubs) {
+            if(enemy.getComponent(WaypointMoveComponent.class).atDestinationProperty().get())
+            {
+                // An enemy has made it to the end.
+                // There's probably a more efficient way of checking this...
+
+                getGameController().pauseEngine();
+                //getDialogService().showMessageBox("GAME OVER");
+                getDialogService().showMessageBox("GAME OVER", () -> {
+                    //Do something when player clicks 'OK'
+                });
+            }
+        }
     }
 
     public static void main(String[] args) {

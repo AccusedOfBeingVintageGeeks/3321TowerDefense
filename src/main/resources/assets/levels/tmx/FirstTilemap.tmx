@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="22" height="16" tilewidth="45" tileheight="45" infinite="0" nextlayerid="4" nextobjectid="8">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="22" height="16" tilewidth="45" tileheight="45" infinite="0" nextlayerid="4" nextobjectid="36">
  <editorsettings>
   <export target="../FirstTilemap.json" format="json"/>
  </editorsettings>
@@ -27,31 +27,25 @@
 </data>
  </layer>
  <objectgroup id="2" name="Object Layer 1">
-  <object id="3" name="blocked_tile" class="blocked_tile" x="90" y="0" width="495" height="90">
-   <properties>
-    <property name="Type" value="blocked_tile"/>
-   </properties>
-  </object>
-  <object id="4" name="blocked_tile" class="blocked_tile" x="900" y="0" width="90" height="135">
-   <properties>
-    <property name="Type" value="blocked_tile"/>
-   </properties>
-  </object>
-  <object id="5" name="blocked_tile" class="blocked_tile" x="0" y="360" width="180" height="360">
-   <properties>
-    <property name="Type" value="blocked_tile"/>
-   </properties>
-  </object>
-  <object id="6" name="blocked_tile" class="blocked_tile" x="270" y="540" width="180" height="90">
-   <properties>
-    <property name="Type" value="blocked_tile"/>
-   </properties>
-  </object>
+  <object id="3" name="blocked_tiles" class="blocked_tile" x="90" y="0" width="495" height="90"/>
+  <object id="4" name="blocked_tiles" class="blocked_tile" x="900" y="0" width="90" height="135"/>
+  <object id="5" name="blocked_tiles" class="blocked_tile" x="0" y="360" width="180" height="360"/>
+  <object id="6" name="blocked_tile" class="blocked_tile" x="270" y="540" width="180" height="90"/>
   <object id="7" name="path" class="path" x="990" y="540">
-   <properties>
-    <property name="Type" value="path"/>
-   </properties>
    <polyline points="0,0 -180,0 -180,-405 -270,-405 -270,-270 -405,-270 -405,90 -765,90 -765,-45 -540,-45 -540,-450 -810,-450 -810,-225 -990,-225"/>
   </object>
+  <object id="23" name="path_tiles" class="blocked_tile" x="810" y="540" width="180" height="45"/>
+  <object id="24" name="path_tiles" class="blocked_tile" x="810" y="135" width="45" height="405"/>
+  <object id="25" name="path_tiles" class="blocked_tile" x="720" y="135" width="90" height="45"/>
+  <object id="26" name="path_tiles" class="blocked_tile" x="720" y="180" width="45" height="135"/>
+  <object id="27" name="path_tiles" class="blocked_tile" x="585" y="270" width="135" height="45"/>
+  <object id="28" name="path_tiles" class="blocked_tile" x="585" y="315" width="45" height="360"/>
+  <object id="29" name="path_tiles" class="blocked_tile" x="225" y="630" width="360" height="45"/>
+  <object id="30" name="path_tiles" class="blocked_tile" x="225" y="495" width="45" height="135"/>
+  <object id="31" name="path_tiles" class="blocked_tile" x="270" y="495" width="225" height="45"/>
+  <object id="32" name="path_tiles" class="blocked_tile" x="450" y="90" width="45" height="405"/>
+  <object id="33" name="path_tiles" class="blocked_tile" x="180" y="90" width="270" height="45"/>
+  <object id="34" name="path_tiles" class="blocked_tile" x="180" y="135" width="45" height="225"/>
+  <object id="35" name="path_tiles" class="blocked_tile" x="0" y="315" width="180" height="45"/>
  </objectgroup>
 </map>
