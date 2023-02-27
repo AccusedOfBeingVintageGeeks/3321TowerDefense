@@ -1,0 +1,6 @@
+Software Bill of Materials:
+- IntelliJ
+- FXGL                  https://github.com/AlmasB/FXGLtiled
+- JavaFX
+- Tiled                 https://www.mapeditor.org/
+- Affinity Designer
