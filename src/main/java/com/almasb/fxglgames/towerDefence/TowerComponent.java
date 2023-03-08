@@ -84,7 +84,7 @@ public class TowerComponent extends Component {
                     .getClosestEntity(entity,e ->e.isType(target))
                     .ifPresent(closestEnemy ->{
                         entity.rotateToVector(closestEnemy.getPosition().subtract(entity.getPosition()));
-                        entity.rotateBy(90);
+                        transformComponent.rotateBy(90);
                         shoot(closestEnemy);
                         shotFrequency.capture();
                     });
