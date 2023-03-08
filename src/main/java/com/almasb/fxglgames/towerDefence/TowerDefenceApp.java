@@ -74,7 +74,7 @@ public class TowerDefenceApp extends GameApplication {
             @Override
             protected void onAction() {
                 //testEntity.getComponent(TestEntityComponent.class).moveUp();
-                towerEntity.getComponent(TowerComponent.class).moveUp();
+                //towerEntity.getComponent(TowerComponent.class).moveUp();
                 //System.out.println("keydown");
             }
         };
@@ -108,8 +108,8 @@ public class TowerDefenceApp extends GameApplication {
 
                 if(testLevelMap.isTileFree(tileIndices)) {      //if tile(x,y) is free
                     //The circle is anchored from the center so there's an offset
-                    float radiusOffset = 45f/2f;
-                    Point2D snappedPos = testLevelMap.getTilePosition(tileIndices, radiusOffset, radiusOffset);
+                    //float radiusOffset = 45f/2f;
+                    Point2D snappedPos = testLevelMap.getTilePosition(tileIndices);
                     towerEntity.getComponent(TowerComponent.class).setPlacedStatus(true);
                     towerEntity.getComponent(TowerComponent.class).moveToPos(snappedPos);
                 }

@@ -40,8 +40,8 @@ public class Factory implements EntityFactory {
     {
         Entity entity = FXGL.entityBuilder(data)
                 //.view(new Circle(20, Color.BLACK))
-                //.view("cannon (1).jpg")
-                .view(new Rectangle(40,40,Color.BLACK))
+                .viewWithBBox("cannon (1).jpg")
+                //.view(new Rectangle(40,40,Color.BLACK))
                 .type(TowerDefenceApp.Type.TOWER)
                 .anchorFromCenter()
                 .with(new TowerComponent(5))
