@@ -6,6 +6,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.shape.Polyline;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
@@ -37,13 +38,25 @@ public class TDLevelMap {
 
     private void initializeTileAvailability()
     {
-        for(int c = 0; c<isTileFree.length;c++) {
-            for(int r = 0; r<isTileFree[c].length;r++) {
+        //Set all tiles to free by default
+        for (boolean[] isTileFreeRow : isTileFree)
+            Arrays.fill(isTileFreeRow, true);
 
-                isTileFree[c][r] = true;
+        //Now set blocked tiles to not free
+        List <Entity> blockedEntities = getGameWorld().getEntitiesByType(TowerDefenceApp.Type.BLOCKED_TILES);
+        for (Entity currentEntity : blockedEntities) {
+            IndexPair currentEntityTileIndex = new IndexPair(
+                    (int) currentEntity.getX() / tileSize,
+                    (int) currentEntity.getY() / tileSize
+            );
+            IndexPair currentEntityDimensionsInTiles = new IndexPair(
+                    (int) currentEntity.getWidth() / tileSize,
+                    (int) currentEntity.getHeight() / tileSize
+            );
 
-                //set tiles with blocked_tile to false here
-            }
+            for (int c = currentEntityTileIndex.X; c < currentEntityTileIndex.X + currentEntityDimensionsInTiles.X; c++)
+                for (int r = currentEntityTileIndex.Y; r < currentEntityTileIndex.Y + currentEntityDimensionsInTiles.Y; r++)
+                    isTileFree[c][r] = false;
         }
     }
     private void initializePathPoints()

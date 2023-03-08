@@ -33,7 +33,7 @@ public class TowerDefenceApp extends GameApplication {
      */
     public enum Type {
         // If we give Entities a Type we can reference entities of that type. Optional
-        TOWER, ENEMY, PROJECTILE, PATH, TEST
+        TOWER, ENEMY, PROJECTILE, PATH, BLOCKED_TILES, TEST
     }
     Entity testEntity;
     Entity towerEntity;

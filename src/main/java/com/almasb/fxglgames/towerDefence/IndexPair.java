@@ -11,4 +11,9 @@ public class IndexPair {
         this.X = x;
         this.Y = y;
     }
+
+    @Override
+    public String toString() {
+        return "(" + X + "," + Y + ")";
+    }
 }

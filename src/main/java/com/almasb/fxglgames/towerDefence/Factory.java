@@ -18,34 +18,28 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 import java.util.List;
 
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
-
 public class Factory implements EntityFactory {
     @Spawns("testEntity")
     public Entity newTestEntity(SpawnData data)
     {
-        Entity entity = FXGL.entityBuilder(data)
+        return FXGL.entityBuilder(data)
                 .view(new Circle(20, Color.GREEN))
                 .type(TowerDefenceApp.Type.TEST)//Types are defined in TowerDefenceApp.java
                 .anchorFromCenter()
                 //.zIndex(999)
                 .with(new TestEntityComponent(5))
                 .build();
-
-        return entity;
     }
     //creating entity of type TOWER
     @Spawns("towerComponent")
     public Entity newTestTower(SpawnData data)
     {
-        Entity entity = FXGL.entityBuilder(data)
+        return FXGL.entityBuilder(data)
                 .view(new Circle(20,Color.RED))
                 .type(TowerDefenceApp.Type.TOWER)
                 .anchorFromCenter()
                 .with(new TowerComponent(5))
                 .build();
-
-        return entity;
     }
 
     /*
@@ -99,7 +93,7 @@ public class Factory implements EntityFactory {
     }
 
     /*
-     *  Map entities
+     *  TMX Tile Map entities
      */
     @Spawns("blocked_tile")
     public Entity newBlockedTile(SpawnData data)
@@ -110,6 +104,7 @@ public class Factory implements EntityFactory {
 
         return FXGL.entityBuilder(data)
                 .bbox(BoundingShape.box(WIDTH, HEIGHT))
+                .type(TowerDefenceApp.Type.BLOCKED_TILES)
                 //.view(new Rectangle(WIDTH, HEIGHT, Color.color(1, 0, 0, 0.3))) //uncomment for debugging
                 .build();
     }
