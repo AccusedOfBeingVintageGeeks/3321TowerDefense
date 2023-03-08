@@ -16,7 +16,6 @@ import com.almasb.fxgl.input.UserAction;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
-import javafx.util.Duration;
 
 import java.util.List;
 import java.util.Map;
@@ -29,11 +28,20 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 public class TowerDefenceApp extends GameApplication {
 
     /**
-     * Types of entities in this game.
+     * Types of entities in this game. May be assigned to entities in the factory with the .type() method.
      */
     public enum Type {
         // If we give Entities a Type we can reference entities of that type. Optional
         TOWER, ENEMY, PROJECTILE, PATH, BLOCKED_TILES, TEST
+    }
+
+    /**
+     * Types of enemies in this game.
+     * Do not assign to entities in the factory, instead add a new entry to this enum with the same name
+     * as the one passed to the factory @Spawns interface.
+     */
+    public enum EnemyType {
+        scrub
     }
     Entity testEntity;
     Entity towerEntity;
@@ -89,7 +97,7 @@ public class TowerDefenceApp extends GameApplication {
                 }
             }
 
-            /**
+            /*
              * let go of mousebutton -> Tower returns to menu bar
              */
             @Override
@@ -125,15 +133,28 @@ public class TowerDefenceApp extends GameApplication {
         testEntity = spawn("testEntity", getAppWidth()- testTDLevelMap.tileSize,0.5 * getAppHeight());
         //spawn("Projectile", FXGLMath.randomPoint(new Rectangle2D(0,0,getAppWidth(),getAppHeight())));
 
-        //******* Refactor into WaveSpawner class later
-        SpawnData scrubSpawnData = new SpawnData();
-        scrubSpawnData.put("waypoints", testTDLevelMap.pathPoints);
+        SpawnData enemySpawnData = new SpawnData();
+        enemySpawnData.put("waypoints", testTDLevelMap.pathPoints);
 
-        run(() -> {
-            Entity scrubEntity = spawn("scrub",scrubSpawnData);
-            Factory.reinitializeScrub(scrubEntity);
-        }, Duration.millis(1000));
-        //******* Refactor into WaveSpawner class later
+        WaveSpawner waveSpawner = new WaveSpawner(enemySpawnData);
+
+        //Need to figure out a good way to store this data
+        EnemyType[] enemyQueue = new EnemyType[]{
+                EnemyType.scrub,
+                EnemyType.scrub,
+                EnemyType.scrub,
+                null,
+                EnemyType.scrub,
+                EnemyType.scrub,
+                null,
+                EnemyType.scrub,
+                null,
+                null,
+                EnemyType.scrub
+        };
+
+        WaveData waveData = new WaveData(enemyQueue,3,500);
+        waveSpawner.SpawnWave(waveData);
     }
 
     @Override

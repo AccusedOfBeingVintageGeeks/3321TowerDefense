@@ -4,7 +4,6 @@ import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entity;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Polyline;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
