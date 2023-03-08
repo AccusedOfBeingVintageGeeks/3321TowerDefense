@@ -39,12 +39,14 @@ public class Factory implements EntityFactory {
     public Entity newTestTower(SpawnData data)
     {
         Entity entity = FXGL.entityBuilder(data)
-                .view(new Circle(20,Color.RED))
+                //.view(new Circle(20, Color.BLACK))
+                //.view("cannon (1).jpg")
+                .view(new Rectangle(40,40,Color.BLACK))
                 .type(TowerDefenceApp.Type.TOWER)
                 .anchorFromCenter()
                 .with(new TowerComponent(5))
                 .build();
-
+        entity.setLocalAnchorFromCenter();
         return entity;
     }
 
@@ -66,7 +68,7 @@ public class Factory implements EntityFactory {
                 .at(waypoints.get(0))
                 .with(new WaypointMoveComponent(SPEED, waypoints))
                 .build();
-        entity.setReusable(true);
+        //entity.setReusable(true);
 
         return entity;
     }

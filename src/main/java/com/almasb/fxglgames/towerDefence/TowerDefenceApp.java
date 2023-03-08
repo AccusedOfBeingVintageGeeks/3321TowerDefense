@@ -59,6 +59,7 @@ public class TowerDefenceApp extends GameApplication {
         //We can probably refactor later so that the UserActions below are initialized from methods in a UserActions class
 
         Input input = getInput();
+        /*
         UserAction shootTest = new UserAction("shoot") {
             @Override
             protected void onAction(){
@@ -67,34 +68,31 @@ public class TowerDefenceApp extends GameApplication {
         };
         input.addAction(shootTest,KeyCode.SPACE);
 
+         */
+
         UserAction moveUp = new UserAction("Move Up") {
             @Override
             protected void onAction() {
-                testEntity.getComponent(TestEntityComponent.class).moveUp();
+                //testEntity.getComponent(TestEntityComponent.class).moveUp();
                 towerEntity.getComponent(TowerComponent.class).moveUp();
                 //System.out.println("keydown");
             }
         };
 
         UserAction drag = new UserAction("Drag") {
-            //For drag and drop
-            boolean dragging = false;
             Entity draggedEntity;//Maybe we should set this in onActionBegin
             @Override
             protected void onActionBegin() {
-                if(getInput().getMousePositionWorld().distance(testEntity.getCenter()) < 0.5 * 40) {
-                    dragging = true;
-                }else if(getInput().getMousePositionWorld().distance(towerEntity.getCenter()) < 0.5 * 40){
+                if(getInput().getMousePositionWorld().distance(towerEntity.getCenter()) < 0.5 * 40){
                     towerEntity.getComponent(TowerComponent.class).setDragStatus(true);
                 }
             }
 
             @Override
             protected void onAction() {
-                if(dragging){
-                    testEntity.getComponent(TestEntityComponent.class).moveToPos(getInput().getMousePositionWorld());
-                }else if(towerEntity.getComponent(TowerComponent.class).getDragStatus()){
+                if(towerEntity.getComponent(TowerComponent.class).getDragStatus()){
                     towerEntity.getComponent(TowerComponent.class).moveToPos(getInput().getMousePositionWorld());
+                    towerEntity.getComponent(TowerComponent.class).setPlacedStatus(false);
                 }
             }
 
@@ -103,15 +101,16 @@ public class TowerDefenceApp extends GameApplication {
              */
             @Override
             protected void onActionEnd() {
-                dragging = false;
+                //dragging = false;
                 // Check if the tile that the mouse is positioned over is placeable.
-
+                towerEntity.getComponent(TowerComponent.class).setDragStatus(true);
                 IndexPair tileIndices = testLevelMap.getTileIndexFromPoint(getInput().getMousePositionWorld());
 
                 if(testLevelMap.isTileFree(tileIndices)) {      //if tile(x,y) is free
                     //The circle is anchored from the center so there's an offset
                     float radiusOffset = 45f/2f;
                     Point2D snappedPos = testLevelMap.getTilePosition(tileIndices, radiusOffset, radiusOffset);
+                    towerEntity.getComponent(TowerComponent.class).setPlacedStatus(true);
                     towerEntity.getComponent(TowerComponent.class).moveToPos(snappedPos);
                 }
                 else {
@@ -132,7 +131,7 @@ public class TowerDefenceApp extends GameApplication {
         setLevelFromMap("tmx/FirstTilemap.tmx");
         testLevelMap = new LevelMap(45,22,16);
         towerEntity = spawn("towerComponent",getAppWidth() - testLevelMap.tileSize, 0.6 * getAppHeight());
-        testEntity = spawn("testEntity", getAppWidth()- testLevelMap.tileSize,0.5 * getAppHeight());
+        //testEntity = spawn("testEntity", getAppWidth()- testLevelMap.tileSize,0.5 * getAppHeight());
         //spawn("Projectile", FXGLMath.randomPoint(new Rectangle2D(0,0,getAppWidth(),getAppHeight())));
 
         run(() -> {
@@ -155,7 +154,7 @@ public class TowerDefenceApp extends GameApplication {
             {
                 // An enemy has made it to the end.
                 // There's probably a more efficient way of checking this...
-
+                towerEntity.getComponent(TowerComponent.class).onUpdate(tpf);
                 getGameController().pauseEngine();
                 //getDialogService().showMessageBox("GAME OVER");
                 getDialogService().showMessageBox("GAME OVER", () -> {
