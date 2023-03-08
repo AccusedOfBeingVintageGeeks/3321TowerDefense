@@ -56,8 +56,7 @@ public class Factory implements EntityFactory {
     {
         final int SPEED = 100;
 
-        Entity pathEntity = getGameWorld().getEntitiesByType(TowerDefenceApp.Type.PATH).get(0);
-        List<Point2D> waypoints = MapTools.getPointsFromPathEntity(pathEntity);
+        List<Point2D> waypoints = data.get("waypoints");
 
         //List<Point2D>
         Entity entity = FXGL.entityBuilder(data)

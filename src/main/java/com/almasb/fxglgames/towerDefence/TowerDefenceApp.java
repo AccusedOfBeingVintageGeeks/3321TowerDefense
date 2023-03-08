@@ -9,8 +9,8 @@ package com.almasb.fxglgames.towerDefence;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.components.WaypointMoveComponent;
-import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import javafx.geometry.Point2D;
@@ -37,7 +37,7 @@ public class TowerDefenceApp extends GameApplication {
     }
     Entity testEntity;
     Entity towerEntity;
-    LevelMap testLevelMap;
+    TDLevelMap testTDLevelMap;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -66,15 +66,6 @@ public class TowerDefenceApp extends GameApplication {
             }
         };
         input.addAction(shootTest,KeyCode.SPACE);
-
-        UserAction moveUp = new UserAction("Move Up") {
-            @Override
-            protected void onAction() {
-                testEntity.getComponent(TestEntityComponent.class).moveUp();
-                towerEntity.getComponent(TowerComponent.class).moveUp();
-                //System.out.println("keydown");
-            }
-        };
 
         UserAction drag = new UserAction("Drag") {
             //For drag and drop
@@ -106,39 +97,43 @@ public class TowerDefenceApp extends GameApplication {
                 dragging = false;
                 // Check if the tile that the mouse is positioned over is placeable.
 
-                IndexPair tileIndices = testLevelMap.getTileIndexFromPoint(getInput().getMousePositionWorld());
+                IndexPair tileIndices = testTDLevelMap.getTileIndexFromPoint(getInput().getMousePositionWorld());
 
-                if(testLevelMap.isTileFree(tileIndices)) {      //if tile(x,y) is free
+                if(testTDLevelMap.isTileFree(tileIndices)) {      //if tile(x,y) is free
                     //The circle is anchored from the center so there's an offset
                     float radiusOffset = 45f/2f;
-                    Point2D snappedPos = testLevelMap.getTilePosition(tileIndices, radiusOffset, radiusOffset);
+                    Point2D snappedPos = testTDLevelMap.getTilePosition(tileIndices, radiusOffset, radiusOffset);
                     towerEntity.getComponent(TowerComponent.class).moveToPos(snappedPos);
                 }
                 else {
-                    Point2D initPoint = new Point2D(getAppWidth() - testLevelMap.tileSize,getAppHeight() * 0.6);
+                    Point2D initPoint = new Point2D(getAppWidth() - testTDLevelMap.tileSize,getAppHeight() * 0.6);
                     towerEntity.getComponent(TowerComponent.class).moveToPos(initPoint);
                 }
             }
         };
 
-        input.addAction(moveUp, KeyCode.W);
         input.addAction(drag, MouseButton.PRIMARY);
     }
 
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new Factory());
-        //Level entities must be spawned AFTER setting the level
-        setLevelFromMap("tmx/FirstTilemap.tmx");
-        testLevelMap = new LevelMap(45,22,16);
-        towerEntity = spawn("towerComponent",getAppWidth() - testLevelMap.tileSize, 0.6 * getAppHeight());
-        testEntity = spawn("testEntity", getAppWidth()- testLevelMap.tileSize,0.5 * getAppHeight());
+        setLevelFromMap("tmx/FirstTilemap.tmx");        //Level entities must be spawned AFTER setting the level
+
+        testTDLevelMap = new TDLevelMap(45,22,16);
+        towerEntity = spawn("towerComponent",getAppWidth() - testTDLevelMap.tileSize, 0.6 * getAppHeight());
+        testEntity = spawn("testEntity", getAppWidth()- testTDLevelMap.tileSize,0.5 * getAppHeight());
         //spawn("Projectile", FXGLMath.randomPoint(new Rectangle2D(0,0,getAppWidth(),getAppHeight())));
 
+        //******* Refactor into WaveSpawner class later
+        SpawnData scrubSpawnData = new SpawnData();
+        scrubSpawnData.put("waypoints", testTDLevelMap.pathPoints);
+
         run(() -> {
-            Entity scrubEntity = spawn("scrub", 50,50);
+            Entity scrubEntity = spawn("scrub",scrubSpawnData);
             Factory.reinitializeScrub(scrubEntity);
         }, Duration.millis(1000));
+        //******* Refactor into WaveSpawner class later
     }
 
     @Override
