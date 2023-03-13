@@ -11,7 +11,6 @@ import com.almasb.fxgl.physics.BoundingShape;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -23,23 +22,27 @@ public class Factory implements EntityFactory {
     public Entity newTestEntity(SpawnData data)
     {
         return FXGL.entityBuilder(data)
-                .view(new Circle(20, Color.GREEN))
-                .type(TowerDefenceApp.Type.TEST)//Types are defined in TowerDefenceApp.java
+                .viewWithBBox("purpleTestTexture.png")
+                .type(TowerDefenceApp.Type.TOWER)
+                .zIndex(TowerDefenceApp.Layer.STANDARD.ZIndex)
                 .anchorFromCenter()
-                //.zIndex(999)
-                .with(new TestEntityComponent(5))
+                .with(new TowerComponent(5))
                 .build();
     }
     //creating entity of type TOWER
     @Spawns("towerComponent")
     public Entity newTestTower(SpawnData data)
     {
-        return FXGL.entityBuilder(data)
-                .view(new Circle(20,Color.RED))
+        Entity entity = FXGL.entityBuilder(data)
+                .viewWithBBox("turretRescaled.png")
                 .type(TowerDefenceApp.Type.TOWER)
+                .zIndex(TowerDefenceApp.Layer.TALL.ZIndex)
                 .anchorFromCenter()
                 .with(new TowerComponent(5))
                 .build();
+        entity.setLocalAnchor(new Point2D(entity.getWidth()/2,entity.getHeight()-entity.getWidth()/2));
+
+        return entity;
     }
 
     /*
@@ -59,13 +62,15 @@ public class Factory implements EntityFactory {
                 .at(waypoints.get(0))
                 .with(new WaypointMoveComponent(SPEED, waypoints))
                 .build();
-        entity.setReusable(true);
+        //entity.setReusable(true);
 
         return entity;
     }
     public static void reinitializeScrub(Entity scrubEntity/*, SpawnData data*/)
     {
-        // Reset every property that needs to be reset here.
+        // Reset every property that needs to be reset here
+        // ^^^ Only call when entity.setReusable(true)
+
         //scrubEntity.setPosition();
         //scrubEntity.getComponent(WaypointMoveComponent.class).
 
