@@ -91,8 +91,9 @@ public class TowerDefenceApp extends GameApplication {
             @Override
             protected void onAction() {
                 if(towerEntity.getComponent(TowerComponent.class).getDragStatus()){
-                    towerEntity.getComponent(TowerComponent.class).moveToPos(getInput().getMousePositionWorld());
+                    towerEntity.getComponent(TowerComponent.class).moveToPos(getInput().getMousePositionWorld().subtract(towerEntity.getWidth()/2,towerEntity.getHeight()/2));
                     towerEntity.getComponent(TowerComponent.class).setPlacedStatus(false);
+
                 }
             }
 
@@ -106,17 +107,23 @@ public class TowerDefenceApp extends GameApplication {
                 towerEntity.getComponent(TowerComponent.class).setDragStatus(true);
                 IndexPair tileIndices = testLevelMap.getTileIndexFromPoint(getInput().getMousePositionWorld());
 
-                if(testLevelMap.isTileFree(tileIndices)) {      //if tile(x,y) is free
-                    //The circle is anchored from the center so there's an offset
-                    //float radiusOffset = 45f/2f;
-                    Point2D snappedPos = testLevelMap.getTilePosition(tileIndices);
-                    towerEntity.getComponent(TowerComponent.class).setPlacedStatus(true);
-                    towerEntity.getComponent(TowerComponent.class).moveToPos(snappedPos);
-                }
-                else {
-                    Point2D initPoint = new Point2D(getAppWidth() - testLevelMap.tileSize,getAppHeight() * 0.6);
+                try {
+                    if (testLevelMap.isTileFree(tileIndices)) {      //if tile(x,y) is free
+                        Point2D snappedPos = testLevelMap.getTilePosition(tileIndices);
+                        towerEntity.getComponent(TowerComponent.class).setPlacedStatus(true);
+                        towerEntity.getComponent(TowerComponent.class).moveToPos(snappedPos);
+                    }
+                    else {
+                        Point2D initPoint = new Point2D(getAppWidth() - testLevelMap.tileSize -20,getAppHeight() * 0.5);
+                        towerEntity.getComponent(TowerComponent.class).moveToPos(initPoint);
+                    }
+                }catch (IndexOutOfBoundsException e){
+                    Point2D initPoint = new Point2D(getAppWidth() - testLevelMap.tileSize -20,getAppHeight() * 0.5);
                     towerEntity.getComponent(TowerComponent.class).moveToPos(initPoint);
+                    towerEntity.getComponent(TowerComponent.class).rotateUp();
+
                 }
+
             }
         };
 
@@ -130,7 +137,7 @@ public class TowerDefenceApp extends GameApplication {
         //Level entities must be spawned AFTER setting the level
         setLevelFromMap("tmx/FirstTilemap.tmx");
         testLevelMap = new LevelMap(45,22,16);
-        towerEntity = spawn("towerComponent",getAppWidth() - testLevelMap.tileSize, 0.6 * getAppHeight());
+        towerEntity = spawn("towerComponent",getAppWidth() - testLevelMap.tileSize - 20, 0.5 * getAppHeight());
         //testEntity = spawn("testEntity", getAppWidth()- testLevelMap.tileSize,0.5 * getAppHeight());
         //spawn("Projectile", FXGLMath.randomPoint(new Rectangle2D(0,0,getAppWidth(),getAppHeight())));
 

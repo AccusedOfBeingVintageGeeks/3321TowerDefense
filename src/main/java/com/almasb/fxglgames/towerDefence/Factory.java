@@ -8,6 +8,7 @@ import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.physics.BoundingShape;
+import com.almasb.fxgl.texture.Texture;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -38,10 +39,11 @@ public class Factory implements EntityFactory {
     @Spawns("towerComponent")
     public Entity newTestTower(SpawnData data)
     {
+        Texture texture = new Texture(image("cannon.png"));
+        texture.setFitHeight(45);
+        texture.setFitWidth(45);
         Entity entity = FXGL.entityBuilder(data)
-                //.view(new Circle(20, Color.BLACK))
-                .viewWithBBox("cannon (1).jpg")
-                //.view(new Rectangle(40,40,Color.BLACK))
+                .viewWithBBox(texture)
                 .type(TowerDefenceApp.Type.TOWER)
                 .anchorFromCenter()
                 .with(new TowerComponent(5))
@@ -64,7 +66,7 @@ public class Factory implements EntityFactory {
         //List<Point2D>
         Entity entity = FXGL.entityBuilder(data)
                 .type(TowerDefenceApp.Type.ENEMY)
-                .view("scrub.png")
+                .viewWithBBox("scrub.png")
                 .at(waypoints.get(0))
                 .with(new WaypointMoveComponent(SPEED, waypoints))
                 .build();
@@ -85,15 +87,19 @@ public class Factory implements EntityFactory {
     @Spawns("Projectile")
     public Entity newProjectile(SpawnData data){
 
-        Node view = new Rectangle(10,10,Color.BLUE);
+        Texture bullet = new Texture(image("projectile1.png"));
+        bullet.setFitWidth(10);
+        bullet.setFitHeight(10);
+        //Node view = new Rectangle(10,10,Color.BLUE);
         //view.setRotate(90);
 
         Entity tower = data.get("tower");
         Entity prey = data.get("prey");
+        //Point2D aim = prey.getCenter();
 
         return entityBuilder(data)
                 .type(TowerDefenceApp.Type.PROJECTILE)
-                .viewWithBBox(view)
+                .viewWithBBox(bullet)
                 .collidable()
                 .with(new TowerProjectileComponent(tower,prey))
                 .with(new AutoRotationComponent())
