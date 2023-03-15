@@ -43,8 +43,18 @@ public class TowerDefenceApp extends GameApplication {
     public enum EnemyType {
         scrub
     }
-    Entity testEntity;
-    Entity towerEntity;
+
+    /**
+     * Standard sorting layers.
+     */
+    public enum Layer{
+        //These MUST be ordered from lowest zIndex to highest
+        GROUNDED, SHORT, STANDARD, TALL, AIRBORNE;
+
+        //This is multiplied by 100 for edge cases where we want to have an entity between layers
+        final int ZIndex = ordinal() * 100;
+    }
+    Entity testEntity, towerEntity;
     TDLevelMap testTDLevelMap;
 
     @Override
@@ -81,19 +91,23 @@ public class TowerDefenceApp extends GameApplication {
             Entity draggedEntity;//Maybe we should set this in onActionBegin
             @Override
             protected void onActionBegin() {
-                if(getInput().getMousePositionWorld().distance(testEntity.getCenter()) < 0.5 * 40) {
-                    dragging = true;
-                }else if(getInput().getMousePositionWorld().distance(towerEntity.getCenter()) < 0.5 * 40){
-                    towerEntity.getComponent(TowerComponent.class).setDragStatus(true);
+                //loop through towers, check if draggable, check of mouse is over it
+                List<Entity> towerEntities = getGameWorld().getEntitiesByComponent(TowerComponent.class);
+                for (Entity towerEnt : towerEntities) {
+                    if(!towerEnt.getComponent(TowerComponent.class).getPlacedStatus()
+                            && getInput().getMousePositionWorld().distance(towerEnt.getAnchoredPosition()) < 0.5 * testTDLevelMap.TileSize) {
+                        draggedEntity = towerEnt;
+                        dragging = true;
+                        break;
+                    }
                 }
             }
 
             @Override
             protected void onAction() {
                 if(dragging){
-                    testEntity.getComponent(TestEntityComponent.class).moveToPos(getInput().getMousePositionWorld());
-                }else if(towerEntity.getComponent(TowerComponent.class).getDragStatus()){
-                    towerEntity.getComponent(TowerComponent.class).moveToPos(getInput().getMousePositionWorld());
+                    Point2D dragPos = getInput().getMousePositionWorld();
+                    draggedEntity.setAnchoredPosition(dragPos);
                 }
             }
 
@@ -102,20 +116,26 @@ public class TowerDefenceApp extends GameApplication {
              */
             @Override
             protected void onActionEnd() {
-                dragging = false;
-                // Check if the tile that the mouse is positioned over is placeable.
+                if(dragging) {
+                    dragging = false;
 
-                IndexPair tileIndices = testTDLevelMap.getTileIndexFromPoint(getInput().getMousePositionWorld());
+                    // Check if the tile that the mouse is positioned over is placeable.
+                    IndexPair tileIndices = testTDLevelMap.getTileIndexFromPoint(getInput().getMousePositionWorld());
 
-                if(testTDLevelMap.isTileFree(tileIndices)) {      //if tile(x,y) is free
-                    //The circle is anchored from the center so there's an offset
-                    float radiusOffset = 45f/2f;
-                    Point2D snappedPos = testTDLevelMap.getTilePosition(tileIndices, radiusOffset, radiusOffset);
-                    towerEntity.getComponent(TowerComponent.class).moveToPos(snappedPos);
-                }
-                else {
-                    Point2D initPoint = new Point2D(getAppWidth() - testTDLevelMap.tileSize,getAppHeight() * 0.6);
-                    towerEntity.getComponent(TowerComponent.class).moveToPos(initPoint);
+                    if(testTDLevelMap.isTileAvailable(tileIndices)) {
+                        // Place tower on tile
+                        draggedEntity.setAnchoredPosition(testTDLevelMap.getTilePositionCenter(tileIndices));
+                        draggedEntity.getComponent(TowerComponent.class).setPlacedStatus(true);
+                        testTDLevelMap.setTileAvailability(false, tileIndices);
+                    }
+                    else {
+                        // Abort drag
+
+                        // initPoint (the tower's position on the sidebar) needs to be a property of tower entities or their TowerComponent.
+                        // Or maybe it gets it from the sidebar class if there will be such a thing?
+                        Point2D initPoint = new Point2D(getAppWidth() - testTDLevelMap.TileSize,getAppHeight() * 0.4);
+                        draggedEntity.setAnchoredPosition(initPoint);
+                    }
                 }
             }
         };
@@ -129,8 +149,8 @@ public class TowerDefenceApp extends GameApplication {
         setLevelFromMap("tmx/FirstTilemap.tmx");        //Level entities must be spawned AFTER setting the level
 
         testTDLevelMap = new TDLevelMap(45,22,16);
-        towerEntity = spawn("towerComponent",getAppWidth() - testTDLevelMap.tileSize, 0.6 * getAppHeight());
-        testEntity = spawn("testEntity", getAppWidth()- testTDLevelMap.tileSize,0.5 * getAppHeight());
+        towerEntity = spawn("towerComponent",getAppWidth() - testTDLevelMap.TileSize * 3f/2, 0.6 * getAppHeight());
+        testEntity = spawn("testEntity", getAppWidth()- testTDLevelMap.TileSize * 3f/2,0.5 * getAppHeight());
         //spawn("Projectile", FXGLMath.randomPoint(new Rectangle2D(0,0,getAppWidth(),getAppHeight())));
 
         SpawnData enemySpawnData = new SpawnData();
@@ -158,13 +178,7 @@ public class TowerDefenceApp extends GameApplication {
     }
 
     @Override
-    protected void initPhysics() {
-        //
-    }
-
-    @Override
     protected void onUpdate(double tpf) {
-
         List<Entity> scrubs = getGameWorld().getEntitiesByType(Type.ENEMY);
         for (Entity enemy: scrubs) {
             if(enemy.getComponent(WaypointMoveComponent.class).atDestinationProperty().get())
