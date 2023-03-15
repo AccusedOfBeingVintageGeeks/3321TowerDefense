@@ -154,7 +154,7 @@ public class TowerDefenceApp extends GameApplication {
         //spawn("Projectile", FXGLMath.randomPoint(new Rectangle2D(0,0,getAppWidth(),getAppHeight())));
 
         SpawnData enemySpawnData = new SpawnData();
-        enemySpawnData.put("waypoints", testTDLevelMap.pathPoints);
+        enemySpawnData.put("waypoints", testTDLevelMap.PathPoints);
 
         WaveSpawner waveSpawner = new WaveSpawner(enemySpawnData);
 
