@@ -7,6 +7,7 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.time.LocalTimer;
 import javafx.util.Duration;
+import com.almasb.fxgl.texture.Texture;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -21,6 +22,7 @@ public class TowerComponent extends Component {
     private boolean isDragged, isPlaced;
     private LocalTimer shotFrequency;
     private TransformComponent transformComponent;
+    private double fireRateinSec = 0.7;
 
     public boolean getDragStatus() { return isDragged; }
     public void setDragStatus(boolean dragStatus) { isDragged = dragStatus; }
@@ -35,6 +37,7 @@ public class TowerComponent extends Component {
      */
     public TowerComponent(double speed)
     {
+
         this.speed = speed;
         isDragged = false;
         isPlaced = false;
@@ -46,10 +49,11 @@ public class TowerComponent extends Component {
      * Method enables TowerComponent to shoot Enemy using TowerProjectileComponent
      * @param enemy
      */
-    public void shoot(Entity enemy){ //later needs to get enemy as parameter - make private
+    private void shoot(Entity enemy){
 
-        Point2D localPos = this.getEntity().getPosition();
+        Point2D localPos = this.getEntity().getCenter();
         Point2D aim = enemy.getPosition().subtract(localPos);
+        //Point2D newAim = aim.subtract(entity.getHeight()/2,entity.getWidth()/2);
 
         var projectile = spawn("Projectile",
                 new SpawnData(localPos)
@@ -60,17 +64,6 @@ public class TowerComponent extends Component {
     }
 
     /**
-     * prototype method for placing Tower (subject to change)
-     * @param placeableTile
-     */
-    public void placeTower(Entity placeableTile)
-    {
-        Point2D placingPoint = placeableTile.getCenter();
-        this.moveToPos(placingPoint);
-        isPlaced = true;
-    }
-
-    /**
      * enables Tower movement and gets the nearest enemy to shoot (shoots entities of type TEST right now)
      * @param tpf time per frame
      */
@@ -78,12 +71,13 @@ public class TowerComponent extends Component {
     public void onUpdate(double tpf)
     {
         frameRateScalar = tpf * 60;
-        TowerDefenceApp.Type target = TowerDefenceApp.Type.TEST;
-        if(this.isPlaced && shotFrequency.elapsed(Duration.seconds(1))){
+        TowerDefenceApp.Type target = TowerDefenceApp.Type.ENEMY;
+        if(this.isPlaced && shotFrequency.elapsed(Duration.seconds(fireRateinSec))){
             getGameWorld()
                     .getClosestEntity(entity,e ->e.isType(target))
                     .ifPresent(closestEnemy ->{
                         entity.rotateToVector(closestEnemy.getPosition().subtract(entity.getPosition()));
+                        transformComponent.rotateBy(90);
                         shoot(closestEnemy);
                         shotFrequency.capture();
                     });
@@ -93,9 +87,10 @@ public class TowerComponent extends Component {
     /**
      * test method to move TowerComponent vertically
      */
-    public void moveUp()
+    public void rotateUp()
     {
-        transformComponent.translateY(-speed * frameRateScalar);
+        transformComponent.rotateToVector(entity.getPosition().subtract(0,45));
+        transformComponent.rotateBy(343);
     }
 
     /**
@@ -106,8 +101,6 @@ public class TowerComponent extends Component {
     {
         transformComponent.setPosition(posInWorldSpace);
     }
-
-
 
 
 }

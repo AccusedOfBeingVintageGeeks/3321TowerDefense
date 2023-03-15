@@ -14,7 +14,6 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import javafx.geometry.Point2D;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
 import java.util.List;
@@ -77,6 +76,7 @@ public class TowerDefenceApp extends GameApplication {
         //We can probably refactor later so that the UserActions below are initialized from methods in a UserActions class
 
         Input input = getInput();
+        /*
         UserAction shootTest = new UserAction("shoot") {
             @Override
             protected void onAction(){
@@ -84,6 +84,8 @@ public class TowerDefenceApp extends GameApplication {
             }
         };
         input.addAction(shootTest,KeyCode.SPACE);
+
+         */
 
         UserAction drag = new UserAction("Drag") {
             //For drag and drop
@@ -135,6 +137,7 @@ public class TowerDefenceApp extends GameApplication {
                         // Or maybe it gets it from the sidebar class if there will be such a thing?
                         Point2D initPoint = new Point2D(getAppWidth() - testTDLevelMap.TileSize,getAppHeight() * 0.4);
                         draggedEntity.setAnchoredPosition(initPoint);
+                        //draggedEntity.getComponent(TowerComponent.class).rotateUp();
                     }
                 }
             }
@@ -185,7 +188,7 @@ public class TowerDefenceApp extends GameApplication {
             {
                 // An enemy has made it to the end.
                 // There's probably a more efficient way of checking this...
-
+                //towerEntity.getComponent(TowerComponent.class).onUpdate(tpf);
                 getGameController().pauseEngine();
                 //getDialogService().showMessageBox("GAME OVER");
                 getDialogService().showMessageBox("GAME OVER", () -> {
