@@ -22,7 +22,6 @@ import java.util.Map;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
-// NOTE: this import above is crucial, it pulls in many useful methods
 
 public class TowerDefenceApp extends GameApplication {
 
@@ -55,6 +54,7 @@ public class TowerDefenceApp extends GameApplication {
     }
     Entity testEntity, towerEntity;
     TDLevelMap testTDLevelMap;
+    WaveSpawner waveSpawner;
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -76,16 +76,6 @@ public class TowerDefenceApp extends GameApplication {
         //We can probably refactor later so that the UserActions below are initialized from methods in a UserActions class
 
         Input input = getInput();
-        /*
-        UserAction shootTest = new UserAction("shoot") {
-            @Override
-            protected void onAction(){
-                towerEntity.getComponent(TowerComponent.class).shoot(testEntity);
-            }
-        };
-        input.addAction(shootTest,KeyCode.SPACE);
-
-         */
 
         UserAction drag = new UserAction("Drag") {
             //For drag and drop
@@ -154,30 +144,13 @@ public class TowerDefenceApp extends GameApplication {
         testTDLevelMap = new TDLevelMap(45,22,16);
         towerEntity = spawn("towerComponent",getAppWidth() - testTDLevelMap.TileSize * 3f/2, 0.6 * getAppHeight());
         testEntity = spawn("testEntity", getAppWidth()- testTDLevelMap.TileSize * 3f/2,0.5 * getAppHeight());
-        //spawn("Projectile", FXGLMath.randomPoint(new Rectangle2D(0,0,getAppWidth(),getAppHeight())));
 
         SpawnData enemySpawnData = new SpawnData();
         enemySpawnData.put("waypoints", testTDLevelMap.PathPoints);
+        waveSpawner = new WaveSpawner(enemySpawnData, "firstWavesDataLevelList.json");
 
-        WaveSpawner waveSpawner = new WaveSpawner(enemySpawnData);
-
-        //Need to figure out a good way to store this data
-        EnemyType[] enemyQueue = new EnemyType[]{
-                EnemyType.scrub,
-                EnemyType.scrub,
-                EnemyType.scrub,
-                null,
-                EnemyType.scrub,
-                EnemyType.scrub,
-                null,
-                EnemyType.scrub,
-                null,
-                null,
-                EnemyType.scrub
-        };
-
-        WaveData waveData = new WaveData(enemyQueue,3,500);
-        waveSpawner.SpawnWave(waveData);
+        if(!waveSpawner.IsEveryWaveSpawned())
+            waveSpawner.spawnNextWave();
     }
 
     @Override
@@ -188,7 +161,6 @@ public class TowerDefenceApp extends GameApplication {
             {
                 // An enemy has made it to the end.
                 // There's probably a more efficient way of checking this...
-                //towerEntity.getComponent(TowerComponent.class).onUpdate(tpf);
                 getGameController().pauseEngine();
                 //getDialogService().showMessageBox("GAME OVER");
                 getDialogService().showMessageBox("GAME OVER", () -> {
