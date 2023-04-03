@@ -2,6 +2,8 @@ plugins {
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.13'
     id 'org.jetbrains.kotlin.jvm' version '1.6.21'
+    id 'jacoco'
+    id 'groovy'
 }
 
 application {
@@ -20,9 +22,66 @@ repositories {
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-js:1.6.21'
     implementation 'com.github.almasb:fxgl:17.2'
+
+    implementation platform('org.apache.groovy:groovy-bom:4.0.5')
+    implementation 'org.apache.groovy:groovy'
+    testImplementation platform("org.spockframework:spock-bom:2.3-groovy-4.0")
+    testImplementation "org.spockframework:spock-core"
+
+    testImplementation "org.hamcrest:hamcrest-core:2.2" 
+
+    //testImplementation 'org.testfx:testfx-core:4.0.16-alpha'
+    //testImplementation 'org.testfx:testfx-spock:4.0.16-alpha'
+
+//    testImplementation  'org.testfx:testfx-junit5:4.0.16-alpha'
+//    implementation 'org.controlsfx:controlsfx:11.1.0'
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 }
 
 javafx {
     version = "18"
     modules = [ 'javafx.controls', 'javafx.graphics', 'javafx.fxml', 'javafx.media' ]
 }
+
+// jacoco {
+//     toolVersion = "0.8.7"
+//     //reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
+// }
+
+test {
+  useJUnitPlatform()
+  testLogging {
+    events "passed", "skipped", "failed"
+  }
+}
+
+// jacocoTestReport {
+//     dependsOn test
+//     reports {
+
+//         //xml.enabled false
+//         //csv.enabled false
+//         html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+//     }
+// }
+
+// jacocoTestCoverageVerification {
+//     violationRules {
+//         rule {
+//             limit {
+//                 counter = 'LINE'
+//                 value = 'COVEREDRATIO'
+//                 minimum = 0.85
+//             }
+//         }
+//     }
+// }
+
+
+// javadoc {
+//     source = sourceSets.main.allJava
+//     classpath = configurations.runtimeClasspath
+//     destinationDir = file("${rootDir}/docs/javadoc")
+// }

@@ -3,4 +3,5 @@
  */
 open module towerDefence.main {
     requires com.almasb.fxgl.all;
+    requires org.apache.groovy;
 }
