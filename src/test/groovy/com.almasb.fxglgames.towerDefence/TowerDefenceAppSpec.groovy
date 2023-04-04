@@ -18,7 +18,7 @@ class TowerDefenceAppSpec extends Specification{
         result = arg1 + arg2
 
         then: "result should be 3"
-        result == 3
+        result == 2
     }
 
 }
