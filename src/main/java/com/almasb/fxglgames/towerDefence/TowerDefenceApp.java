@@ -54,6 +54,8 @@ public class TowerDefenceApp extends GameApplication {
         final int ZIndex = ordinal() * 100;
     }
     Entity testEntity, towerEntity;
+
+    private TowerSymbol towerSymbol;
     TDLevelMap testTDLevelMap;
 
     @Override
@@ -149,7 +151,8 @@ public class TowerDefenceApp extends GameApplication {
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new Factory());
-        setLevelFromMap("tmx/FirstTilemap.tmx");        //Level entities must be spawned AFTER setting the level
+        setLevelFromMap("tmx/FirstTilemap.tmx");//Level entities must be spawned AFTER setting the level
+        towerSymbol = new TowerSymbol();
 
         testTDLevelMap = new TDLevelMap(45,22,16);
         towerEntity = spawn("towerComponent",getAppWidth() - testTDLevelMap.TileSize * 3f/2, 0.6 * getAppHeight());

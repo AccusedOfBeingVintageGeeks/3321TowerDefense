@@ -6,39 +6,51 @@ import javafx.geometry.Point2D;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.time.LocalTimer;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import com.almasb.fxgl.texture.Texture;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class TowerComponent extends Component {
     /**
      * based on code by AlmasB
      * -https://github.com/AlmasB/FXGLGames/tree/master/TowerDefense/src/main/java/com/almasb/fxglgames/td/components/TowerComponent
      */
-    private double speed, frameRateScalar;
+    private double frameRateScalar;
     private boolean isDragged, isPlaced;
     private LocalTimer shotFrequency;
     private TransformComponent transformComponent;
-    private double fireRateinSec = 0.7;
+    private double fireRateinSec;
+    private double fireRadius;
+    private Circle circleRadius;
+    private String towerTexture;
 
-    public boolean getDragStatus() { return isDragged; }
-    public void setDragStatus(boolean dragStatus) { isDragged = dragStatus; }
+    private String missileTexture;
+    private int cost;
+
 
     public boolean getPlacedStatus(){ return isPlaced; }
     public void setPlacedStatus(boolean placedStatus){ isPlaced = placedStatus; }
     //getDamage class
 
     /**
-     * TowerDefense Tower can be dragged and dropped, once dropped, shoots nearest enemy
-     * @param speed
+     * TowerDefense Tower can be dragged and dropped, once dropped, shoots the nearest enemy
+     * @param fireRateinSec
+     * @param fireRadius
+     * @param cost
      */
-    public TowerComponent(double speed)
+    public TowerComponent(double fireRateinSec,
+                          double fireRadius,int cost)
     {
+        this.fireRateinSec = fireRateinSec;
+        this.fireRadius = fireRadius;
+        this.cost = cost;
 
-        this.speed = speed;
         isDragged = false;
         isPlaced = false;
         shotFrequency = newLocalTimer();
@@ -70,16 +82,28 @@ public class TowerComponent extends Component {
     @Override
     public void onUpdate(double tpf)
     {
+        /*
+        if(this.isPlaced == false){
+            circleRadius = new Circle(entity.getPosition().getX(),entity.getPosition().getY(),fireRadius,Color.LIGHTGREEN);
+            circleRadius.setVisible(true);
+            return;
+        }
+         */
         frameRateScalar = tpf * 60;
         TowerDefenceApp.Type target = TowerDefenceApp.Type.ENEMY;
         if(this.isPlaced && shotFrequency.elapsed(Duration.seconds(fireRateinSec))){
             getGameWorld()
-                    .getClosestEntity(entity,e ->e.isType(target))
+                    .getClosestEntity(entity, e ->e.isType(target))
                     .ifPresent(closestEnemy ->{
-                        entity.rotateToVector(closestEnemy.getPosition().subtract(entity.getPosition()));
-                        transformComponent.rotateBy(90);
-                        shoot(closestEnemy);
-                        shotFrequency.capture();
+                        if(closestEnemy.distanceBBox(entity) <= fireRadius) {
+                            entity.rotateToVector(closestEnemy.getPosition().subtract(entity.getPosition()));
+                            transformComponent.rotateBy(90);
+                            shoot(closestEnemy);
+                            shotFrequency.capture();
+                        }else{
+                            //do nothing
+                            return;}
+
                     });
         }
     }
@@ -101,6 +125,5 @@ public class TowerComponent extends Component {
     {
         transformComponent.setPosition(posInWorldSpace);
     }
-
 
 }

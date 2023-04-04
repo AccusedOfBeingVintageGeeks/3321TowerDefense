@@ -12,6 +12,7 @@ import com.almasb.fxgl.texture.Texture;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -27,9 +28,10 @@ public class Factory implements EntityFactory {
                 .type(TowerDefenceApp.Type.TOWER)
                 .zIndex(TowerDefenceApp.Layer.STANDARD.ZIndex)
                 .anchorFromCenter()
-                .with(new TowerComponent(5))
+                .with(new TowerComponent(0.7,200,50))
                 .build();
     }
+
     //creating entity of type TOWER
     @Spawns("towerComponent")
     public Entity newTestTower(SpawnData data)
@@ -38,12 +40,12 @@ public class Factory implements EntityFactory {
         texture.setFitHeight(45);
         texture.setFitWidth(45);
         Entity entity = FXGL.entityBuilder(data)
-                //.viewWithBBox("turretRescaled.png")
                 .viewWithBBox(texture)
                 .type(TowerDefenceApp.Type.TOWER)
                 .zIndex(TowerDefenceApp.Layer.TALL.ZIndex)
                 .anchorFromCenter()
-                .with(new TowerComponent(5))
+                //.view(new Circle(200,Color.color(1,0,0,0.3)))
+                .with(new TowerComponent(0.7,200,50))
                 .build();
         //entity.setLocalAnchor(new Point2D(entity.getWidth()/2,entity.getHeight()-entity.getWidth()/2));
 
