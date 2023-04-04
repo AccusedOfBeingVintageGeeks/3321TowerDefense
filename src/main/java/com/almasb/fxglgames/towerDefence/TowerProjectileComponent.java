@@ -2,6 +2,7 @@ package com.almasb.fxglgames.towerDefence;
 
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.Entity;
+import javafx.geometry.Point2D;
 
 /**
  * based on code from AlmasB
@@ -11,8 +12,9 @@ public class TowerProjectileComponent extends Component {
 
     private Entity tower;
     private Entity prey;
+    //private Point2D aim;
 
-    private int speed = 500;
+    private int speed = 1000;
     //speed can probably put into a different class (data class) and be retrieved from there
     //this should make it easier to change game settings
 
@@ -21,9 +23,10 @@ public class TowerProjectileComponent extends Component {
      * @param tower
      * @param prey
      */
-    public TowerProjectileComponent(Entity tower, Entity prey) {
+    public TowerProjectileComponent(Entity tower, Entity prey) { //, Point2D aim
         this.tower = tower;
         this.prey = prey;
+        //this.aim = aim; -> put aim into parameter
     }
 
     /**
@@ -40,6 +43,7 @@ public class TowerProjectileComponent extends Component {
             preyHit();
             return;
         }
+        //entity.translateTowards(aim,speed * tpf);
         entity.translateTowards(prey.getCenter(),speed * tpf);
     }
 
