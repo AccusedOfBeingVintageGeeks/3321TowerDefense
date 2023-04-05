@@ -82,13 +82,14 @@ public class TowerComponent extends Component {
     @Override
     public void onUpdate(double tpf)
     {
-        /*
+/*
         if(this.isPlaced == false){
             circleRadius = new Circle(entity.getPosition().getX(),entity.getPosition().getY(),fireRadius,Color.LIGHTGREEN);
             circleRadius.setVisible(true);
             return;
         }
-         */
+        */
+
         frameRateScalar = tpf * 60;
         TowerDefenceApp.Type target = TowerDefenceApp.Type.ENEMY;
         if(this.isPlaced && shotFrequency.elapsed(Duration.seconds(fireRateinSec))){
