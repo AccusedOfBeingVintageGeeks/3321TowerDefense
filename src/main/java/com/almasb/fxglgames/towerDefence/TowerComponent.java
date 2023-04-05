@@ -20,6 +20,8 @@ public class TowerComponent extends Component {
     /**
      * based on code by AlmasB
      * -https://github.com/AlmasB/FXGLGames/tree/master/TowerDefense/src/main/java/com/almasb/fxglgames/td/components/TowerComponent
+     * author: Andreas Kramer
+     * TowerComponent shoots Entities of type Enemy once set in place
      */
     private double frameRateScalar;
     private boolean isDragged, isPlaced;
@@ -29,10 +31,8 @@ public class TowerComponent extends Component {
     private double fireRadius;
     private Circle circleRadius;
     private String towerTexture;
-
     private String missileTexture;
     private int cost;
-
 
     public boolean getPlacedStatus(){ return isPlaced; }
     public void setPlacedStatus(boolean placedStatus){ isPlaced = placedStatus; }

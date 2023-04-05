@@ -22,6 +22,12 @@ import com.almasb.fxgl.texture.Texture;
 import static com.almasb.fxgl.dsl.FXGL.image;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.texture;
 
+/**
+ * based on code by AlmasB: based on code by AlmasB:-https://github.com/AlmasB/FXGLGames/tree/master/TowerDefense/src/main/java/com/almasb/fxglgames/td/ui/TowerIcon
+ * author: Andreas Kramer
+ * TowerSymbol consisting of background, texture of the tower and a display for its cost
+ */
+
 public class TowerSymbol extends VBox {
 
     private Texture texture;
