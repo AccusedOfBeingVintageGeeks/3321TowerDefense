@@ -55,6 +55,14 @@ public class TowerDefenceApp extends GameApplication {
     }
     Entity testEntity, towerEntity;
 
+    private TowerMenuBox towerMenuBox;
+
+    private List<String> towerNames = List.of(
+            "cannon.png",
+            "cannon.png",
+            "cannon.png"
+    );
+
     private TowerSymbol towerSymbol;
     TDLevelMap testTDLevelMap;
 
@@ -78,16 +86,6 @@ public class TowerDefenceApp extends GameApplication {
         //We can probably refactor later so that the UserActions below are initialized from methods in a UserActions class
 
         Input input = getInput();
-        /*
-        UserAction shootTest = new UserAction("shoot") {
-            @Override
-            protected void onAction(){
-                towerEntity.getComponent(TowerComponent.class).shoot(testEntity);
-            }
-        };
-        input.addAction(shootTest,KeyCode.SPACE);
-
-         */
 
         UserAction drag = new UserAction("Drag") {
             //For drag and drop
@@ -95,11 +93,11 @@ public class TowerDefenceApp extends GameApplication {
             Entity draggedEntity;//Maybe we should set this in onActionBegin
             @Override
             protected void onActionBegin() {
-                //loop through towers, check if draggable, check of mouse is over it
+                //loop through towers, check if draggable, check if mouse is over it
                 List<Entity> towerEntities = getGameWorld().getEntitiesByComponent(TowerComponent.class);
                 for (Entity towerEnt : towerEntities) {
                     if(!towerEnt.getComponent(TowerComponent.class).getPlacedStatus()
-                            && getInput().getMousePositionWorld().distance(towerEnt.getAnchoredPosition()) < 0.5 * testTDLevelMap.TileSize) {
+                            && getInput().getMousePositionWorld().distance(towerEnt.getAnchoredPosition()) < testTDLevelMap.TileSize) {
                         draggedEntity = towerEnt;
                         dragging = true;
                         break;
@@ -137,8 +135,9 @@ public class TowerDefenceApp extends GameApplication {
 
                         // initPoint (the tower's position on the sidebar) needs to be a property of tower entities or their TowerComponent.
                         // Or maybe it gets it from the sidebar class if there will be such a thing?
-                        Point2D initPoint = new Point2D(getAppWidth() - testTDLevelMap.TileSize,getAppHeight() * 0.4);
-                        draggedEntity.setAnchoredPosition(initPoint);
+                        //Point2D initPoint = new Point2D(getAppWidth() - testTDLevelMap.TileSize,getAppHeight() * 0.4);
+                        //draggedEntity.setAnchoredPosition(initPoint);
+                        draggedEntity.removeFromWorld();
                         //draggedEntity.getComponent(TowerComponent.class).rotateUp();
                     }
                 }
@@ -147,16 +146,24 @@ public class TowerDefenceApp extends GameApplication {
 
         input.addAction(drag, MouseButton.PRIMARY);
     }
+    @Override
+    protected void initUI(){
+        addUINode(towerMenuBox);
+    }
 
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new Factory());
         setLevelFromMap("tmx/FirstTilemap.tmx");//Level entities must be spawned AFTER setting the level
-        towerSymbol = new TowerSymbol();
-
         testTDLevelMap = new TDLevelMap(45,22,16);
-        towerEntity = spawn("towerComponent",getAppWidth() - testTDLevelMap.TileSize * 3f/2, 0.6 * getAppHeight());
-        testEntity = spawn("testEntity", getAppWidth()- testTDLevelMap.TileSize * 3f/2,0.5 * getAppHeight());
+        towerMenuBox = new TowerMenuBox(towerNames);
+        towerMenuBox.setTranslateX(getAppWidth() - testTDLevelMap.TileSize * 3f/2 - 12);
+        towerMenuBox.setTranslateY(0.1 * getAppHeight());
+
+
+
+        //towerEntity = spawn("towerComponent",getAppWidth() - testTDLevelMap.TileSize * 3f/2, 0.6 * getAppHeight());
+        //testEntity = spawn("testEntity", getAppWidth()- testTDLevelMap.TileSize * 3f/2,0.5 * getAppHeight());
         //spawn("Projectile", FXGLMath.randomPoint(new Rectangle2D(0,0,getAppWidth(),getAppHeight())));
 
         SpawnData enemySpawnData = new SpawnData();
@@ -199,6 +206,9 @@ public class TowerDefenceApp extends GameApplication {
                 });
             }
         }
+    }
+    public void onTowerSelection(){
+        towerEntity = spawn("towerComponent",getInput().getMousePositionWorld().getX()-5, getInput().getMousePositionWorld().getY()+5);
     }
 
     public static void main(String[] args) {

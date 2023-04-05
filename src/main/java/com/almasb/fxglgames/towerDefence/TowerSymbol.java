@@ -14,6 +14,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 import com.almasb.fxgl.texture.Texture;
 
@@ -26,19 +28,20 @@ public class TowerSymbol extends VBox {
 
     public TowerSymbol(){
 
-        var backGround = new Circle(35,35,35);
-        backGround.setStroke(Color.WHITESMOKE);
+        var backGround = new Circle(35,35,35,Color.LIGHTGREEN);
+        backGround.setStroke(Color.BEIGE);
         backGround.setStrokeWidth(2.5);
 
         var text = FXGLForKtKt.getUIFactoryService().newText("50" + "");
         text.setStroke(Color.BLACK);
         texture = texture("cannon.png");
+        texture.setFitHeight(60);
+        texture.setFitWidth(60);
 
         var stackPane = new StackPane(backGround,texture);
-
-        setSpacing(10);
+        stackPane.toBack();
+        setSpacing(5);
         setAlignment(Pos.TOP_CENTER);
-
         getChildren().addAll(stackPane,text);
 
     }
