@@ -10,29 +10,31 @@ import java.io.InputStream;
 import java.util.List;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
 /**
  * Every level will need a WaveSpawner object managing the spawning of waves of enemy entities.
  * @author koda koziol
  */
-public class WaveSpawner {
+public class WaveManager {
     final SpawnData enemySpawnData;
+    final int WAVE_BREAK_TIME = 30;
+
     private List<WaveData> waveDataLevelList;
-    private int waveIndex = 0;
+    private int waveIndex = 0, countdown = WAVE_BREAK_TIME;
+
+    //need some kind of currentWaveState property: prevDefeated or nextReady, currentActive
 
     /**
      * @return true if every wave for this level has been spawned.
      */
-    public Boolean IsEveryWaveSpawned(){return waveIndex>=waveDataLevelList.size();}
+    public Boolean isEveryWaveSpawned(){return waveIndex>=waveDataLevelList.size();}
 
     /**
      * WaveSpawner objects manage the spawning of waves of enemy entities.
      * @param enemySpawnData            Must include the key-value: "waypoints" - List of Point2D
      * @param waveDataLevelListFileName The name of the json file at the path /assets/levels/waveDataLists/
      */
-    WaveSpawner(SpawnData enemySpawnData, String waveDataLevelListFileName){
+    WaveManager(SpawnData enemySpawnData, String waveDataLevelListFileName){
         this.enemySpawnData = enemySpawnData;
         try{
             InputStream stream = getAssetLoader().getStream("/assets/levels/waveDataLists/" + waveDataLevelListFileName);
@@ -57,35 +59,16 @@ public class WaveSpawner {
     }
 
     /**
-     * @return true if any enemy has reached the end of the path, false otherwise.
-     */
-    public boolean hasAnEnemyReachedTheEnd(){//TODO
-        List<Entity> scrubs = getGameWorld().getEntitiesByType(TowerDefenceApp.Type.ENEMY);
-        for (Entity enemy: scrubs) {
-            if (enemy.getComponent(WaypointMoveComponent.class).atDestinationProperty().get())
-                return true;
-        }
-        return false;
-    }
-
-    /**
-     * @return true if every enemy in the current wave has been destroyed.
-     */
-    public boolean isWaveDefeated(){//TODO
-        return false;
-    }
-
-    /**
      * Begin regularly spawning a wave of enemies according to the passed waveData object.
      * @param waveData Includes the enemyQueue, spawnsPerQueueEntry, and deltaSpawnInMilliseconds.
      */
     private void spawnWave(WaveData waveData)
     {
         final int[] currentEntry = {0}, consecutiveSpawnsOfCurrentEntry = {0};
-        run(
+        getGameTimer().runAtInterval(
                 ()->{
                     //Check waveData
-                    TowerDefenceApp.EnemyType nextEnemyType = waveData.enemyQueue()[currentEntry[0]];
+                    TowerDefenseApp.EnemyType nextEnemyType = waveData.enemyQueue()[currentEntry[0]];
 
                     if(nextEnemyType != null){
                         Entity scrubEntity = spawn(nextEnemyType.name(),enemySpawnData);
@@ -103,4 +86,25 @@ public class WaveSpawner {
                 waveData.enemyQueue().length * waveData.spawnsPerQueueEntry()
         );
     }
+
+    /**
+     * @return true if any enemy has reached the end of the path, false otherwise.
+     */
+    public boolean hasAnEnemyReachedTheEnd(){
+        List<Entity> scrubs = getGameWorld().getEntitiesByType(TowerDefenseApp.Type.ENEMY);
+        for (Entity enemy: scrubs) {
+            if (enemy.getComponent(WaypointMoveComponent.class).atDestinationProperty().get())
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return the number of enemies currently spawned and existing; a positive int
+     */
+    public int remainingEnemies(){
+        return getGameWorld().getEntitiesByType(TowerDefenseApp.Type.ENEMY).size();
+    }
+    //^^^ in future, spawned enemies may be cached for better performance instead of being searched for every time.
+
 }

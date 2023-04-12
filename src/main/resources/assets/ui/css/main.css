@@ -1,0 +1,17 @@
+.ready_button{
+    -fx-margin: 0;
+    -fx-padding: 0;
+
+    -fx-background-color: darkgreen;
+    -fx-border-width: 0;
+}
+.ready_button:hover{
+    -fx-background-color: green;
+}
+.ready_button:pressed{
+    -fx-background-color: black;
+}
+
+.wave_info_text{
+    -fx-color-label-visible: white
+}

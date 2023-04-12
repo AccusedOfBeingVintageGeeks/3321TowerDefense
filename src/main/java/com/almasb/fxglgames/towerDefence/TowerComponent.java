@@ -7,11 +7,8 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.time.LocalTimer;
 import javafx.util.Duration;
-import com.almasb.fxgl.texture.Texture;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
-
-import java.util.Objects;
 
 public class TowerComponent extends Component {
     /**
@@ -71,7 +68,7 @@ public class TowerComponent extends Component {
     public void onUpdate(double tpf)
     {
         frameRateScalar = tpf * 60;
-        TowerDefenceApp.Type target = TowerDefenceApp.Type.ENEMY;
+        TowerDefenseApp.Type target = TowerDefenseApp.Type.ENEMY;
         if(this.isPlaced && shotFrequency.elapsed(Duration.seconds(fireRateinSec))){
             getGameWorld()
                     .getClosestEntity(entity,e ->e.isType(target))

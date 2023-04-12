@@ -8,22 +8,25 @@ package com.almasb.fxglgames.towerDefence;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.app.scene.GameView;
 import com.almasb.fxgl.dsl.components.WaypointMoveComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.util.List;
 import java.util.Map;
 
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.*;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
-public class TowerDefenceApp extends GameApplication {
+public class TowerDefenseApp extends GameApplication {
 
     /**
      * Types of entities in this game. May be assigned to entities in the factory with the .type() method.
@@ -54,16 +57,26 @@ public class TowerDefenceApp extends GameApplication {
     }
     Entity testEntity, towerEntity;
     TDLevelMap testTDLevelMap;
-    WaveSpawner waveSpawner;
+    WaveManager waveManager;
+
+    final int
+            WINDOW_WIDTH = 1080,
+            WINDOW_HEIGHT = 720,
+            TILE_SIZE = 45;
 
     @Override
     protected void initSettings(GameSettings settings) {
         // initialize common game / window settings.
         settings.setTitle("Tower Defense");
         settings.setVersion("0.01");
-        settings.setWidth(1080);
-        settings.setHeight(720);
+        settings.setWidth(WINDOW_WIDTH);
+        settings.setHeight(WINDOW_HEIGHT);
         settings.setGameMenuEnabled(true);
+        //settings.setMainMenuEnabled(true);
+        settings.getCSSList().add("main.css");
+
+        //settings.setFullScreenAllowed(true);
+        //settings.setFullScreenFromStart(true);
     }
 
     @Override
@@ -71,10 +84,9 @@ public class TowerDefenceApp extends GameApplication {
         //I believe this is important for saving state, but I need to do more research.
     }
 
+
     @Override
     protected void initInput() {
-        //We can probably refactor later so that the UserActions below are initialized from methods in a UserActions class
-
         Input input = getInput();
 
         UserAction drag = new UserAction("Drag") {
@@ -138,36 +150,60 @@ public class TowerDefenceApp extends GameApplication {
 
     @Override
     protected void initGame() {
+        Rectangle background = new Rectangle(WINDOW_WIDTH - TILE_SIZE*2, 0,TILE_SIZE*2,getAppHeight());
+        background.setFill(Color.gray(0.2));
+        getGameScene().addGameView(new GameView(background,Layer.SHORT.ZIndex));
+
         getGameWorld().addEntityFactory(new Factory());
         setLevelFromMap("tmx/FirstTilemap.tmx");        //Level entities must be spawned AFTER setting the level
 
-        testTDLevelMap = new TDLevelMap(45,22,16);
+        testTDLevelMap = new TDLevelMap(TILE_SIZE,22,16);
         towerEntity = spawn("towerComponent",getAppWidth() - testTDLevelMap.TileSize * 3f/2, 0.6 * getAppHeight());
         testEntity = spawn("testEntity", getAppWidth()- testTDLevelMap.TileSize * 3f/2,0.5 * getAppHeight());
 
         SpawnData enemySpawnData = new SpawnData();
         enemySpawnData.put("waypoints", testTDLevelMap.PathPoints);
-        waveSpawner = new WaveSpawner(enemySpawnData, "firstWavesDataLevelList.json");
+        waveManager = new WaveManager(enemySpawnData, "firstWavesDataLevelList.json");
+    }
+    @Override
+    protected void initUI() {
+        EventHandler<ActionEvent> readyClick = event -> {
+            if(waveManager.remainingEnemies() == 0 && !waveManager.isEveryWaveSpawned())
+                waveManager.spawnNextWave();
+        };
+        ReadyButton readyButton = new ReadyButton(TILE_SIZE*2, TILE_SIZE,readyClick);
 
-        if(!waveSpawner.IsEveryWaveSpawned())
-            waveSpawner.spawnNextWave();
+        addUINode(readyButton,WINDOW_WIDTH - TILE_SIZE*2,WINDOW_HEIGHT - TILE_SIZE);
     }
 
     @Override
     protected void onUpdate(double tpf) {
+        /*if(EnemyStatus.remainingEnemies() == 0)
+            getGameTimer().runOnceAfter(()-> {
+                if(EnemyStatus.remainingEnemies() == 0)
+                    waveSpawner.spawnNextWave();
+                }, Duration.seconds(5));*/
+
         List<Entity> scrubs = getGameWorld().getEntitiesByType(Type.ENEMY);
         for (Entity enemy: scrubs) {
-            if(enemy.getComponent(WaypointMoveComponent.class).atDestinationProperty().get())
-            {
+            if(enemy.getComponent(WaypointMoveComponent.class).atDestinationProperty().get()) {
                 // An enemy has made it to the end.
                 // There's probably a more efficient way of checking this...
                 getGameController().pauseEngine();
                 //getDialogService().showMessageBox("GAME OVER");
                 getDialogService().showMessageBox("GAME OVER", () -> {
-                    //Do something when player clicks 'OK'
+                    //Do something when player clicks 'OK', like go back to the main menu
                 });
             }
         }
+
+        //broken, may need events from WaveManager instead
+        /*if(waveManager.remainingEnemies() == 0 && waveManager.isEveryWaveSpawned()) {
+            getGameController().pauseEngine();
+            getDialogService().showMessageBox("VICTORY", ()->{
+                //Do something when player clicks 'OK', like go back to the main menu
+            });
+        }*/
     }
 
     public static void main(String[] args) {
