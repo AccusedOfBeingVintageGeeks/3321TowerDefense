@@ -56,6 +56,15 @@ public class TowerComponent extends Component {
         shotFrequency = newLocalTimer();
         newLocalTimer().capture();
     }
+    /*
+    private DataForTower towerData;
+    public TowerComponent(DataForTower towerData){
+        this.towerData = towerData;
+        shotFrequency = newLocalTimer();
+        newLocalTimer().capture();
+    }
+    */
+
 
     /**
      * Method enables TowerComponent to shoot Enemy using TowerProjectileComponent

@@ -26,6 +26,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.spawn;
 
 public class TowerDefenceApp extends GameApplication {
 
+
     /**
      * Types of entities in this game. May be assigned to entities in the factory with the .type() method.
      */
@@ -53,14 +54,16 @@ public class TowerDefenceApp extends GameApplication {
         //This is multiplied by 100 for edge cases where we want to have an entity between layers
         final int ZIndex = ordinal() * 100;
     }
+
+    private List<DataForTower> dataForTowers;
     Entity testEntity, towerEntity;
 
     private TowerMenuBox towerMenuBox;
 
     private List<String> towerNames = List.of(
             "cannon.png",
-            "cannon.png",
-            "cannon.png"
+            "machinegun.png",
+            "missilelauncher.png"
     );
 
     private TowerSymbol towerSymbol;
@@ -210,6 +213,7 @@ public class TowerDefenceApp extends GameApplication {
     public void onTowerSelection(){
         towerEntity = spawn("towerComponent",getInput().getMousePositionWorld().getX()-5, getInput().getMousePositionWorld().getY()+5);
     }
+
 
     public static void main(String[] args) {
         launch(args);

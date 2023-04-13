@@ -10,6 +10,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.time.LocalTimer;
 import javafx.beans.property.IntegerProperty;
 import javafx.geometry.Pos;
+import javafx.scene.chart.PieChart;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -31,16 +32,17 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.texture;
 public class TowerSymbol extends VBox {
 
     private Texture texture;
+    private DataForTower data;
 
-    public TowerSymbol(){
-
+    public TowerSymbol(String textureName){
+        this.data = data;
         var backGround = new Circle(35,35,35,Color.LIGHTGREEN);
         backGround.setStroke(Color.BEIGE);
         backGround.setStrokeWidth(2.5);
 
         var text = FXGLForKtKt.getUIFactoryService().newText("50" + "");
         text.setStroke(Color.BLACK);
-        texture = texture("cannon.png");
+        texture = texture(textureName);
         texture.setFitHeight(60);
         texture.setFitWidth(60);
 

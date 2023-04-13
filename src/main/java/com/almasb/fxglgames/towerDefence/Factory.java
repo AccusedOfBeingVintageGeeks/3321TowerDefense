@@ -9,6 +9,7 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.texture.Texture;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
@@ -35,11 +36,12 @@ public class Factory implements EntityFactory {
 
     //creating entity of type TOWER
     @Spawns("towerComponent")
-    public Entity newTestTower(SpawnData data)
+    public Entity newTower(SpawnData data)
     {
         Texture texture = new Texture(image("cannon.png"));
         texture.setFitHeight(45);
         texture.setFitWidth(45);
+
         var back = new Circle(25,25,25,Color.GRAY);
         var pane = new StackPane(back,texture);
         Entity entity = FXGL.entityBuilder(data)
@@ -50,6 +52,21 @@ public class Factory implements EntityFactory {
                 //.view(new Circle(200,Color.color(1,0,0,0.3)))
                 .with(new TowerComponent(0.7,200,50))
                 .build();
+        /*
+        texture.opacityProperty().bind(
+                Bindings.when(entity.getViewComponent().getParent().hoverProperty())
+                        .then(entity)
+        );
+        */
+
+                /*
+        back.fillProperty().bind(
+                Bindings.when(entity.getViewComponent().getParent().hoverProperty())
+                        .then(Color.DARKBLUE)
+                        .otherwise(Color.BLUE)
+        );
+
+                 */
         //entity.setLocalAnchor(new Point2D(entity.getWidth()/2,entity.getHeight()-entity.getWidth()/2));
 
         entity.setLocalAnchorFromCenter();

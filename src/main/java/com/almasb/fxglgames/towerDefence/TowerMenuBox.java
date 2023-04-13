@@ -22,8 +22,8 @@ public class TowerMenuBox extends VBox {
      */
     public TowerMenuBox(List<String> towerNames) {
         setSpacing(5);
-        towerNames.forEach(String -> {
-            var symbol = new TowerSymbol();
+        towerNames.forEach(name -> {
+            var symbol = new TowerSymbol(name);
             //symbol.bindToMoney(getip("money"));
 
             symbol.setOnMousePressed(e -> {
