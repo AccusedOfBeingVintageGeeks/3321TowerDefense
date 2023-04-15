@@ -69,12 +69,12 @@ public class Factory implements EntityFactory {
 
         return entity;
     }
-    public static void reinitializeScrub(Entity scrubEntity/*, SpawnData data*/)
+    public static void reinitializeEnemy(Entity enemyEntity/*, SpawnData data*/)
     {
         // Reset every property that needs to be reset here
         // ^^^ Only call when entity.setReusable(true)
 
-        //scrubEntity.setPosition();
+        //enemyEntity.setPosition();
         //scrubEntity.getComponent(WaypointMoveComponent.class).
 
         // Will need to fill this out later

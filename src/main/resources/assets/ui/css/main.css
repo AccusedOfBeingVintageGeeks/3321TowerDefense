@@ -4,6 +4,7 @@
 
     -fx-background-color: darkgreen;
     -fx-border-width: 0;
+    -fx-font-size: 28;
 }
 .ready_button:hover{
     -fx-background-color: green;
@@ -11,7 +12,15 @@
 .ready_button:pressed{
     -fx-background-color: black;
 }
+.ready_button:disabled{
+    -fx-background-color: #003300;
+    -fx-text-fill: lightgrey;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
+    -fx-font-size: 14;
+    -fx-opacity: 1;
+}
 
 .wave_info_text{
-    -fx-color-label-visible: white
+    -fx-font-size: 10;
 }

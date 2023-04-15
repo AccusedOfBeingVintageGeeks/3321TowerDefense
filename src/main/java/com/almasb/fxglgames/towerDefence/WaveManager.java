@@ -3,6 +3,7 @@ package com.almasb.fxglgames.towerDefence;
 import com.almasb.fxgl.dsl.components.WaypointMoveComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.time.Timer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.util.Duration;
@@ -12,25 +13,24 @@ import java.util.List;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 /**
- * Every level will need a WaveSpawner object managing the spawning of waves of enemy entities.
+ * Every level will need a WaveManager object managing the spawning of waves of enemy entities.
  * @author koda koziol
  */
 public class WaveManager {
     final SpawnData enemySpawnData;
-    final int WAVE_BREAK_TIME = 30;
+    final int WAVE_BREAK_TIME = 45;
 
     private List<WaveData> waveDataLevelList;
     private int waveIndex = 0, countdown = WAVE_BREAK_TIME;
+    private Timer waveBreakTimer = new Timer();
+    private boolean isActivelySpawning;
 
-    //need some kind of currentWaveState property: prevDefeated or nextReady, currentActive
-
-    /**
-     * @return true if every wave for this level has been spawned.
-     */
+    public boolean isActivelySpawning() {return isActivelySpawning;}
+    public int getSecondsToNextWave(){return countdown;}
     public Boolean isEveryWaveSpawned(){return waveIndex>=waveDataLevelList.size();}
 
     /**
-     * WaveSpawner objects manage the spawning of waves of enemy entities.
+     * WaveManager objects manage the spawning of waves of enemy entities.
      * @param enemySpawnData            Must include the key-value: "waypoints" - List of Point2D
      * @param waveDataLevelListFileName The name of the json file at the path /assets/levels/waveDataLists/
      */
@@ -45,12 +45,15 @@ public class WaveManager {
             //Seems like it would be a game-breaking problem.
             System.out.println(e.getMessage());
         }
+        startBreakPeriod(WAVE_BREAK_TIME);
     }
 
     /**
      * Spawns the next wave of enemies. Will throw an exception if called after the last wave has already been spawned.
      */
     public void spawnNextWave(){
+        System.out.println("spawnNextWaveCalled");
+        waveBreakTimer.clear();
         if(waveIndex >= waveDataLevelList.size())
             throw new IndexOutOfBoundsException("Last wave for this level has already been spawned");
 
@@ -64,26 +67,58 @@ public class WaveManager {
      */
     private void spawnWave(WaveData waveData)
     {
-        final int[] currentEntry = {0}, consecutiveSpawnsOfCurrentEntry = {0};
+        isActivelySpawning = true;
+
+        final int[] currentEntryIndex = {0}, numConsecutiveSpawnsOfCurrentEntry = {0};
         getGameTimer().runAtInterval(
                 ()->{
-                    //Check waveData
-                    TowerDefenseApp.EnemyType nextEnemyType = waveData.enemyQueue()[currentEntry[0]];
+                        //Check waveData
+                        TowerDefenseApp.EnemyType nextEnemyType = waveData.enemyQueue()[currentEntryIndex[0]];
 
-                    if(nextEnemyType != null){
-                        Entity scrubEntity = spawn(nextEnemyType.name(),enemySpawnData);
-                        Factory.reinitializeScrub(scrubEntity);
-                    }
+                        if(nextEnemyType != null){
+                            Entity enemy = spawn(nextEnemyType.name(),enemySpawnData);
+                            Factory.reinitializeEnemy(enemy);
+                        }
 
-                    consecutiveSpawnsOfCurrentEntry[0]++;
-                    if(consecutiveSpawnsOfCurrentEntry[0] >= waveData.spawnsPerQueueEntry())
-                    {
-                        consecutiveSpawnsOfCurrentEntry[0] = 0;
-                        currentEntry[0]++;
-                    }
-                },
+                        numConsecutiveSpawnsOfCurrentEntry[0]++;
+                        if(numConsecutiveSpawnsOfCurrentEntry[0] >= waveData.spawnsPerQueueEntry())
+                        {
+                            numConsecutiveSpawnsOfCurrentEntry[0] = 0;
+                            currentEntryIndex[0]++;
+
+                            if(currentEntryIndex[0] == waveData.enemyQueue().length)// if we just spawned the last enemyEntry
+                            {
+                                isActivelySpawning = false;
+                                startBreakPeriod(WAVE_BREAK_TIME);
+                            }
+
+                        }
+                    },
                 Duration.millis(waveData.deltaSpawnInMilliseconds()),
                 waveData.enemyQueue().length * waveData.spawnsPerQueueEntry()
+        );
+    }
+
+    /**
+     * This method starts or restarts the waveBreakTimer.
+     * @param durationInSec An integer, how long should the next break be?
+     */
+    private void startBreakPeriod(int durationInSec){
+        waveBreakTimer.clear();
+        waveBreakTimer = getGameTimer();
+
+        waveBreakTimer.runAtInterval(
+                ()->{
+                    if(countdown > 1)
+                        countdown--;
+                    else {
+                        countdown = durationInSec;
+                        if(!isEveryWaveSpawned())
+                            spawnNextWave();
+                    }
+                },
+                Duration.seconds(1),
+                durationInSec
         );
     }
 
@@ -91,8 +126,8 @@ public class WaveManager {
      * @return true if any enemy has reached the end of the path, false otherwise.
      */
     public boolean hasAnEnemyReachedTheEnd(){
-        List<Entity> scrubs = getGameWorld().getEntitiesByType(TowerDefenseApp.Type.ENEMY);
-        for (Entity enemy: scrubs) {
+        List<Entity> spawnedEntities = getGameWorld().getEntitiesByType(TowerDefenseApp.Type.ENEMY);
+        for (Entity enemy: spawnedEntities) {
             if (enemy.getComponent(WaypointMoveComponent.class).atDestinationProperty().get())
                 return true;
         }
@@ -100,11 +135,9 @@ public class WaveManager {
     }
 
     /**
-     * @return the number of enemies currently spawned and existing; a positive int
+     * @return the number of enemies currently spawned and existing; a positive integer.
      */
     public int remainingEnemies(){
         return getGameWorld().getEntitiesByType(TowerDefenseApp.Type.ENEMY).size();
     }
-    //^^^ in future, spawned enemies may be cached for better performance instead of being searched for every time.
-
 }

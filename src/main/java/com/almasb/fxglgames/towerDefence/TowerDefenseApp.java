@@ -56,6 +56,7 @@ public class TowerDefenseApp extends GameApplication {
         final int ZIndex = ordinal() * 100;
     }
     Entity testEntity, towerEntity;
+    ReadyUINode readyUINode;
     TDLevelMap testTDLevelMap;
     WaveManager waveManager;
 
@@ -167,23 +168,18 @@ public class TowerDefenseApp extends GameApplication {
     }
     @Override
     protected void initUI() {
-        EventHandler<ActionEvent> readyClick = event -> {
+        EventHandler<ActionEvent> readyClicked = event -> {
             if(waveManager.remainingEnemies() == 0 && !waveManager.isEveryWaveSpawned())
                 waveManager.spawnNextWave();
         };
-        ReadyButton readyButton = new ReadyButton(TILE_SIZE*2, TILE_SIZE,readyClick);
+        readyUINode = new ReadyUINode(TILE_SIZE*2, TILE_SIZE,readyClicked);
 
-        addUINode(readyButton,WINDOW_WIDTH - TILE_SIZE*2,WINDOW_HEIGHT - TILE_SIZE);
+
+        addUINode(readyUINode,WINDOW_WIDTH - TILE_SIZE*2,WINDOW_HEIGHT - TILE_SIZE);
     }
 
     @Override
     protected void onUpdate(double tpf) {
-        /*if(EnemyStatus.remainingEnemies() == 0)
-            getGameTimer().runOnceAfter(()-> {
-                if(EnemyStatus.remainingEnemies() == 0)
-                    waveSpawner.spawnNextWave();
-                }, Duration.seconds(5));*/
-
         List<Entity> scrubs = getGameWorld().getEntitiesByType(Type.ENEMY);
         for (Entity enemy: scrubs) {
             if(enemy.getComponent(WaypointMoveComponent.class).atDestinationProperty().get()) {
@@ -195,6 +191,15 @@ public class TowerDefenseApp extends GameApplication {
                     //Do something when player clicks 'OK', like go back to the main menu
                 });
             }
+        }
+        if(!waveManager.isActivelySpawning()) {
+            readyUINode.setCountdownText(waveManager.getSecondsToNextWave());
+            if(waveManager.remainingEnemies() == 0)
+                readyUINode.setButtonClickable(true);
+        }
+        else {
+            readyUINode.setBlankText();
+            readyUINode.setButtonClickable(false);
         }
 
         //broken, may need events from WaveManager instead
