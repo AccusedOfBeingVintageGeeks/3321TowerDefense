@@ -1,4 +1,4 @@
-package com.almasb.fxglgames.towerDefence;
+package com.almasb.fxglgames.towerDefense;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -43,15 +43,19 @@ public class ReadyUINode extends Parent {
      * @param isCounting    Will display the countdown if this is true.
      * @param countdown     This should be the seconds remaining.
      */
-    public void update(Boolean isClickable, Boolean isCounting, int countdown){
-        if(isCounting) {
-            setCountdownText(countdown);
-            if(isClickable)
-                setButtonClickable(true);
-        }
-        else {
-            waveInfoText.setText("");
-            setButtonClickable(false);
+    public void update(Boolean isClickable, Boolean isCounting, int countdown, Boolean hasLastWaveStarted){
+        if(hasLastWaveStarted)
+            waveInfoText.setText("Last wave");
+        else{
+            if(isCounting) {
+                setCountdownText(countdown);
+                if(isClickable)
+                    setButtonClickable(true);
+            }
+            else {
+                waveInfoText.setText("");//Can make current wave later
+                setButtonClickable(false);
+            }
         }
     }
 

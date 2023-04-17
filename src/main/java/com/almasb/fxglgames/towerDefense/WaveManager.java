@@ -1,4 +1,4 @@
-package com.almasb.fxglgames.towerDefence;
+package com.almasb.fxglgames.towerDefense;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
@@ -16,7 +16,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
  * @author koda koziol
  */
 public class WaveManager {
-    final SpawnData enemySpawnData;
+    private final SpawnData enemySpawnData;
     final int WAVE_BREAK_TIME = 45;
 
     private List<WaveData> waveDataLevelList;

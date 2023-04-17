@@ -4,7 +4,7 @@
  * See LICENSE for details.
  */
 
-package com.almasb.fxglgames.towerDefence;
+package com.almasb.fxglgames.towerDefense;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
@@ -69,7 +69,7 @@ public class TowerDefenseApp extends GameApplication {
     protected void initSettings(GameSettings settings) {
         // initialize common game / window settings.
         settings.setTitle("Tower Defense");
-        settings.setVersion("0.01");
+        settings.setVersion("0.04");
         settings.setWidth(WINDOW_WIDTH);
         settings.setHeight(WINDOW_HEIGHT);
         settings.setGameMenuEnabled(true);
@@ -155,7 +155,7 @@ public class TowerDefenseApp extends GameApplication {
         setLevelFromMap("tmx/FirstTilemap.tmx");        //Level entities must be spawned AFTER setting the level
 
         testTDLevelMap = new TDLevelMap(TILE_SIZE,22,16);
-        towerEntity = spawn("towerComponent",getAppWidth() - testTDLevelMap.TileSize * 3f/2, 0.6 * getAppHeight());
+        towerEntity = spawn("tower",getAppWidth() - testTDLevelMap.TileSize * 3f/2, 0.6 * getAppHeight());
         testEntity = spawn("testEntity", getAppWidth()- testTDLevelMap.TileSize * 3f/2,0.5 * getAppHeight());
 
         SpawnData enemySpawnData = new SpawnData();
@@ -201,7 +201,8 @@ public class TowerDefenseApp extends GameApplication {
         readyUINode.update(
                 currentlySpawnedEnemies.size() == 0,
                 !waveManager.isActivelySpawning(),
-                waveManager.getSecondsToNextWave()
+                waveManager.getSecondsToNextWave(),
+                false //TODO
         );
     }
 

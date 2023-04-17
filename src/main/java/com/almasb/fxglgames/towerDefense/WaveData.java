@@ -1,4 +1,4 @@
-package com.almasb.fxglgames.towerDefence;
+package com.almasb.fxglgames.towerDefense;
 
 /**
  * WaveData objects hold data necessary to spawn a wave of enemies.

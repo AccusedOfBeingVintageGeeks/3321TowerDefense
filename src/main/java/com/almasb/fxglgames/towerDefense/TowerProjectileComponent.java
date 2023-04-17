@@ -1,8 +1,7 @@
-package com.almasb.fxglgames.towerDefence;
+package com.almasb.fxglgames.towerDefense;
 
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.Entity;
-import javafx.geometry.Point2D;
 
 /**
  * based on code from AlmasB

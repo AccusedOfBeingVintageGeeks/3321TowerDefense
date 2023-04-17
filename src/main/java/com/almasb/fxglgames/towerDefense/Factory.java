@@ -1,4 +1,4 @@
-package com.almasb.fxglgames.towerDefence;
+package com.almasb.fxglgames.towerDefense;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.WaypointMoveComponent;
@@ -28,7 +28,7 @@ public class Factory implements EntityFactory {
                 .build();
     }
     //creating entity of type TOWER
-    @Spawns("towerComponent")
+    @Spawns("tower")
     public Entity newTestTower(SpawnData data)
     {
         Texture texture = new Texture(image("cannon.png"));
@@ -58,7 +58,6 @@ public class Factory implements EntityFactory {
 
         List<Point2D> waypoints = data.get("waypoints");
 
-        //List<Point2D>
         Entity entity = FXGL.entityBuilder(data)
                 .type(TowerDefenseApp.Type.ENEMY)
                 .viewWithBBox("scrub.png")
