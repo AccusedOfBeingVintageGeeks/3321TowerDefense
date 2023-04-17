@@ -10,9 +10,6 @@ import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.texture.Texture;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -24,8 +21,8 @@ public class Factory implements EntityFactory {
     {
         return FXGL.entityBuilder(data)
                 .viewWithBBox("purpleTestTexture.png")
-                .type(TowerDefenceApp.Type.TOWER)
-                .zIndex(TowerDefenceApp.Layer.STANDARD.ZIndex)
+                .type(TowerDefenseApp.Type.TOWER)
+                .zIndex(TowerDefenseApp.Layer.STANDARD.ZIndex)
                 .anchorFromCenter()
                 .with(new TowerComponent(5))
                 .build();
@@ -40,8 +37,8 @@ public class Factory implements EntityFactory {
         Entity entity = FXGL.entityBuilder(data)
                 //.viewWithBBox("turretRescaled.png")
                 .viewWithBBox(texture)
-                .type(TowerDefenceApp.Type.TOWER)
-                .zIndex(TowerDefenceApp.Layer.TALL.ZIndex)
+                .type(TowerDefenseApp.Type.TOWER)
+                .zIndex(TowerDefenseApp.Layer.TALL.ZIndex)
                 .anchorFromCenter()
                 .with(new TowerComponent(5))
                 .build();
@@ -63,7 +60,7 @@ public class Factory implements EntityFactory {
 
         //List<Point2D>
         Entity entity = FXGL.entityBuilder(data)
-                .type(TowerDefenceApp.Type.ENEMY)
+                .type(TowerDefenseApp.Type.ENEMY)
                 .viewWithBBox("scrub.png")
                 .at(waypoints.get(0))
                 .with(new WaypointMoveComponent(SPEED, waypoints))
@@ -72,12 +69,12 @@ public class Factory implements EntityFactory {
 
         return entity;
     }
-    public static void reinitializeScrub(Entity scrubEntity/*, SpawnData data*/)
+    public static void reinitializeEnemy(Entity enemyEntity/*, SpawnData data*/)
     {
         // Reset every property that needs to be reset here
         // ^^^ Only call when entity.setReusable(true)
 
-        //scrubEntity.setPosition();
+        //enemyEntity.setPosition();
         //scrubEntity.getComponent(WaypointMoveComponent.class).
 
         // Will need to fill this out later
@@ -98,7 +95,7 @@ public class Factory implements EntityFactory {
         //Point2D aim = prey.getCenter();
 
         return entityBuilder(data)
-                .type(TowerDefenceApp.Type.PROJECTILE)
+                .type(TowerDefenseApp.Type.PROJECTILE)
                 .viewWithBBox(bullet)
                 .collidable()
                 .with(new TowerProjectileComponent(tower,prey))
@@ -119,7 +116,7 @@ public class Factory implements EntityFactory {
 
         return FXGL.entityBuilder(data)
                 .bbox(BoundingShape.box(WIDTH, HEIGHT))
-                .type(TowerDefenceApp.Type.BLOCKED_TILES)
+                .type(TowerDefenseApp.Type.BLOCKED_TILES)
                 //.view(new Rectangle(WIDTH, HEIGHT, Color.color(1, 0, 0, 0.3))) //uncomment for debugging
                 .build();
     }
@@ -127,7 +124,7 @@ public class Factory implements EntityFactory {
     public Entity newPath(SpawnData data)
     {
         return FXGL.entityBuilder(data)
-                .type(TowerDefenceApp.Type.PATH)
+                .type(TowerDefenseApp.Type.PATH)
                 .build();
     }
 }

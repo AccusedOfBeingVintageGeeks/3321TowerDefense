@@ -7,8 +7,8 @@ plugins {
 }
 
 application {
-    mainModule = 'towerDefence.main'
-    mainClass = 'com.almasb.fxglgames.towerDefence.TowerDefenceApp'
+    mainModule = 'towerDefense.main'
+    mainClass = 'com.almasb.fxglgames.towerDefence.TowerDefenseApp'
 }
 
 repositories {
@@ -22,6 +22,7 @@ repositories {
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-js:1.8.10'
     implementation 'com.github.almasb:fxgl:17.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
 
     implementation platform('org.apache.groovy:groovy-bom:4.0.5')
     implementation 'org.apache.groovy:groovy'

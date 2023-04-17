@@ -45,7 +45,7 @@ public class TDLevelMap {
             Arrays.fill(isTileFreeRow, true);
 
         //Now set blocked tiles to not free
-        List <Entity> blockedEntities = getGameWorld().getEntitiesByType(TowerDefenceApp.Type.BLOCKED_TILES);
+        List <Entity> blockedEntities = getGameWorld().getEntitiesByType(TowerDefenseApp.Type.BLOCKED_TILES);
         for (Entity currentEntity : blockedEntities) {
             IndexPair currentEntityTileIndex = new IndexPair(
                     (int) currentEntity.getX() / TileSize,
@@ -69,7 +69,7 @@ public class TDLevelMap {
      *  <a href="https://github.com/AlmasB/FXGLGames/blob/master/TowerDefense/src/main/java/com/almasb/fxglgames/td/data/Way.java">Way.java</a>
      */
     private void initializePathPoints() {
-        Entity pathEntity = getGameWorld().getEntitiesByType(TowerDefenceApp.Type.PATH).get(0); //gets first (currently only) object of type PATH
+        Entity pathEntity = getGameWorld().getEntitiesByType(TowerDefenseApp.Type.PATH).get(0); //gets first (currently only) object of type PATH
         Polyline polyline = pathEntity.getObject("polyline");
         List<Double> polylineEntries = polyline.getPoints();
 

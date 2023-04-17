@@ -6,6 +6,4 @@ package com.almasb.fxglgames.towerDefence;
  * @param spawnsPerQueueEntry       Number of times an enemy will be spawned before moving on to the next entry in the enemyQueue.
  * @param deltaSpawnInMilliseconds  Time between spawns.
  */
-public record WaveData(TowerDefenceApp.EnemyType[] enemyQueue, int spawnsPerQueueEntry, int deltaSpawnInMilliseconds) {
-
-}
+public record WaveData(TowerDefenseApp.EnemyType[] enemyQueue, int spawnsPerQueueEntry, int deltaSpawnInMilliseconds) { }
