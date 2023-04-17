@@ -73,11 +73,11 @@ public class TowerDefenseApp extends GameApplication {
         settings.setWidth(WINDOW_WIDTH);
         settings.setHeight(WINDOW_HEIGHT);
         settings.setGameMenuEnabled(true);
-        //settings.setMainMenuEnabled(true);
+        settings.setMainMenuEnabled(true);
         settings.getCSSList().add("main.css");
 
-        //settings.setFullScreenAllowed(true);
-        //settings.setFullScreenFromStart(true);
+        settings.setFullScreenAllowed(true);
+        settings.setFullScreenFromStart(true);
     }
 
     @Override
@@ -90,10 +90,9 @@ public class TowerDefenseApp extends GameApplication {
     protected void initInput() {
         Input input = getInput();
 
-        UserAction drag = new UserAction("Drag") {
-            //For drag and drop
+        UserAction drag = new UserAction("Drag") {//For drag and drop
             boolean dragging = false;
-            Entity draggedEntity;//Maybe we should set this in onActionBegin
+            Entity draggedEntity;
             @Override
             protected void onActionBegin() {
                 //loop through towers, check if draggable, check of mouse is over it
@@ -116,9 +115,6 @@ public class TowerDefenseApp extends GameApplication {
                 }
             }
 
-            /*
-             * let go of mousebutton -> Tower returns to menu bar
-             */
             @Override
             protected void onActionEnd() {
                 if(dragging) {
@@ -169,46 +165,44 @@ public class TowerDefenseApp extends GameApplication {
     @Override
     protected void initUI() {
         EventHandler<ActionEvent> readyClicked = event -> {
-            if(waveManager.remainingEnemies() == 0 && !waveManager.isEveryWaveSpawned())
+            List<Entity> currentlySpawnedEnemies = getGameWorld().getEntitiesByType(TowerDefenseApp.Type.ENEMY);
+            if(currentlySpawnedEnemies.size() == 0 && !waveManager.areAllWavesSpawned())
                 waveManager.spawnNextWave();
         };
+
         readyUINode = new ReadyUINode(TILE_SIZE*2, TILE_SIZE,readyClicked);
-
-
         addUINode(readyUINode,WINDOW_WIDTH - TILE_SIZE*2,WINDOW_HEIGHT - TILE_SIZE);
     }
 
     @Override
     protected void onUpdate(double tpf) {
-        List<Entity> scrubs = getGameWorld().getEntitiesByType(Type.ENEMY);
-        for (Entity enemy: scrubs) {
+        List<Entity> currentlySpawnedEnemies = getGameWorld().getEntitiesByType(Type.ENEMY);
+
+        //Defeat?
+        for (Entity enemy: currentlySpawnedEnemies) {
             if(enemy.getComponent(WaypointMoveComponent.class).atDestinationProperty().get()) {
                 // An enemy has made it to the end.
-                // There's probably a more efficient way of checking this...
-                getGameController().pauseEngine();
-                //getDialogService().showMessageBox("GAME OVER");
                 getDialogService().showMessageBox("GAME OVER", () -> {
                     //Do something when player clicks 'OK', like go back to the main menu
+                    getGameController().gotoMainMenu();
                 });
             }
         }
-        if(!waveManager.isActivelySpawning()) {
-            readyUINode.setCountdownText(waveManager.getSecondsToNextWave());
-            if(waveManager.remainingEnemies() == 0)
-                readyUINode.setButtonClickable(true);
-        }
-        else {
-            readyUINode.setBlankText();
-            readyUINode.setButtonClickable(false);
-        }
 
-        //broken, may need events from WaveManager instead
-        /*if(waveManager.remainingEnemies() == 0 && waveManager.isEveryWaveSpawned()) {
-            getGameController().pauseEngine();
+        //Victory?
+        if(waveManager.areAllWavesSpawned() && currentlySpawnedEnemies.size() == 0) {
             getDialogService().showMessageBox("VICTORY", ()->{
                 //Do something when player clicks 'OK', like go back to the main menu
+                getGameController().gotoMainMenu();
             });
-        }*/
+        }
+
+        //Update UI
+        readyUINode.update(
+                currentlySpawnedEnemies.size() == 0,
+                !waveManager.isActivelySpawning(),
+                waveManager.getSecondsToNextWave()
+        );
     }
 
     public static void main(String[] args) {

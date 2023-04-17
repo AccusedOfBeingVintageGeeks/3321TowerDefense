@@ -38,10 +38,28 @@ public class ReadyUINode extends Parent {
     }
 
     /**
+     * Updates the properties of this node.
+     * @param isClickable   Should this button be clickable right now? Note: While isCounting is true, this node will not be clickable, regardless of this value.
+     * @param isCounting    Will display the countdown if this is true.
+     * @param countdown     This should be the seconds remaining.
+     */
+    public void update(Boolean isClickable, Boolean isCounting, int countdown){
+        if(isCounting) {
+            setCountdownText(countdown);
+            if(isClickable)
+                setButtonClickable(true);
+        }
+        else {
+            waveInfoText.setText("");
+            setButtonClickable(false);
+        }
+    }
+
+    /**
      * This method sets whether the button is disabled or not, and changes the button's text appropriately.
      * @param isClickable   Should the button be clickable? Is the player allowed to be ready for the next round?
      */
-    public void setButtonClickable(boolean isClickable){
+    private void setButtonClickable(boolean isClickable){
         button.setDisable(!isClickable);
         if(isClickable)
             button.setText("READY");
@@ -54,18 +72,11 @@ public class ReadyUINode extends Parent {
      * This method sets the waveInfo text to a countdown with the given integer.
      * @param countdownVal  How much time is left in seconds (integer) before the next round starts?
      */
-    public void setCountdownText(int countdownVal){
+    private void setCountdownText(int countdownVal){
         waveInfoText.setText("Next wave in " + countdownVal + "s");
         if(countdownVal <= 10)
             waveInfoText.setFill(Color.LIGHTCORAL);
         else
             waveInfoText.setFill(Color.WHITE);
-    }
-
-    /**
-     * This method sets the waveInfo text to an empty string.
-     */
-    public void setBlankText(){
-        waveInfoText.setText("");
     }
 }
