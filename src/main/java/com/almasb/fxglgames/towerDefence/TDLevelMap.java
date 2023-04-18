@@ -67,6 +67,12 @@ public class TDLevelMap {
      * Based on code by AlmasB:
      *  <a href="https://github.com/AlmasB/FXGLGames/blob/master/TowerDefense/src/main/java/com/almasb/fxglgames/td/TowerDefenseApp.java">TowerDefenseApp.java</a>,
      *  <a href="https://github.com/AlmasB/FXGLGames/blob/master/TowerDefense/src/main/java/com/almasb/fxglgames/td/data/Way.java">Way.java</a>
+     *
+     *  An explanation of how this code works:
+     *  In the resources/assets/levels.tmx/(whatever tile map you're using).tmx there will be one object of class "path" at a specific location
+     *  that also contains polyline information. Using the polyline information in there (where the information is stored as (x,y x,y) relative
+     *  to the position of the first path object) the rest of the PathPoints are created based on the postitions of the polyline points taken from
+     *  the tmx file.
      */
     private void initializePathPoints() {
         Entity pathEntity = getGameWorld().getEntitiesByType(TowerDefenceApp.Type.PATH).get(0); //gets first (currently only) object of type PATH
@@ -94,6 +100,7 @@ public class TDLevelMap {
      */
     public IndexPair getTileIndexFromPoint(Point2D point) {
         return new IndexPair(
+                //FIXME may want to move the division by TileSize outside of floor function. May give wrong num in rare cases.
                 FXGLMath.floor((float)(point.getX() / TileSize)),
                 FXGLMath.floor((float)(point.getY() / TileSize))
         );
@@ -181,6 +188,7 @@ public class TDLevelMap {
         if((column>=0 && column< NumColumns) && (row>=0 && row< NumRows))
             return isTileAvailable[column][row];
         else
+            // FIXME shouldn't this throw an exception?
             return false;
     }
 

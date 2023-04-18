@@ -1,10 +1,9 @@
 package com.almasb.fxglgames.towerDefence
 
-import com.almasb.fxgl.app.GameSettings
 import spock.lang.Specification
 
-class TowerDefenceAppSpec extends Specification {
-    def "test initSettings"() {
+class FactorySpec extends Specification {
+    def "test newTestEntity"() {
         given:
 
         when:
@@ -13,7 +12,7 @@ class TowerDefenceAppSpec extends Specification {
         // TODO implement assertions
     }
 
-    def "test initGameVars"() {
+    def "test newTestTower"() {
         given:
 
         when:
@@ -22,7 +21,7 @@ class TowerDefenceAppSpec extends Specification {
         // TODO implement assertions
     }
 
-    def "test initInput"() {
+    def "test newScrub"() {
         given:
 
         when:
@@ -31,7 +30,7 @@ class TowerDefenceAppSpec extends Specification {
         // TODO implement assertions
     }
 
-    def "test initGame"() {
+    def "test reinitializeScrub"() {
         given:
 
         when:
@@ -40,7 +39,25 @@ class TowerDefenceAppSpec extends Specification {
         // TODO implement assertions
     }
 
-    def "test onUpdate"() {
+    def "test newProjectile"() {
+        given:
+
+        when:
+        // TODO implement stimulus
+        then:
+        // TODO implement assertions
+    }
+
+    def "test newBlockedTile"() {
+        given:
+
+        when:
+        // TODO implement stimulus
+        then:
+        // TODO implement assertions
+    }
+
+    def "test newPath"() {
         given:
 
         when:

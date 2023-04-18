@@ -1,10 +1,9 @@
 package com.almasb.fxglgames.towerDefence
 
-import com.almasb.fxgl.app.GameSettings
 import spock.lang.Specification
 
-class TowerDefenceAppSpec extends Specification {
-    def "test initSettings"() {
+class TowerComponentSpec extends Specification {
+    def "test getDragStatus"() {
         given:
 
         when:
@@ -13,7 +12,7 @@ class TowerDefenceAppSpec extends Specification {
         // TODO implement assertions
     }
 
-    def "test initGameVars"() {
+    def "test setDragStatus"() {
         given:
 
         when:
@@ -22,7 +21,7 @@ class TowerDefenceAppSpec extends Specification {
         // TODO implement assertions
     }
 
-    def "test initInput"() {
+    def "test getPlacedStatus"() {
         given:
 
         when:
@@ -31,7 +30,7 @@ class TowerDefenceAppSpec extends Specification {
         // TODO implement assertions
     }
 
-    def "test initGame"() {
+    def "test setPlacedStatus"() {
         given:
 
         when:
@@ -41,6 +40,24 @@ class TowerDefenceAppSpec extends Specification {
     }
 
     def "test onUpdate"() {
+        given:
+
+        when:
+        // TODO implement stimulus
+        then:
+        // TODO implement assertions
+    }
+
+    def "test rotateUp"() {
+        given:
+
+        when:
+        // TODO implement stimulus
+        then:
+        // TODO implement assertions
+    }
+
+    def "test moveToPos"() {
         given:
 
         when:
