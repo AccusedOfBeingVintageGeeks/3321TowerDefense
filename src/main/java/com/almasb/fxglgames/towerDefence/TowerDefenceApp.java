@@ -8,6 +8,7 @@ package com.almasb.fxglgames.towerDefence;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.dsl.components.WaypointMoveComponent;
 import com.almasb.fxgl.entity.Entity;
@@ -206,6 +207,10 @@ public class TowerDefenceApp extends GameApplication {
 
     @Override
     protected void onUpdate(double tpf) {
+        List<Entity> towers = getGameWorld().getEntitiesByType(Type.TOWER);
+        for(Entity tower: towers ) {
+            tower.getComponent(TowerComponent.class).initializeInfo();
+        }
         List<Entity> scrubs = getGameWorld().getEntitiesByType(Type.ENEMY);
         for (Entity enemy: scrubs) {
             if(enemy.getComponent(WaypointMoveComponent.class).atDestinationProperty().get())
@@ -227,6 +232,15 @@ public class TowerDefenceApp extends GameApplication {
                         getInput().getMousePositionWorld().getY()+5).put("dataForTower",towerData),
                 Duration.seconds(0),
                 Interpolator.DISCRETE);
+    }
+
+    public void onTowerSell(DataForTower data){
+        //data.cost(); increase amount of money by about a third of tower cost
+        IndexPair tileIndices = testTDLevelMap.getTileIndexFromPoint(towerEntity.getPosition());
+        towerEntity.getComponent(TowerComponent.class).deleteInfo();
+        towerEntity.setAnchoredPosition(testTDLevelMap.getTilePositionCenter(tileIndices));
+        testTDLevelMap.setTileAvailability(true, tileIndices);
+        towerEntity.removeFromWorld();
     }
 
 

@@ -54,23 +54,24 @@ public class Factory implements EntityFactory {
                 .with(new TowerComponent(dataForTower))
                 .build();
 
-        /*
+        //when mouse hovers above entity -> its opacity changes
         texture.opacityProperty().bind(
                 Bindings.when(entity.getViewComponent().getParent().hoverProperty())
-                        .then(entity)
+                        .then(0.7)
+                        .otherwise(1)
         );
 
-         */
-                /*
+        /* testing visual signal if mouse is over entity
         back.fillProperty().bind(
                 Bindings.when(entity.getViewComponent().getParent().hoverProperty())
                         .then(Color.DARKBLUE)
                         .otherwise(Color.BLUE)
         );
+         */
 
-                 */
+
         entity.setLocalAnchorFromCenter();
-        entity.getViewComponent().addChild(new Circle(dataForTower.fireRadius() +5,Color.color(1, 0, 0, 0.3)));
+        //entity.getViewComponent().addChild(new Circle(dataForTower.fireRadius() +5,Color.color(1, 0, 0, 0.3)));
 
         entity.setLocalAnchorFromCenter();
         return entity;
@@ -113,21 +114,25 @@ public class Factory implements EntityFactory {
     public Entity newProjectile(SpawnData data){
 
         String textureName = data.get("projectile");
+        int speed = data.get("projectileSpeed");
+        int height = data.get("height");
+        int width = data.get("width");
         Entity tower = data.get("tower");
         Entity prey = data.get("prey");
 
         Texture bullet = new Texture(image(textureName));
-        bullet.setFitWidth(10);
-        bullet.setFitHeight(10);
+        bullet.setFitWidth(height);
+        bullet.setFitHeight(width);
 
-        return entityBuilder(data)
+        Entity entity = entityBuilder(data)
                 .type(TowerDefenceApp.Type.PROJECTILE)
                 .viewWithBBox(bullet)
                 .collidable()
-                .with(new TowerProjectileComponent(tower,prey))
+                .with(new TowerProjectileComponent(tower,prey,speed))
                 .with(new AutoRotationComponent())
                 //.zIndex(444)
                 .build();
+        return entity;
     }
 
     /*

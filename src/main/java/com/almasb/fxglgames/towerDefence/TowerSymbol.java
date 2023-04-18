@@ -33,6 +33,7 @@ public class TowerSymbol extends VBox {
 
     private Texture texture;
     private DataForTower data;
+    private Entity entity;
 
     public TowerSymbol(DataForTower data){
         this.data = data;
@@ -55,7 +56,7 @@ public class TowerSymbol extends VBox {
     }
     public void bindToMoney(IntegerProperty property) {
         texture.opacityProperty().bind(
-                Bindings.when(property.greaterThanOrEqualTo(50))
+                Bindings.when(property.greaterThanOrEqualTo(data.cost()))
                         .then(1.0)
                         .otherwise(0.25)
         );

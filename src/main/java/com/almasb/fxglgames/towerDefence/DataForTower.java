@@ -22,6 +22,8 @@ public record DataForTower (
             double fireRate,
             int projectileSpeed,
             String projectileImageName,
+            int projectileHeight,
+            int projectileWidth,
             List<String> effects
     ){
         @Override

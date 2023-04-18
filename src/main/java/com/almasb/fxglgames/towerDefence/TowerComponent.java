@@ -1,5 +1,6 @@
 package com.almasb.fxglgames.towerDefence;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.TransformComponent;
@@ -30,6 +31,7 @@ public class TowerComponent extends Component {
     private LocalTimer shotFrequency;
     private TransformComponent transformComponent;
     private Circle circleRadius;
+    private TowerInfo info;
 
 
     public boolean getPlacedStatus(){ return isPlaced; }
@@ -45,7 +47,9 @@ public class TowerComponent extends Component {
         this.data = towerData;
         isDragged = false;
         isPlaced = false;
-
+        info = new TowerInfo(data);
+        info.setVisible(false);
+        addUINode(info);
         shotFrequency = newLocalTimer();
         newLocalTimer().capture();
     }
@@ -65,9 +69,28 @@ public class TowerComponent extends Component {
                         .put("tower",entity)
                         .put("prey", enemy)
                         .put("projectile",data.projectileImageName())
-                        .put("projectile-speed",data.projectileSpeed())
+                        .put("projectileSpeed",data.projectileSpeed())
+                        .put("height",data.projectileHeight())
+                        .put("width",data.projectileWidth())
         );
         projectile.rotateToVector(aim);
+    }
+    public void initializeInfo(){
+
+        info.setTranslateX(entity.getX() + 40);
+        info.setTranslateY(entity.getY());
+        entity.getViewComponent().getParent().setOnMouseClicked(e ->{
+            {
+                if(this.info.isVisible()){
+                    this.info.setVisible(false);
+                }else{
+                    this.info.setVisible(true);
+                }
+            }
+        });
+    }
+    public void deleteInfo(){
+        removeUINode(info);
     }
     /**
      * enables Tower movement and gets the nearest enemy to shoot (shoots entities of type TEST right now)
@@ -78,10 +101,8 @@ public class TowerComponent extends Component {
     {
         frameRateScalar = tpf * 60;
         TowerDefenceApp.Type target = TowerDefenceApp.Type.ENEMY;
-        if(this.isPlaced && shotFrequency.elapsed(Duration.seconds(data.fireRate()))){
-            circleRadius = new Circle(
-                    entity.getPosition().getX(),entity.getPosition().getY(),data.fireRadius(),Color.LIGHTGREEN);
-            circleRadius.setVisible(false);
+        Duration time = Duration.seconds(data.fireRate());
+        if(this.isPlaced && shotFrequency.elapsed(time)){
             getGameWorld()
                     .getClosestEntity(entity, e ->e.isType(target))
                     .ifPresent(closestEnemy ->{
@@ -96,7 +117,7 @@ public class TowerComponent extends Component {
                     });
         }
         else {
-
+            //do nothing
         }
     }
 

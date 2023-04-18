@@ -4,9 +4,11 @@
     "imageName": "cannon.png",
     "cost": 50,
     "fireRadius": 200,
-    "fireRate": 0.7,
-    "projectileSpeed": 100,
-    "projectileImageName": "projectile1.png",
+    "fireRate": 0.9,
+    "projectileSpeed": 500,
+    "projectileImageName": "bullet.png",
+    "projectileHeight": 13,
+    "projectileWidth": 8,
     "effects": null
   },
   {
@@ -16,7 +18,9 @@
     "fireRadius": 150,
     "fireRate": 0.3,
     "projectileSpeed": 300,
-    "projectileImageName": "projectile1.png",
+    "projectileImageName": "projectile.png",
+    "projectileHeight": 10,
+    "projectileWidth": 10,
     "effects": null
   },
   {
@@ -25,8 +29,10 @@
     "cost": 200,
     "fireRadius": 300,
     "fireRate": 2.0,
-    "projectileSpeed": 50,
-    "projectileImageName": "projectile1.png",
+    "projectileSpeed": 150,
+    "projectileImageName": "missile.png",
+    "projectileHeight": 20,
+    "projectileWidth": 15,
     "effects": null
   }
 ]
