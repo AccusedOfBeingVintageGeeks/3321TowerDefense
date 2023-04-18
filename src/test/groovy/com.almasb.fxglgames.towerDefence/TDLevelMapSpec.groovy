@@ -1,5 +1,9 @@
 package com.almasb.fxglgames.towerDefence
 
+import com.almasb.fxgl.dsl.FXGL
+import com.almasb.fxgl.entity.Entity
+import com.almasb.fxgl.entity.GameWorld
+import com.almasb.fxgl.entity.level.Level
 import javafx.geometry.Point2D
 import spock.lang.Specification
 
@@ -9,21 +13,32 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld
 class TDLevelMapSpec extends Specification {
 
     TDLevelMap map
+    List<Entity> bTiles
+    Entity path
 
-    void setupSpec() {
-        getGameWorld().addEntityFactory(new Factory())
+    void makeNewWorld(String tmx) {
+        GameWorld world = new GameWorld()
+        world.addEntityFactory(new Factory())
+//        Level level = new Level()
+//        world.setLevel(new Level().makeNewWorld(tmx))
+        setLevelFromMap(tmx)
+//        world.set
+//        //setLevelFromMap(tmx)
+        bTiles = world.getEntitiesByType(TowerDefenceApp.Type.BLOCKED_TILES)
+        path = world.getEntitiesByType(TowerDefenceApp.Type.PATH).get(0)
     }
 
+
     void setup() {
-        setLevelFromMap("tmx/FirstTilemap.tmx")
-        map = new TDLevelMap(45, 22, 16)
+        makeNewWorld("tmx/FirstTilemap.tmx")
+        map = new TDLevelMap(45, 22, 16, bTiles, path)
     }
 
     def "New map has all tiles free"() {
 
         when: "Make new map"
 
-        map = new TDLevelMap(45, 22, 16)
+        map = new TDLevelMap(45, 22, 16, bTiles, path)
 
         then: "tiles are free"
         map.isTileAvailable(map.getTileIndexFromPoint(map.getTilePosition(1,1)))
@@ -33,26 +48,26 @@ class TDLevelMapSpec extends Specification {
    def "initializePathPoints creates PathPoints for each polylineEntry"() {
 
        given:
-       setLevelFromMap("tmx/TestTilemap.tmx")
+       makeNewWorld("tmx/TestTilemap.tmx")
 
        when: "initializePathPoints"
        //initializePathPoints is run in the TDLevelMap constructor
-       map = new TDLevelMap(45, 4, 4)
+       TDLevelMap myMap = new TDLevelMap(45, 4, 4, bTiles, path)
 
        then: "PathPoints are the same as in the tmx"
        pathPointCoord == tmxCoord
 
        where:
 
-       pathPointCoord                   |           tmxCoord
-       map.PathPoints.get(0).getX()     |       990
-       map.PathPoints.get(0).getY()     |       540
-       map.PathPoints.get(1).getX()     |       765
-       map.PathPoints.get(1).getY()     |       450
-       map.PathPoints.get(2).getX()     |       90
-       map.PathPoints.get(2).getY()     |       450
-       map.PathPoints.get(3).getX()     |       0
-       map.PathPoints.get(3).getY()     |       540
+       pathPointCoord                     |     tmxCoord
+       myMap.PathPoints.get(0).getX()     |       990
+       myMap.PathPoints.get(0).getY()     |       540
+       myMap.PathPoints.get(1).getX()     |       765
+       myMap.PathPoints.get(1).getY()     |       450
+       myMap.PathPoints.get(2).getX()     |       90
+       myMap.PathPoints.get(2).getY()     |       450
+       myMap.PathPoints.get(3).getX()     |       0
+       myMap.PathPoints.get(3).getY()     |       540
 
    }
 

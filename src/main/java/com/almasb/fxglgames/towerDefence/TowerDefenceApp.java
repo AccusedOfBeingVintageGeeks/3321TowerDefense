@@ -151,7 +151,7 @@ public class TowerDefenceApp extends GameApplication {
         getGameWorld().addEntityFactory(new Factory());
         setLevelFromMap("tmx/FirstTilemap.tmx");        //Level entities must be spawned AFTER setting the level
 
-        testTDLevelMap = new TDLevelMap(45,22,16);
+        testTDLevelMap = new TDLevelMap(45,22,16,getGameWorld().getEntitiesByType(TowerDefenceApp.Type.BLOCKED_TILES) ,getGameWorld().getEntitiesByType(TowerDefenceApp.Type.PATH).get(0));
         towerEntity = spawn("towerComponent",getAppWidth() - testTDLevelMap.TileSize * 3f/2, 0.6 * getAppHeight());
         testEntity = spawn("testEntity", getAppWidth()- testTDLevelMap.TileSize * 3f/2,0.5 * getAppHeight());
         //spawn("Projectile", FXGLMath.randomPoint(new Rectangle2D(0,0,getAppWidth(),getAppHeight())));

@@ -18,6 +18,8 @@ public class TDLevelMap {
     public int TileSize, NumRows, NumColumns;
     public List<Point2D> PathPoints;
     private final boolean[][] isTileAvailable;
+    List <Entity> blockedEntities;
+    Entity pathEntity;
 
     /**
      * For every level there will be a TDLevelMap object which will provide all the data needed for interacting with tiles.
@@ -26,7 +28,9 @@ public class TDLevelMap {
      * @param numRows          The number of tiles in the vertical axis.
      * @param numColumns       The number of tiles in the horizontal axis.
      */
-    TDLevelMap(int tileSize, int numColumns, int numRows) {
+    TDLevelMap(int tileSize, int numColumns, int numRows, List <Entity> blockedEntities, Entity pathEntity) {
+        this.blockedEntities = blockedEntities;
+        this.pathEntity = pathEntity;
         TileSize = tileSize;
         NumColumns = numColumns;
         NumRows = numRows;
@@ -45,7 +49,6 @@ public class TDLevelMap {
             Arrays.fill(isTileFreeRow, true);
 
         //Now set blocked tiles to not free
-        List <Entity> blockedEntities = getGameWorld().getEntitiesByType(TowerDefenceApp.Type.BLOCKED_TILES);
         for (Entity currentEntity : blockedEntities) {
             IndexPair currentEntityTileIndex = new IndexPair(
                     (int) currentEntity.getX() / TileSize,
@@ -75,7 +78,6 @@ public class TDLevelMap {
      *  the tmx file.
      */
     private void initializePathPoints() {
-        Entity pathEntity = getGameWorld().getEntitiesByType(TowerDefenceApp.Type.PATH).get(0); //gets first (currently only) object of type PATH
         Polyline polyline = pathEntity.getObject("polyline");
         List<Double> polylineEntries = polyline.getPoints();
 
@@ -100,9 +102,8 @@ public class TDLevelMap {
      */
     public IndexPair getTileIndexFromPoint(Point2D point) {
         return new IndexPair(
-                //FIXME may want to move the division by TileSize outside of floor function. May give wrong num in rare cases.
-                FXGLMath.floor((float)(point.getX() / TileSize)),
-                FXGLMath.floor((float)(point.getY() / TileSize))
+                FXGLMath.floor((float)(point.getX()))/TileSize,
+                FXGLMath.floor((float)(point.getY()))/TileSize
         );
     }
 
@@ -183,13 +184,13 @@ public class TDLevelMap {
      * @param column    Horizontal index of tile
      * @param row       Vertical index of tile
      * @return          True if free to place, false if blocked or otherwise disallowed
+     * @throws IndexOutOfBoundsException if querying outside valid range
      */
-    public boolean isTileAvailable(int column, int row) {
+    public boolean isTileAvailable(int column, int row) throws IndexOutOfBoundsException{
         if((column>=0 && column< NumColumns) && (row>=0 && row< NumRows))
             return isTileAvailable[column][row];
         else
-            // FIXME shouldn't this throw an exception?
-            return false;
+            throw new IndexOutOfBoundsException();
     }
 
     /**
@@ -206,8 +207,9 @@ public class TDLevelMap {
      * @param isAvailable    Is this tile being set to free or not?
      * @param column    Horizontal index of tile
      * @param row       Vertical index of tile
+     * @throws IndexOutOfBoundsException if setting outside valid range
      */
-    public void setTileAvailability(boolean isAvailable, int column, int row){
+    public void setTileAvailability(boolean isAvailable, int column, int row) throws IndexOutOfBoundsException{
         if((column>=0 && column< NumColumns) && (row>=0 && row< NumRows))
             isTileAvailable[column][row] = isAvailable;
         else throw new IndexOutOfBoundsException();
