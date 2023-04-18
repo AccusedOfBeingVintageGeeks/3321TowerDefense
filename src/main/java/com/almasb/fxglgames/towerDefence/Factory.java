@@ -46,12 +46,13 @@ public class Factory implements EntityFactory {
         var back = new Circle(25,25,25,Color.GRAY);
         var pane = new StackPane(back,texture);
         Entity entity = FXGL.entityBuilder(data)
+                .with(new TowerComponent(dataForTower))
                 .viewWithBBox(texture)
                 .type(TowerDefenceApp.Type.TOWER)
                 .zIndex(1000)
                 .anchorFromCenter()
                 //.view(new Circle(dataForTower.fireRadius(),Color.color(1,0,0,0.3)))
-                .with(new TowerComponent(dataForTower))
+
                 .build();
 
         //when mouse hovers above entity -> its opacity changes
@@ -60,6 +61,7 @@ public class Factory implements EntityFactory {
                         .then(0.7)
                         .otherwise(1)
         );
+
 
         /* testing visual signal if mouse is over entity
         back.fillProperty().bind(

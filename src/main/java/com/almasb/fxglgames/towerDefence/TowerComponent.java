@@ -30,10 +30,10 @@ public class TowerComponent extends Component {
     private boolean isDragged, isPlaced;
     private LocalTimer shotFrequency;
     private TransformComponent transformComponent;
-    private Circle circleRadius;
+
     private TowerInfo info;
 
-
+    private Circle circle;
     public boolean getPlacedStatus(){ return isPlaced; }
     public void setPlacedStatus(boolean placedStatus){ isPlaced = placedStatus; }
     //getDamage class
@@ -49,7 +49,9 @@ public class TowerComponent extends Component {
         isPlaced = false;
         info = new TowerInfo(data,this);
         info.setVisible(false);
+        //circle = new Circle(data.fireRadius(),Color.color(1,0,0,0.3));
         addUINode(info);
+        //addUINode(circle);
         shotFrequency = newLocalTimer();
         newLocalTimer().capture();
     }
@@ -79,6 +81,11 @@ public class TowerComponent extends Component {
 
         info.setTranslateX(entity.getX() + 40);
         info.setTranslateY(entity.getY());
+        /*
+        circle.setTranslateX(entity.getAnchoredPosition().getX());
+        circle.setTranslateY(entity.getAnchoredPosition().getY());
+        circle.setTranslateZ(50);
+        */
         entity.getViewComponent().getParent().setOnMouseClicked(e ->{
             {
                 if(this.info.isVisible()){
@@ -86,10 +93,18 @@ public class TowerComponent extends Component {
                 }else{
                     this.info.setVisible(true);
                 }
+                /*
+                if(this.circle.isVisible()) {
+                    this.circle.setVisible(false);
+                }else{
+                    this.circle.setVisible(true);
+                }
+                 */
             }
         });
     }
     public void deleteInfo(){
+        //removeUINode(circle);
         removeUINode(info);
     }
     /**
