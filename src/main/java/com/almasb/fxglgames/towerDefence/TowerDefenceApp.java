@@ -8,14 +8,20 @@ package com.almasb.fxglgames.towerDefence;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.dsl.FXGLForKtKt;
 import com.almasb.fxgl.dsl.components.WaypointMoveComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.animation.Interpolator;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
+import javafx.util.Duration;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -57,6 +63,7 @@ public class TowerDefenceApp extends GameApplication {
 
     private List<DataForTower> dataForTowers;
     Entity testEntity, towerEntity;
+    private DataForTower towerData;
 
     private TowerMenuBox towerMenuBox;
 
@@ -65,6 +72,15 @@ public class TowerDefenceApp extends GameApplication {
             "machinegun.png",
             "missilelauncher.png"
     );
+    private void loadTowers(){
+        String towerSpecifications = "towerdata.json";
+        try {
+            InputStream stream = FXGLForKtKt.getAssetLoader().getStream("/assets/towers/" + towerSpecifications);
+            dataForTowers = new ObjectMapper().readValue(stream, new TypeReference<List<DataForTower>>(){});
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
 
     private TowerSymbol towerSymbol;
     TDLevelMap testTDLevelMap;
@@ -159,15 +175,10 @@ public class TowerDefenceApp extends GameApplication {
         getGameWorld().addEntityFactory(new Factory());
         setLevelFromMap("tmx/FirstTilemap.tmx");//Level entities must be spawned AFTER setting the level
         testTDLevelMap = new TDLevelMap(45,22,16);
-        towerMenuBox = new TowerMenuBox(towerNames);
+        loadTowers();
+        towerMenuBox = new TowerMenuBox(dataForTowers);
         towerMenuBox.setTranslateX(getAppWidth() - testTDLevelMap.TileSize * 3f/2 - 12);
         towerMenuBox.setTranslateY(0.1 * getAppHeight());
-
-
-
-        //towerEntity = spawn("towerComponent",getAppWidth() - testTDLevelMap.TileSize * 3f/2, 0.6 * getAppHeight());
-        //testEntity = spawn("testEntity", getAppWidth()- testTDLevelMap.TileSize * 3f/2,0.5 * getAppHeight());
-        //spawn("Projectile", FXGLMath.randomPoint(new Rectangle2D(0,0,getAppWidth(),getAppHeight())));
 
         SpawnData enemySpawnData = new SpawnData();
         enemySpawnData.put("waypoints", testTDLevelMap.PathPoints);
@@ -210,8 +221,12 @@ public class TowerDefenceApp extends GameApplication {
             }
         }
     }
-    public void onTowerSelection(){
-        towerEntity = spawn("towerComponent",getInput().getMousePositionWorld().getX()-5, getInput().getMousePositionWorld().getY()+5);
+    public void onTowerSelection(DataForTower towerData){
+        towerEntity = spawnWithScale("towerComponent",
+                new SpawnData(getInput().getMousePositionWorld().getX()-5,
+                        getInput().getMousePositionWorld().getY()+5).put("dataForTower",towerData),
+                Duration.seconds(0),
+                Interpolator.DISCRETE);
     }
 
 

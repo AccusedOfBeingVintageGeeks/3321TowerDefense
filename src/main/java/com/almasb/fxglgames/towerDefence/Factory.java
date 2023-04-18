@@ -24,13 +24,13 @@ import java.util.List;
 public class Factory implements EntityFactory {
     @Spawns("testEntity")
     public Entity newTestEntity(SpawnData data)
-    {
+    {DataForTower dataForTower = data.get("dataForTower");
         return FXGL.entityBuilder(data)
                 .viewWithBBox("purpleTestTexture.png")
                 .type(TowerDefenceApp.Type.TOWER)
                 .zIndex(TowerDefenceApp.Layer.STANDARD.ZIndex)
                 .anchorFromCenter()
-                .with(new TowerComponent(0.7,200,50))
+                .with(new TowerComponent(dataForTower))
                 .build();
     }
 
@@ -38,7 +38,8 @@ public class Factory implements EntityFactory {
     @Spawns("towerComponent")
     public Entity newTower(SpawnData data)
     {
-        Texture texture = new Texture(image("cannon.png"));
+        DataForTower dataForTower = data.get("dataForTower");
+        Texture texture = new Texture(image(dataForTower.imageName()));
         texture.setFitHeight(45);
         texture.setFitWidth(45);
 
@@ -49,16 +50,17 @@ public class Factory implements EntityFactory {
                 .type(TowerDefenceApp.Type.TOWER)
                 .zIndex(1000)
                 .anchorFromCenter()
-                //.view(new Circle(200,Color.color(1,0,0,0.3)))
-                .with(new TowerComponent(0.7,200,50))
+                //.view(new Circle(dataForTower.fireRadius(),Color.color(1,0,0,0.3)))
+                .with(new TowerComponent(dataForTower))
                 .build();
+
         /*
         texture.opacityProperty().bind(
                 Bindings.when(entity.getViewComponent().getParent().hoverProperty())
                         .then(entity)
         );
-        */
 
+         */
                 /*
         back.fillProperty().bind(
                 Bindings.when(entity.getViewComponent().getParent().hoverProperty())
@@ -67,7 +69,8 @@ public class Factory implements EntityFactory {
         );
 
                  */
-        //entity.setLocalAnchor(new Point2D(entity.getWidth()/2,entity.getHeight()-entity.getWidth()/2));
+        entity.setLocalAnchorFromCenter();
+        entity.getViewComponent().addChild(new Circle(dataForTower.fireRadius() +5,Color.color(1, 0, 0, 0.3)));
 
         entity.setLocalAnchorFromCenter();
         return entity;
@@ -109,15 +112,13 @@ public class Factory implements EntityFactory {
     @Spawns("Projectile")
     public Entity newProjectile(SpawnData data){
 
-        Texture bullet = new Texture(image("projectile1.png"));
-        bullet.setFitWidth(10);
-        bullet.setFitHeight(10);
-        //Node view = new Rectangle(10,10,Color.BLUE);
-        //view.setRotate(90);
-
+        String textureName = data.get("projectile");
         Entity tower = data.get("tower");
         Entity prey = data.get("prey");
-        //Point2D aim = prey.getCenter();
+
+        Texture bullet = new Texture(image(textureName));
+        bullet.setFitWidth(10);
+        bullet.setFitHeight(10);
 
         return entityBuilder(data)
                 .type(TowerDefenceApp.Type.PROJECTILE)

@@ -34,15 +34,15 @@ public class TowerSymbol extends VBox {
     private Texture texture;
     private DataForTower data;
 
-    public TowerSymbol(String textureName){
+    public TowerSymbol(DataForTower data){
         this.data = data;
         var backGround = new Circle(35,35,35,Color.LIGHTGREEN);
         backGround.setStroke(Color.BEIGE);
         backGround.setStrokeWidth(2.5);
 
-        var text = FXGLForKtKt.getUIFactoryService().newText("50" + "");
+        var text = FXGLForKtKt.getUIFactoryService().newText(data.cost() + "");
         text.setStroke(Color.BLACK);
-        texture = texture(textureName);
+        texture = texture(data.imageName());
         texture.setFitHeight(60);
         texture.setFitWidth(60);
 

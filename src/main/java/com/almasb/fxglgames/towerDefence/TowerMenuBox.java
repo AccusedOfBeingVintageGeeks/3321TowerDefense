@@ -20,7 +20,7 @@ public class TowerMenuBox extends VBox {
      * Creates a UI on the right side of the map, with clickable TowerSymbols
      * @param towerNames    - a list of Strings containing the names for the different textures for the different types of towers
      */
-    public TowerMenuBox(List<String> towerNames) {
+    public TowerMenuBox(List<DataForTower> towerNames) {
         setSpacing(5);
         towerNames.forEach(name -> {
             var symbol = new TowerSymbol(name);
@@ -28,7 +28,7 @@ public class TowerMenuBox extends VBox {
 
             symbol.setOnMousePressed(e -> {
                 {
-                    FXGL.<TowerDefenceApp>getAppCast().onTowerSelection();
+                    FXGL.<TowerDefenceApp>getAppCast().onTowerSelection(name);
                 }
             });
             getChildren().add(symbol);

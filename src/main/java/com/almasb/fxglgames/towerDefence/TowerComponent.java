@@ -1,5 +1,6 @@
 package com.almasb.fxglgames.towerDefence;
 
+import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.TransformComponent;
 import javafx.geometry.Point2D;
@@ -23,48 +24,31 @@ public class TowerComponent extends Component {
      * author: Andreas Kramer
      * TowerComponent shoots Entities of type Enemy once set in place
      */
+    private DataForTower data;
     private double frameRateScalar;
     private boolean isDragged, isPlaced;
     private LocalTimer shotFrequency;
     private TransformComponent transformComponent;
-    private double fireRateinSec;
-    private double fireRadius;
     private Circle circleRadius;
-    private String towerTexture;
-    private String missileTexture;
-    private int cost;
+
 
     public boolean getPlacedStatus(){ return isPlaced; }
     public void setPlacedStatus(boolean placedStatus){ isPlaced = placedStatus; }
     //getDamage class
 
     /**
-     * TowerDefense Tower can be dragged and dropped, once dropped, shoots the nearest enemy
-     * @param fireRateinSec
-     * @param fireRadius
-     * @param cost
+     * Tower-defense Tower can be dragged and dropped, once dropped, shoots the nearest enemy
+     * @param towerData
      */
-    public TowerComponent(double fireRateinSec,
-                          double fireRadius,int cost)
+    public TowerComponent(DataForTower towerData)
     {
-        this.fireRateinSec = fireRateinSec;
-        this.fireRadius = fireRadius;
-        this.cost = cost;
-
+        this.data = towerData;
         isDragged = false;
         isPlaced = false;
-        shotFrequency = newLocalTimer();
-        newLocalTimer().capture();
-    }
-    /*
-    private DataForTower towerData;
-    public TowerComponent(DataForTower towerData){
-        this.towerData = towerData;
-        shotFrequency = newLocalTimer();
-        newLocalTimer().capture();
-    }
-    */
 
+        shotFrequency = newLocalTimer();
+        newLocalTimer().capture();
+    }
 
     /**
      * Method enables TowerComponent to shoot Enemy using TowerProjectileComponent
@@ -80,10 +64,11 @@ public class TowerComponent extends Component {
                 new SpawnData(localPos)
                         .put("tower",entity)
                         .put("prey", enemy)
+                        .put("projectile",data.projectileImageName())
+                        .put("projectile-speed",data.projectileSpeed())
         );
         projectile.rotateToVector(aim);
     }
-
     /**
      * enables Tower movement and gets the nearest enemy to shoot (shoots entities of type TEST right now)
      * @param tpf time per frame
@@ -91,21 +76,16 @@ public class TowerComponent extends Component {
     @Override
     public void onUpdate(double tpf)
     {
-/*
-        if(this.isPlaced == false){
-            circleRadius = new Circle(entity.getPosition().getX(),entity.getPosition().getY(),fireRadius,Color.LIGHTGREEN);
-            circleRadius.setVisible(true);
-            return;
-        }
-        */
-
         frameRateScalar = tpf * 60;
         TowerDefenceApp.Type target = TowerDefenceApp.Type.ENEMY;
-        if(this.isPlaced && shotFrequency.elapsed(Duration.seconds(fireRateinSec))){
+        if(this.isPlaced && shotFrequency.elapsed(Duration.seconds(data.fireRate()))){
+            circleRadius = new Circle(
+                    entity.getPosition().getX(),entity.getPosition().getY(),data.fireRadius(),Color.LIGHTGREEN);
+            circleRadius.setVisible(false);
             getGameWorld()
                     .getClosestEntity(entity, e ->e.isType(target))
                     .ifPresent(closestEnemy ->{
-                        if(closestEnemy.distanceBBox(entity) <= fireRadius) {
+                        if(closestEnemy.distanceBBox(entity) <= data.fireRadius()) {
                             entity.rotateToVector(closestEnemy.getPosition().subtract(entity.getPosition()));
                             transformComponent.rotateBy(90);
                             shoot(closestEnemy);
@@ -113,8 +93,10 @@ public class TowerComponent extends Component {
                         }else{
                             //do nothing
                             return;}
-
                     });
+        }
+        else {
+
         }
     }
 
