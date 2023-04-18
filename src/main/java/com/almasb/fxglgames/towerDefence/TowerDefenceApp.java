@@ -234,13 +234,13 @@ public class TowerDefenceApp extends GameApplication {
                 Interpolator.DISCRETE);
     }
 
-    public void onTowerSell(DataForTower data){
+    public void onTowerSell(DataForTower data, TowerComponent tower){
         //data.cost(); increase amount of money by about a third of tower cost
-        IndexPair tileIndices = testTDLevelMap.getTileIndexFromPoint(towerEntity.getPosition());
-        towerEntity.getComponent(TowerComponent.class).deleteInfo();
-        towerEntity.setAnchoredPosition(testTDLevelMap.getTilePositionCenter(tileIndices));
+        IndexPair tileIndices = testTDLevelMap.getTileIndexFromPoint(tower.getEntity().getPosition());
+        tower.deleteInfo();
+        tower.getEntity().getAnchoredPosition(testTDLevelMap.getTilePositionCenter(tileIndices));
         testTDLevelMap.setTileAvailability(true, tileIndices);
-        towerEntity.removeFromWorld();
+        tower.getEntity().removeFromWorld();
     }
 
 

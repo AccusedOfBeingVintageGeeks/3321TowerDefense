@@ -14,7 +14,7 @@ import javafx.scene.text.Text;
 public class TowerInfo extends VBox {
 
     private DataForTower data;
-    public TowerInfo(DataForTower data){
+    public TowerInfo(DataForTower data, TowerComponent tower){
         this.data = data;
         this.setOpacity(0.8);
 
@@ -22,11 +22,10 @@ public class TowerInfo extends VBox {
         var text1 = setUpText("SELL");
         var text = setUpText(data.name() + "\n" + "Fire-rate: " + data.fireRate() + "\n" +
                 "Fire-radius: " + data.fireRadius() + "\n" + "Damage: " + "tbc" + "\n");
-        var sell_Button = setUpButton(backGround,text1);
+        var sell_Button = setUpButton(backGround,text1,tower);
         getChildren().addAll(sell_Button,text);
 
     }
-
     private Rectangle setUpBackGround(){
 
         Rectangle back = new Rectangle(100,40, Color.RED);
@@ -40,10 +39,9 @@ public class TowerInfo extends VBox {
         text.setTabSize(5);
         return text;
     }
-    private StackPane setUpButton(Rectangle backGround,Text text){
+    private StackPane setUpButton(Rectangle backGround,Text text, TowerComponent tower){
         StackPane sellButton = new StackPane();
         sellButton.getChildren().addAll(backGround,text);
-
         sellButton.opacityProperty().bind(
                 Bindings.when(sellButton.hoverProperty())
                         .then(0.8)
@@ -51,7 +49,7 @@ public class TowerInfo extends VBox {
         );
         sellButton.setOnMouseClicked(e->{
             {
-                FXGL.<TowerDefenceApp>getAppCast().onTowerSell(data);
+                FXGL.<TowerDefenceApp>getAppCast().onTowerSell(data,tower);
             }
         });
         return sellButton;

@@ -47,7 +47,7 @@ public class TowerComponent extends Component {
         this.data = towerData;
         isDragged = false;
         isPlaced = false;
-        info = new TowerInfo(data);
+        info = new TowerInfo(data,this);
         info.setVisible(false);
         addUINode(info);
         shotFrequency = newLocalTimer();
