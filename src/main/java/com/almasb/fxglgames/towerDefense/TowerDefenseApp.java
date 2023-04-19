@@ -134,8 +134,9 @@ public class TowerDefenseApp extends GameApplication {
 
                         // initPoint (the tower's position on the sidebar) needs to be a property of tower entities or their TowerComponent.
                         // Or maybe it gets it from the sidebar class if there will be such a thing?
-                        Point2D initPoint = new Point2D(getAppWidth() - testTDLevelMap.TileSize,getAppHeight() * 0.4);
-                        draggedEntity.setAnchoredPosition(initPoint);
+                        //Point2D initPoint = new Point2D(getAppWidth() - testTDLevelMap.TileSize,getAppHeight() * 0.4);
+                        //draggedEntity.setAnchoredPosition(initPoint);
+                        draggedEntity.removeFromWorld();
                         //draggedEntity.getComponent(TowerComponent.class).rotateUp();
                     }
                 }
@@ -152,11 +153,12 @@ public class TowerDefenseApp extends GameApplication {
         getGameScene().addGameView(new GameView(background,Layer.SHORT.ZIndex));
 
         getGameWorld().addEntityFactory(new Factory());
-        setLevelFromMap("tmx/FirstTilemap.tmx");        //Level entities must be spawned AFTER setting the level
-
-        testTDLevelMap = new TDLevelMap(TILE_SIZE,22,16);
-        towerEntity = spawn("tower",getAppWidth() - testTDLevelMap.TileSize * 3f/2, 0.6 * getAppHeight());
-        testEntity = spawn("testEntity", getAppWidth()- testTDLevelMap.TileSize * 3f/2,0.5 * getAppHeight());
+        setLevelFromMap("tmx/FirstTilemap.tmx");//Level entities must be spawned AFTER setting the level
+        testTDLevelMap = new TDLevelMap(45,22,16);
+        loadTowers();
+        towerMenuBox = new TowerMenuBox(dataForTowers);
+        towerMenuBox.setTranslateX(getAppWidth() - testTDLevelMap.TileSize * 3f/2 - 12);
+        towerMenuBox.setTranslateY(0.1 * getAppHeight());
 
         SpawnData enemySpawnData = new SpawnData();
         enemySpawnData.put("waypoints", testTDLevelMap.PathPoints);
@@ -164,6 +166,7 @@ public class TowerDefenseApp extends GameApplication {
     }
     @Override
     protected void initUI() {
+        addUINode(towerMenuBox);
         EventHandler<ActionEvent> readyClicked = event -> {
             List<Entity> currentlySpawnedEnemies = getGameWorld().getEntitiesByType(TowerDefenseApp.Type.ENEMY);
             if(currentlySpawnedEnemies.size() == 0 && !waveManager.areAllWavesSpawned())
@@ -176,6 +179,10 @@ public class TowerDefenseApp extends GameApplication {
 
     @Override
     protected void onUpdate(double tpf) {
+        List<Entity> towers = getGameWorld().getEntitiesByType(Type.TOWER);
+        for(Entity tower: towers ) {
+            tower.getComponent(TowerComponent.class).initializeTowerInfo();
+        }
         List<Entity> currentlySpawnedEnemies = getGameWorld().getEntitiesByType(Type.ENEMY);
 
         //Defeat?
@@ -188,7 +195,6 @@ public class TowerDefenseApp extends GameApplication {
                 });
             }
         }
-
         //Victory?
         if(waveManager.areAllWavesSpawned() && currentlySpawnedEnemies.size() == 0) {
             getDialogService().showMessageBox("VICTORY", ()->{
@@ -196,7 +202,6 @@ public class TowerDefenseApp extends GameApplication {
                 getGameController().gotoMainMenu();
             });
         }
-
         //Update UI
         readyUINode.update(
                 currentlySpawnedEnemies.size() == 0,
@@ -204,7 +209,25 @@ public class TowerDefenseApp extends GameApplication {
                 waveManager.getSecondsToNextWave(),
                 false //TODO
         );
+
     }
+    public void onTowerSelection(DataForTower towerData){
+        towerEntity = spawnWithScale("towerComponent",
+                new SpawnData(getInput().getMousePositionWorld().getX()-5,
+                        getInput().getMousePositionWorld().getY()+5).put("dataForTower",towerData),
+                Duration.seconds(0),
+                Interpolator.DISCRETE);
+    }
+
+    public void onTowerSell(DataForTower data, TowerComponent tower){
+        //data.cost(); increase amount of money by about a third of tower cost
+        IndexPair tileIndices = testTDLevelMap.getTileIndexFromPoint(tower.getEntity().getPosition());
+        tower.deleteTowerInfo();
+        tower.getEntity().getAnchoredPosition(testTDLevelMap.getTilePositionCenter(tileIndices));
+        testTDLevelMap.setTileAvailability(true, tileIndices);
+        tower.getEntity().removeFromWorld();
+    }
+
 
     public static void main(String[] args) {
         launch(args);

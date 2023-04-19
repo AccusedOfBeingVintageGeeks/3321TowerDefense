@@ -30,7 +30,7 @@
     "fireRadius": 300,
     "fireRate": 2.0,
     "projectileSpeed": 150,
-    "projectileImageName": "missile.png",
+    "projectileImageName": "Missile.png",
     "projectileHeight": 20,
     "projectileWidth": 15,
     "effects": null
