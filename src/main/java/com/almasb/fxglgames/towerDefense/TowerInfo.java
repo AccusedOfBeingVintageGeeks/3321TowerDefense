@@ -1,4 +1,4 @@
-package com.almasb.fxglgames.towerDefence;
+package com.almasb.fxglgames.towerDefense;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.FXGLForKtKt;
@@ -46,7 +46,7 @@ public class TowerInfo extends VBox {
                         .otherwise(0.5)
         );
         sellButton.setOnMouseClicked(e->
-                FXGL.<TowerDefenceApp>getAppCast().onTowerSell(data, tower));
+                FXGL.<TowerDefenseApp>getAppCast().onTowerSell(data, tower));
         return sellButton;
     }
 

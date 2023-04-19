@@ -14,13 +14,18 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.animation.Interpolator;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +60,8 @@ public class TowerDefenseApp extends GameApplication {
         //This is multiplied by 100 for edge cases where we want to have an entity between layers
         final int ZIndex = ordinal() * 100;
     }
-    Entity testEntity, towerEntity;
+    private List<DataForTower> dataForTowers;
+    Entity towerEntity;
     ReadyUINode readyUINode;
     TDLevelMap testTDLevelMap;
     WaveManager waveManager;
@@ -145,6 +151,16 @@ public class TowerDefenseApp extends GameApplication {
 
         input.addAction(drag, MouseButton.PRIMARY);
     }
+    private TowerMenuBox towerMenuBox;
+    private void loadTowers(){
+        String towerSpecifications = "towerdata.json";
+        try {
+            InputStream stream = getAssetLoader().getStream("/assets/towerdata/" + towerSpecifications);
+            dataForTowers = new ObjectMapper().readValue(stream, new TypeReference<List<DataForTower>>(){});
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
 
     @Override
     protected void initGame() {
@@ -212,9 +228,9 @@ public class TowerDefenseApp extends GameApplication {
 
     }
     public void onTowerSelection(DataForTower towerData){
-        towerEntity = spawnWithScale("towerComponent",
-                new SpawnData(getInput().getMousePositionWorld().getX()-5,
-                        getInput().getMousePositionWorld().getY()+5).put("dataForTower",towerData),
+        towerEntity = spawnWithScale("tower",
+                new SpawnData(getInput().getMousePositionWorld().getX()-TILE_SIZE/2,
+                        getInput().getMousePositionWorld().getY()-TILE_SIZE/2).put("dataForTower",towerData),
                 Duration.seconds(0),
                 Interpolator.DISCRETE);
     }

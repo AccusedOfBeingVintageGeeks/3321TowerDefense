@@ -6,98 +6,109 @@ import javafx.geometry.Point2D;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.time.LocalTimer;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
+/**
+ * based on code by AlmasB
+ * -<a href="https://github.com/AlmasB/FXGLGames/tree/master/TowerDefense/src/main/java/com/almasb/fxglgames/td/components/TowerComponent">...</a>
+ * author: Andreas Kramer
+ * TowerComponent shoots Entities of type Enemy once set in place
+ */
+
 public class TowerComponent extends Component {
-    /**
-     * based on code by AlmasB
-     * -https://github.com/AlmasB/FXGLGames/tree/master/TowerDefense/src/main/java/com/almasb/fxglgames/td/components/TowerComponent
-     */
-    private double speed, frameRateScalar;
-    private boolean isDragged, isPlaced;
-    private LocalTimer shotFrequency;
+
+    private final DataForTower data;
+    private final LocalTimer shotFrequency;
+    private final TowerInfo info;
+    private final Circle circle;
     private TransformComponent transformComponent;
-    private double fireRateinSec = 0.7;
-
-    public boolean getDragStatus() { return isDragged; }
-    public void setDragStatus(boolean dragStatus) { isDragged = dragStatus; }
-
+    private boolean isPlaced;
     public boolean getPlacedStatus(){ return isPlaced; }
     public void setPlacedStatus(boolean placedStatus){ isPlaced = placedStatus; }
     //getDamage class
 
     /**
-     * TowerDefense Tower can be dragged and dropped, once dropped, shoots nearest enemy
-     * @param speed
+     * Tower-defense Tower can be dragged and dropped, once dropped, shoots the nearest enemy
+     * @param towerData TowerData includes information about a specific tower like names, fireRate, fireRadius, etc
      */
-    public TowerComponent(double speed)
+    public TowerComponent(DataForTower towerData)
     {
-
-        this.speed = speed;
-        isDragged = false;
+        this.data = towerData;
+        this.transformComponent = new TransformComponent();
         isPlaced = false;
-        shotFrequency = newLocalTimer();
-        newLocalTimer().capture();
+        info = new TowerInfo(data,this);
+        info.setVisible(false);
+        circle = new Circle(data.fireRadius() + 15, Color.color(1,0,0,0.3));
+        this.shotFrequency = newLocalTimer();
+        shotFrequency.capture();
+        addUINode(info);
+        addUINode(circle);
     }
 
     /**
      * Method enables TowerComponent to shoot Enemy using TowerProjectileComponent
-     * @param enemy
+     * @param enemy target that gets shot
      */
     private void shoot(Entity enemy){
-
+        shotFrequency.capture();
         Point2D localPos = this.getEntity().getCenter();
         Point2D aim = enemy.getPosition().subtract(localPos);
-        //Point2D newAim = aim.subtract(entity.getHeight()/2,entity.getWidth()/2);
-
         var projectile = spawn("Projectile",
                 new SpawnData(localPos)
                         .put("tower",entity)
                         .put("prey", enemy)
+                        .put("projectile",data.projectileImageName())
+                        .put("projectileSpeed",data.projectileSpeed())
+                        .put("height",data.projectileHeight())
+                        .put("width",data.projectileWidth())
         );
         projectile.rotateToVector(aim);
     }
+    private void rotateTowerToTarget(Entity tower, Entity target){
+        tower.rotateToVector(target.getPosition().subtract(tower.getPosition()));
+        transformComponent.rotateBy(90);
+    }
 
+    public void initializeTowerInfo(){
+        info.setTranslateX(entity.getX() + 40);
+        info.setTranslateY(entity.getY());
+        circle.setTranslateX(entity.getAnchoredPosition().getX());
+        circle.setTranslateY(entity.getAnchoredPosition().getY());
+        this.circle.setVisible(!this.isPlaced);
+        entity.getViewComponent().getParent().setOnMouseClicked(e ->{
+            {
+                this.info.setVisible(!this.info.isVisible());
+            }
+        });
+    }
+    public void deleteTowerInfo(){
+        removeUINode(circle);
+        removeUINode(info);
+    }
     /**
-     * enables Tower movement and gets the nearest enemy to shoot (shoots entities of type TEST right now)
+     * Scans Game-world for the nearest enemy entity
      * @param tpf time per frame
      */
     @Override
     public void onUpdate(double tpf)
     {
-        frameRateScalar = tpf * 60;
-        TowerDefenseApp.Type target = TowerDefenseApp.Type.ENEMY;
-        if(this.isPlaced && shotFrequency.elapsed(Duration.seconds(fireRateinSec))){
+        TowerDefenseApp.Type targetType = TowerDefenseApp.Type.ENEMY;
+        Duration firePause = Duration.seconds(data.fireRate());
+        if(this.isPlaced && shotFrequency.elapsed(firePause)){
             getGameWorld()
-                    .getClosestEntity(entity,e ->e.isType(target))
+                    .getClosestEntity(entity, e ->e.isType(targetType))
                     .ifPresent(closestEnemy ->{
-                        entity.rotateToVector(closestEnemy.getPosition().subtract(entity.getPosition()));
-                        transformComponent.rotateBy(90);
-                        shoot(closestEnemy);
-                        shotFrequency.capture();
+                        if(closestEnemy.distanceBBox(entity) <= data.fireRadius()) {
+                            rotateTowerToTarget(entity,closestEnemy);
+                            shoot(closestEnemy);
+                        }//do nothing
+
                     });
         }
+        //do nothing
     }
-
-    /**
-     * test method to move TowerComponent vertically
-     */
-    public void rotateUp()
-    {
-        transformComponent.rotateToVector(entity.getPosition().subtract(0,45));
-        transformComponent.rotateBy(343);
-    }
-
-    /**
-     * moves TowerComponent to 2D Point in WorldSpace
-     * @param posInWorldSpace
-     */
-    public void moveToPos(Point2D posInWorldSpace)
-    {
-        transformComponent.setPosition(posInWorldSpace);
-    }
-
-
 }
