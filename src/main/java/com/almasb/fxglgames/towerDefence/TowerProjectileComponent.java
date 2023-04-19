@@ -11,9 +11,8 @@ import javafx.geometry.Point2D;
  */
 public class TowerProjectileComponent extends Component {
 
-    private Entity tower;
+    private final Entity tower;
     private Entity prey;
-    //private Point2D aim;
     private TransformComponent transformComponent;
     private int speed;
 
@@ -25,14 +24,14 @@ public class TowerProjectileComponent extends Component {
 
     /**
      * Projectile that travels from a Tower towards an Enemy (prey)
-     * @param tower
-     * @param prey
+     * @param tower TowerComponent entity
+     * @param prey TowerComponent entity
+     * @param speed projectile speed
      */
-    public TowerProjectileComponent(Entity tower, Entity prey, int speed) { //, Point2D aim
-        this.tower = tower;
+    public TowerProjectileComponent(Entity tower, Entity prey, int speed) {
         this.prey = prey;
         this.speed = speed;
-        //this.aim = aim; -> put aim into parameter
+        this.tower = tower;
     }
 
     /**
@@ -49,7 +48,6 @@ public class TowerProjectileComponent extends Component {
             preyHit();
             return;
         }
-        //entity.translateTowards(aim,speed * tpf);
         entity.translateTowards(prey.getCenter(),speed * tpf);
 
     }

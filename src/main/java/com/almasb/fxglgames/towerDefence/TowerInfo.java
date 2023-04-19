@@ -3,8 +3,6 @@ package com.almasb.fxglgames.towerDefence;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.FXGLForKtKt;
 import javafx.beans.binding.Bindings;
-import javafx.geometry.Pos;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -13,7 +11,7 @@ import javafx.scene.text.Text;
 
 public class TowerInfo extends VBox {
 
-    private DataForTower data;
+    private final DataForTower data;
     public TowerInfo(DataForTower data, TowerComponent tower){
         this.data = data;
         this.setOpacity(0.8);
@@ -47,11 +45,8 @@ public class TowerInfo extends VBox {
                         .then(0.8)
                         .otherwise(0.5)
         );
-        sellButton.setOnMouseClicked(e->{
-            {
-                FXGL.<TowerDefenceApp>getAppCast().onTowerSell(data,tower);
-            }
-        });
+        sellButton.setOnMouseClicked(e->
+                FXGL.<TowerDefenceApp>getAppCast().onTowerSell(data, tower));
         return sellButton;
     }
 

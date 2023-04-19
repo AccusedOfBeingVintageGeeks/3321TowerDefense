@@ -209,7 +209,7 @@ public class TowerDefenceApp extends GameApplication {
     protected void onUpdate(double tpf) {
         List<Entity> towers = getGameWorld().getEntitiesByType(Type.TOWER);
         for(Entity tower: towers ) {
-            tower.getComponent(TowerComponent.class).initializeInfo();
+            tower.getComponent(TowerComponent.class).initializeTowerInfo();
         }
         List<Entity> scrubs = getGameWorld().getEntitiesByType(Type.ENEMY);
         for (Entity enemy: scrubs) {
@@ -237,7 +237,7 @@ public class TowerDefenceApp extends GameApplication {
     public void onTowerSell(DataForTower data, TowerComponent tower){
         //data.cost(); increase amount of money by about a third of tower cost
         IndexPair tileIndices = testTDLevelMap.getTileIndexFromPoint(tower.getEntity().getPosition());
-        tower.deleteInfo();
+        tower.deleteTowerInfo();
         tower.getEntity().getAnchoredPosition(testTDLevelMap.getTilePositionCenter(tileIndices));
         testTDLevelMap.setTileAvailability(true, tileIndices);
         tower.getEntity().removeFromWorld();
