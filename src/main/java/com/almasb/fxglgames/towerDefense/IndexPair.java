@@ -1,4 +1,4 @@
-package com.almasb.fxglgames.towerDefence;
+package com.almasb.fxglgames.towerDefense;
 
 /**
  * A pair of integers. Useful for methods dealing with 2-dimensional arrays.

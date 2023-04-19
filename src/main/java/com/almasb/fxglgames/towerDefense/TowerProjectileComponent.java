@@ -1,9 +1,7 @@
-package com.almasb.fxglgames.towerDefence;
+package com.almasb.fxglgames.towerDefense;
 
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.components.TransformComponent;
-import javafx.geometry.Point2D;
 
 /**
  * based on code from AlmasB
@@ -14,12 +12,8 @@ public class TowerProjectileComponent extends Component {
     private Entity tower;
     private Entity prey;
     //private Point2D aim;
-    private TransformComponent transformComponent;
-    private int speed;
 
-    public TransformComponent getTransformComponent() {
-        return transformComponent;
-    }
+    private int speed = 1000;
     //speed can probably put into a different class (data class) and be retrieved from there
     //this should make it easier to change game settings
 
@@ -28,10 +22,9 @@ public class TowerProjectileComponent extends Component {
      * @param tower
      * @param prey
      */
-    public TowerProjectileComponent(Entity tower, Entity prey, int speed) { //, Point2D aim
+    public TowerProjectileComponent(Entity tower, Entity prey) { //, Point2D aim
         this.tower = tower;
         this.prey = prey;
-        this.speed = speed;
         //this.aim = aim; -> put aim into parameter
     }
 
@@ -51,7 +44,6 @@ public class TowerProjectileComponent extends Component {
         }
         //entity.translateTowards(aim,speed * tpf);
         entity.translateTowards(prey.getCenter(),speed * tpf);
-
     }
 
 
@@ -62,7 +54,8 @@ public class TowerProjectileComponent extends Component {
         //actions if prey gets hit
         //remove projectile and prey from world
         //later on: start effects/animations,deal damage,if prey is killed -> call functions for money,etc..
-        //TowerComponent data = tower.getComponent(TowerComponent.class);
+        TowerComponent data = tower.getComponent(TowerComponent.class);
+
         entity.removeFromWorld();
         /*
         var HP = prey.getComponent(HealthIntComponent.class);

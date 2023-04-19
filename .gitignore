@@ -29,3 +29,7 @@ logs/
 system/
 /.vscode/launch.json
 /.vscode/settings.json
+/docs
+
+# libraries #
+lib/
