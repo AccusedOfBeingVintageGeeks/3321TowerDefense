@@ -137,7 +137,6 @@ public class TowerDefenseApp extends GameApplication {
                     }
                     else {
                         // Abort drag
-
                         // initPoint (the tower's position on the sidebar) needs to be a property of tower entities or their TowerComponent.
                         // Or maybe it gets it from the sidebar class if there will be such a thing?
                         //Point2D initPoint = new Point2D(getAppWidth() - testTDLevelMap.TileSize,getAppHeight() * 0.4);
