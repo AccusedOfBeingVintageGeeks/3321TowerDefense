@@ -15,6 +15,7 @@ class TDLevelMapSpec extends Specification {
     TDLevelMap map
     List<Entity> bTiles
     Entity path
+    Thread thread
 
     void makeNewWorld(String tmx) {
         GameWorld world = new GameWorld()
@@ -28,6 +29,11 @@ class TDLevelMapSpec extends Specification {
         path = world.getEntitiesByType(TowerDefenceApp.Type.PATH).get(0)
     }
 
+    void setupSpec() {
+        TowerDefenceApp app = new TowerDefenceApp();
+        thread = new Thread(app as Runnable);
+        thread.start();
+    }
 
     void setup() {
         makeNewWorld("tmx/FirstTilemap.tmx")
