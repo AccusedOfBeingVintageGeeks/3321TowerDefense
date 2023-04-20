@@ -4,3 +4,10 @@ Software Bill of Materials:
 - JavaFX
 - Tiled                 https://www.mapeditor.org/
 - Affinity Designer
+- Groovy
+- Jacoco
+- Spock
+- Jackson
+- Junit Jupiter
+- Hamcrest
+- Kotlin
