@@ -143,12 +143,12 @@ public class TowerDefenseApp extends GameApplication {
                         //Point2D initPoint = new Point2D(getAppWidth() - testTDLevelMap.TileSize,getAppHeight() * 0.4);
                         //draggedEntity.setAnchoredPosition(initPoint);
                         draggedEntity.removeFromWorld();
+                        draggedEntity.getComponent(TowerComponent.class).deleteTowerInfo();
                         //draggedEntity.getComponent(TowerComponent.class).rotateUp();
                     }
                 }
             }
         };
-
         input.addAction(drag, MouseButton.PRIMARY);
     }
     private TowerMenuBox towerMenuBox;
