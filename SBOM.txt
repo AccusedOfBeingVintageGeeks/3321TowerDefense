@@ -1,7 +1,13 @@
 Software Bill of Materials:
 - IntelliJ
-- FXGL                  https://github.com/AlmasB/FXGL
+- FXGL                  https://github.com/AlmasB/FXGLtiled
 - JavaFX
 - Tiled                 https://www.mapeditor.org/
 - Affinity Designer
-- OpenGameArt.org       https://opengameart.org/content/tower-defence-basic-towers
+- Groovy
+- Jacoco
+- Spock
+- Jackson
+- Junit Jupiter
+- Hamcrest
+- Kotlin
