@@ -1,0 +1,32 @@
+[
+  {
+    "enemyQueue": ["scrub", null, "scrub", "scrub", null, "scrub", "scrub", "scrub"],
+    "spawnsPerQueueEntry": 1,
+    "deltaSpawnInMilliseconds": 500
+  },
+  {
+    "enemyQueue": ["scrub", null, "scrub", "scrub", null, "scrub", "scrub", "scrub"],
+    "spawnsPerQueueEntry": 3,
+    "deltaSpawnInMilliseconds": 500
+  },
+  {
+    "enemyQueue": ["scrub", "scrub", "scrub", null, "scrub", "scrub", "scrub", null, "scrub"],
+    "spawnsPerQueueEntry": 5,
+    "deltaSpawnInMilliseconds": 500
+  },
+  {
+    "enemyQueue": ["scrub", null, "scrub", null, "scrub", null, "scrub", "scrub"],
+    "spawnsPerQueueEntry": 10,
+    "deltaSpawnInMilliseconds": 200
+  },
+  {
+    "enemyQueue": ["scrub", "scrub", "scrub", null, "scrub", null, "scrub", "scrub", "scrub"],
+    "spawnsPerQueueEntry": 5,
+    "deltaSpawnInMilliseconds": 300
+  },
+  {
+    "enemyQueue": ["scrub", "scrub", "scrub", null, "scrub", null, "scrub", "scrub", "scrub"],
+    "spawnsPerQueueEntry": 10,
+    "deltaSpawnInMilliseconds": 150
+  }
+]

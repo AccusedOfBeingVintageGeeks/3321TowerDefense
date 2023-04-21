@@ -82,18 +82,15 @@ public class WaveManager {
                         }
 
                         numConsecutiveSpawnsOfCurrentEntry[0]++;
-                        if(numConsecutiveSpawnsOfCurrentEntry[0] >= waveData.spawnsPerQueueEntry())
-                        {
+                        if(numConsecutiveSpawnsOfCurrentEntry[0] >= waveData.spawnsPerQueueEntry()) {
                             numConsecutiveSpawnsOfCurrentEntry[0] = 0;
                             currentEntryIndex[0]++;
 
-                            if(currentEntryIndex[0] == waveData.enemyQueue().length)// if we just spawned the last enemyEntry
-                            {
+                            if(currentEntryIndex[0] == waveData.enemyQueue().length) {// if we just spawned the last enemyEntry
                                 isActivelySpawning = false;
                                 startBreakPeriod(WAVE_BREAK_TIME);
                                 currentWaveIndex++;
                             }
-
                         }
                     },
                 Duration.millis(waveData.deltaSpawnInMilliseconds()),
