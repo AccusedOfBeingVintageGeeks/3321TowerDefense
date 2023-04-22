@@ -33,6 +33,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class TowerDefenseApp extends GameApplication {
 
+    public static final String MONEY = "money";
     /**
      * Types of entities in this game. May be assigned to entities in the factory with the .type() method.
      */
@@ -49,7 +50,6 @@ public class TowerDefenseApp extends GameApplication {
     public enum EnemyType {
         scrub
     }
-
     /**
      * Standard sorting layers.
      */
@@ -63,6 +63,7 @@ public class TowerDefenseApp extends GameApplication {
     private List<DataForTower> dataForTowers;
     Entity towerEntity;
     ReadyUINode readyUINode;
+    CurrencySymbol currencySymbol;
     TDLevelMap testTDLevelMap;
     WaveManager waveManager;
 
@@ -88,6 +89,7 @@ public class TowerDefenseApp extends GameApplication {
 
     @Override
     protected void initGameVars(Map<String, Object> vars) {
+        vars.put(MONEY,0);
         //I believe this is important for saving state, but I need to do more research.
     }
 
@@ -174,7 +176,7 @@ public class TowerDefenseApp extends GameApplication {
         loadTowers();
         towerMenuBox = new TowerMenuBox(dataForTowers);
         towerMenuBox.setTranslateX(getAppWidth() - testTDLevelMap.TileSize * 3f/2 - 12);
-        towerMenuBox.setTranslateY(0.1 * getAppHeight());
+        towerMenuBox.setTranslateY(0.2 * getAppHeight());
 
         SpawnData enemySpawnData = new SpawnData();
         enemySpawnData.put("waypoints", testTDLevelMap.PathPoints);
@@ -183,6 +185,8 @@ public class TowerDefenseApp extends GameApplication {
     @Override
     protected void initUI() {
         addUINode(towerMenuBox);
+        currencySymbol = new CurrencySymbol();
+        addUINode(currencySymbol,getAppWidth() - testTDLevelMap.TileSize * 3f/2 - 12,0.01 * getAppHeight());
         EventHandler<ActionEvent> readyClicked = event -> {
             List<Entity> currentlySpawnedEnemies = getGameWorld().getEntitiesByType(TowerDefenseApp.Type.ENEMY);
             if(currentlySpawnedEnemies.size() == 0 && !waveManager.areAllWavesSpawned())

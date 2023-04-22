@@ -32,7 +32,7 @@ public class TowerInfo extends VBox {
         return back;
     }
     private Text setUpText(String content){
-        var text = FXGLForKtKt.getUIFactoryService().newText(content);
+        var text = FXGLForKtKt.getUIFactoryService().newText(content,20);
         text.setStroke(Color.ANTIQUEWHITE);
         text.setTabSize(5);
         return text;
