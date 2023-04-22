@@ -8,7 +8,9 @@ package com.almasb.fxglgames.towerDefense;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.app.scene.FXGLMenu;
 import com.almasb.fxgl.app.scene.GameView;
+import com.almasb.fxgl.app.scene.SceneFactory;
 import com.almasb.fxgl.dsl.components.WaypointMoveComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
@@ -24,6 +26,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
 import java.util.List;
@@ -63,7 +66,7 @@ public class TowerDefenseApp extends GameApplication {
     private List<DataForTower> dataForTowers;
     Entity towerEntity;
     ReadyUINode readyUINode;
-    TDLevelMap testTDLevelMap;
+    TDLevelMap levelMap;
     WaveManager waveManager;
 
     final int
@@ -71,16 +74,34 @@ public class TowerDefenseApp extends GameApplication {
             WINDOW_HEIGHT = 720,
             TILE_SIZE = 45;
 
+    String levelName, waveDataFilename;
+
+    /**
+     * Use this method to initialize the data necessary to load the level.
+     * @param levelName         The name of a .tmx file in assets/levels/tmx/
+     * @param waveDataFilename  The name of a .json file in assets/levels/waveDataLists/
+     */
+    public void setLevel(String levelName, String waveDataFilename){
+        this.levelName = levelName;
+        this.waveDataFilename = waveDataFilename;
+    }
+
+
     @Override
     protected void initSettings(GameSettings settings) {
         // initialize common game / window settings.
         settings.setTitle("Tower Defense");
-        settings.setVersion("0.04");
+        settings.setVersion("0.05");
         settings.setWidth(WINDOW_WIDTH);
         settings.setHeight(WINDOW_HEIGHT);
         settings.setGameMenuEnabled(true);
         settings.setMainMenuEnabled(true);
         settings.getCSSList().add("main.css");
+        settings.setSceneFactory(new SceneFactory(){
+            @NotNull
+            @Override
+            public FXGLMenu newMainMenu() {return new MainMenu();}
+        });
 
         settings.setFullScreenAllowed(true);
         settings.setFullScreenFromStart(true);
@@ -105,7 +126,7 @@ public class TowerDefenseApp extends GameApplication {
                 List<Entity> towerEntities = getGameWorld().getEntitiesByComponent(TowerComponent.class);
                 for (Entity towerEnt : towerEntities) {
                     if(!towerEnt.getComponent(TowerComponent.class).getPlacedStatus()
-                            && getInput().getMousePositionWorld().distance(towerEnt.getAnchoredPosition()) < 0.5 * testTDLevelMap.TileSize) {
+                            && getInput().getMousePositionWorld().distance(towerEnt.getAnchoredPosition()) < 0.5 * levelMap.TileSize) {
                         draggedEntity = towerEnt;
                         dragging = true;
                         break;
@@ -127,13 +148,13 @@ public class TowerDefenseApp extends GameApplication {
                     dragging = false;
 
                     // Check if the tile that the mouse is positioned over is placeable.
-                    IndexPair tileIndices = testTDLevelMap.getTileIndexFromPoint(getInput().getMousePositionWorld());
+                    IndexPair tileIndices = levelMap.getTileIndexFromPoint(getInput().getMousePositionWorld());
 
-                    if(testTDLevelMap.isTileAvailable(tileIndices)) {
+                    if(levelMap.isTileAvailable(tileIndices)) {
                         // Place tower on tile
-                        draggedEntity.setAnchoredPosition(testTDLevelMap.getTilePositionCenter(tileIndices));
+                        draggedEntity.setAnchoredPosition(levelMap.getTilePositionCenter(tileIndices));
                         draggedEntity.getComponent(TowerComponent.class).setPlacedStatus(true);
-                        testTDLevelMap.setTileAvailability(false, tileIndices);
+                        levelMap.setTileAvailability(false, tileIndices);
                     }
                     else {
                         // Abort drag
@@ -150,12 +171,25 @@ public class TowerDefenseApp extends GameApplication {
         };
         input.addAction(drag, MouseButton.PRIMARY);
     }
+
+    /**
+     * Call this method to load the next level. Specifically, it initializes the tile map and wave manager.
+     */
+    private void loadLevel(){
+        setLevelFromMap("tmx/" + levelName + ".tmx");
+        levelMap = new TDLevelMap(45,22,16);
+
+        SpawnData enemySpawnData = new SpawnData();
+        enemySpawnData.put("waypoints", levelMap.PathPoints);
+        waveManager = new WaveManager(enemySpawnData, waveDataFilename + ".json");
+    }
+
     private TowerMenuBox towerMenuBox;
     private void loadTowers(){
         String towerSpecifications = "towerdata.json";
         try {
             InputStream stream = getAssetLoader().getStream("/assets/towerdata/" + towerSpecifications);
-            dataForTowers = new ObjectMapper().readValue(stream, new TypeReference<List<DataForTower>>(){});
+            dataForTowers = new ObjectMapper().readValue(stream, new TypeReference<>(){});
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -168,16 +202,11 @@ public class TowerDefenseApp extends GameApplication {
         getGameScene().addGameView(new GameView(background,Layer.SHORT.ZIndex));
 
         getGameWorld().addEntityFactory(new Factory());
-        setLevelFromMap("tmx/FirstTilemap.tmx");//Level entities must be spawned AFTER setting the level
-        testTDLevelMap = new TDLevelMap(45,22,16);
+        loadLevel();
         loadTowers();
         towerMenuBox = new TowerMenuBox(dataForTowers);
-        towerMenuBox.setTranslateX(getAppWidth() - testTDLevelMap.TileSize * 3f/2 - 12);
+        towerMenuBox.setTranslateX(getAppWidth() - levelMap.TileSize * 3f/2 - 12);
         towerMenuBox.setTranslateY(0.1 * getAppHeight());
-
-        SpawnData enemySpawnData = new SpawnData();
-        enemySpawnData.put("waypoints", testTDLevelMap.PathPoints);
-        waveManager = new WaveManager(enemySpawnData, "firstWavesDataLevelList.json");
     }
     @Override
     protected void initUI() {
@@ -228,18 +257,18 @@ public class TowerDefenseApp extends GameApplication {
     }
     public void onTowerSelection(DataForTower towerData){
         towerEntity = spawnWithScale("tower",
-                new SpawnData(getInput().getMousePositionWorld().getX()-TILE_SIZE/2,
-                        getInput().getMousePositionWorld().getY()-TILE_SIZE/2).put("dataForTower",towerData),
+                new SpawnData(getInput().getMousePositionWorld().getX()-TILE_SIZE/2f,
+                        getInput().getMousePositionWorld().getY()-TILE_SIZE/2f).put("dataForTower",towerData),
                 Duration.seconds(0),
                 Interpolator.DISCRETE);
     }
 
     public void onTowerSell(DataForTower data, TowerComponent tower){
         //data.cost(); increase amount of money by about a third of tower cost
-        IndexPair tileIndices = testTDLevelMap.getTileIndexFromPoint(tower.getEntity().getPosition());
+        IndexPair tileIndices = levelMap.getTileIndexFromPoint(tower.getEntity().getPosition());
         tower.deleteTowerInfo();
-        tower.getEntity().getAnchoredPosition(testTDLevelMap.getTilePositionCenter(tileIndices));
-        testTDLevelMap.setTileAvailability(true, tileIndices);
+        tower.getEntity().getAnchoredPosition(levelMap.getTilePositionCenter(tileIndices));
+        levelMap.setTileAvailability(true, tileIndices);
         tower.getEntity().removeFromWorld();
     }
 
