@@ -49,6 +49,10 @@ public class TowerComponent extends Component {
         addUINode(circle);
     }
 
+    public DataForTower getDataForTower(){
+        return data;
+    }
+
     /**
      * Method enables TowerComponent to shoot Enemy using TowerProjectileComponent
      * @param enemy target that gets shot

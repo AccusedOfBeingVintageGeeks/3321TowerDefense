@@ -89,7 +89,7 @@ public class TowerDefenseApp extends GameApplication {
 
     @Override
     protected void initGameVars(Map<String, Object> vars) {
-        vars.put(MONEY,0);
+        vars.put(MONEY,50);
         //I believe this is important for saving state, but I need to do more research.
     }
 
@@ -146,6 +146,7 @@ public class TowerDefenseApp extends GameApplication {
                         //draggedEntity.setAnchoredPosition(initPoint);
                         draggedEntity.removeFromWorld();
                         draggedEntity.getComponent(TowerComponent.class).deleteTowerInfo();
+                        inc(MONEY,draggedEntity.getComponent(TowerComponent.class).getDataForTower().cost());
                         //draggedEntity.getComponent(TowerComponent.class).rotateUp();
                     }
                 }
@@ -237,10 +238,11 @@ public class TowerDefenseApp extends GameApplication {
                         getInput().getMousePositionWorld().getY()-TILE_SIZE/2).put("dataForTower",towerData),
                 Duration.seconds(0),
                 Interpolator.DISCRETE);
+        inc(MONEY,-towerData.cost());
     }
 
     public void onTowerSell(DataForTower data, TowerComponent tower){
-        //data.cost(); increase amount of money by about a third of tower cost
+        inc(MONEY,data.cost() / 3); // increase amount of money by about a third of tower cost
         IndexPair tileIndices = testTDLevelMap.getTileIndexFromPoint(tower.getEntity().getPosition());
         tower.deleteTowerInfo();
         tower.getEntity().getAnchoredPosition(testTDLevelMap.getTilePositionCenter(tileIndices));

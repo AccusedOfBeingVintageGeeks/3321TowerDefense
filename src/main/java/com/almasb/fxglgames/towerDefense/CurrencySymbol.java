@@ -18,7 +18,7 @@ public class CurrencySymbol extends HBox {
         texture.setFitWidth(30);
         var text = getUIFactoryService().newText("", Color.WHITE,20);
         text.textProperty().bind(getip("money").asString());
-        setSpacing(25);
+        setSpacing(20);
         setAlignment(Pos.BASELINE_RIGHT);
 
         getChildren().addAll(texture,text);

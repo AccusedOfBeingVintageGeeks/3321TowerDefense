@@ -3,7 +3,8 @@ package com.almasb.fxglgames.towerDefense;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.components.TransformComponent;
-import javafx.geometry.Point2D;
+import static com.almasb.fxgl.dsl.FXGL.*;
+
 
 /**
  * based on code from AlmasB
@@ -61,6 +62,7 @@ public class TowerProjectileComponent extends Component {
         //remove projectile and prey from world
         //later on: start effects/animations,deal damage,if prey is killed -> call functions for money,etc..
         //TowerComponent data = tower.getComponent(TowerComponent.class);
+        inc(TowerDefenseApp.MONEY,5);
         entity.removeFromWorld();
         /*
         var HP = prey.getComponent(HealthIntComponent.class);

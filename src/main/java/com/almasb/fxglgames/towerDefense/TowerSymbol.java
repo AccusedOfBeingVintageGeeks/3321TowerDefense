@@ -42,7 +42,7 @@ public class TowerSymbol extends VBox{
         getChildren().addAll(stackPane,text);
     }
     public void bindToMoney(IntegerProperty property) {
-        stackPane.opacityProperty().bind(
+        this.opacityProperty().bind(
                 Bindings.when(property.greaterThanOrEqualTo(data.cost()))
                         .then(1.0)
                         .otherwise(0.25)
