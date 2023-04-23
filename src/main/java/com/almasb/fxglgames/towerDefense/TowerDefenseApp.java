@@ -109,8 +109,8 @@ public class TowerDefenseApp extends GameApplication {
             public FXGLMenu newMainMenu() {return new MainMenu();}
         });
 
-        settings.setFullScreenAllowed(true);
-        settings.setFullScreenFromStart(true);
+        //settings.setFullScreenAllowed(true);
+        //settings.setFullScreenFromStart(true);
     }
 
     @Override

@@ -58,7 +58,7 @@ public class Factory implements EntityFactory {
      */
     @Spawns("scrub")
     public Entity newScrubEnemy(SpawnData data) {
-        final int SPEED = 100;
+        final int SPEED = 100, HEALTH = 100;
         List<Point2D> waypoints = data.get("waypoints");
 
         Entity entity = FXGL.entityBuilder(data)
@@ -66,6 +66,7 @@ public class Factory implements EntityFactory {
                 .viewWithBBox("enemies/scrub.png")
                 .at(waypoints.get(0))
                 .with(new WaypointMoveComponent(SPEED, waypoints))
+                .with("health", HEALTH)
                 .build();
         //entity.setReusable(true);
 
@@ -73,7 +74,7 @@ public class Factory implements EntityFactory {
     }
     @Spawns("heavy")
     public Entity newHeavyEnemy(SpawnData data) {
-        final int SPEED = 50;
+        final int SPEED = 50, HEALTH = 300;
         List<Point2D> waypoints = data.get("waypoints");
 
         Entity entity = FXGL.entityBuilder(data)
@@ -81,6 +82,7 @@ public class Factory implements EntityFactory {
                 .viewWithBBox("test/redTestTexture.png")
                 .at(waypoints.get(0))
                 .with(new WaypointMoveComponent(SPEED, waypoints))
+                .with("health", HEALTH)
                 .build();
         //entity.setReusable(true);
 

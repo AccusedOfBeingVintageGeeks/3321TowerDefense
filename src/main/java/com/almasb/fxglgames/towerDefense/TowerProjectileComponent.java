@@ -15,6 +15,7 @@ public class TowerProjectileComponent extends Component {
     private Entity prey;
     private TransformComponent transformComponent;
     private int speed;
+    final int DAMAGE = 50;
 
     public TransformComponent getTransformComponent() {
         return transformComponent;
@@ -62,12 +63,12 @@ public class TowerProjectileComponent extends Component {
         //later on: start effects/animations,deal damage,if prey is killed -> call functions for money,etc..
         //TowerComponent data = tower.getComponent(TowerComponent.class);
         entity.removeFromWorld();
-        /*
-        var HP = prey.getComponent(HealthIntComponent.class);
-        HP.damage(data.getDamage()); //needs method in TowerComponent to get damage
-        */
-        prey.removeFromWorld();
 
+        int health = prey.getInt("health") - DAMAGE;
+        if(health <= 0)
+            prey.removeFromWorld();
+        else
+            prey.setProperty("health", health);
     }
 
 
