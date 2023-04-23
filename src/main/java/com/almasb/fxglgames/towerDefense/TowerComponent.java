@@ -77,6 +77,9 @@ public class TowerComponent extends Component {
         transformComponent.rotateBy(90);
     }
 
+    /**
+     * creates UI including TowerInfo displaying towerData and a circle displaying the fireRadius
+     */
     public void initializeTowerInfo(){
         info.setTranslateX(entity.getX() + 40);
         info.setTranslateY(entity.getY());

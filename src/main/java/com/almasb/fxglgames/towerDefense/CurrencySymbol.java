@@ -4,12 +4,14 @@ import com.almasb.fxgl.texture.Texture;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.scene.layout.VBox;
 
 
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
+/**
+ * UI node to display the player's current amount of money
+ */
 public class CurrencySymbol extends HBox {
 
     public CurrencySymbol(){
