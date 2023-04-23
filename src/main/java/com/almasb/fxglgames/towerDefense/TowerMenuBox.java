@@ -26,6 +26,7 @@ public class TowerMenuBox extends VBox {
             symbol.setOnMousePressed(e -> {
                 {
                     FXGL.<TowerDefenseApp>getAppCast().onTowerSelection(name);
+
                 }
             });
 

@@ -19,10 +19,9 @@ public class TowerInfo extends VBox {
         var backGround = setUpBackGround();
         var text1 = setUpText("SELL");
         var text = setUpText(data.name() + "\n" + "Fire-rate: " + data.fireRate() + "\n" +
-                "Fire-radius: " + data.fireRadius() + "\n" + "Damage: " + "tbc" + "\n");
+                "Fire-radius: " + data.fireRadius() + "\n");
         var sell_Button = setUpButton(backGround,text1,tower);
         getChildren().addAll(sell_Button,text);
-
     }
     private Rectangle setUpBackGround(){
 

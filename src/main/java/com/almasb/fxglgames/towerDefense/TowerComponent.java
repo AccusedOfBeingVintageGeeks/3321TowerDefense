@@ -100,6 +100,7 @@ public class TowerComponent extends Component {
     @Override
     public void onUpdate(double tpf)
     {
+        initializeTowerInfo();
         TowerDefenseApp.Type targetType = TowerDefenseApp.Type.ENEMY;
         Duration firePause = Duration.seconds(data.fireRate());
         if(this.isPlaced && shotFrequency.elapsed(firePause)){

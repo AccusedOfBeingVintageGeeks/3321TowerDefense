@@ -61,9 +61,7 @@ public class TowerDefenseApp extends GameApplication {
         final int ZIndex = ordinal() * 100;
     }
     private List<DataForTower> dataForTowers;
-    Entity towerEntity;
     ReadyUINode readyUINode;
-    CurrencySymbol currencySymbol;
     TDLevelMap testTDLevelMap;
     WaveManager waveManager;
 
@@ -139,27 +137,20 @@ public class TowerDefenseApp extends GameApplication {
                     }
                     else {
                         // Abort drag
-
-                        // initPoint (the tower's position on the sidebar) needs to be a property of tower entities or their TowerComponent.
-                        // Or maybe it gets it from the sidebar class if there will be such a thing?
-                        //Point2D initPoint = new Point2D(getAppWidth() - testTDLevelMap.TileSize,getAppHeight() * 0.4);
-                        //draggedEntity.setAnchoredPosition(initPoint);
                         draggedEntity.removeFromWorld();
                         draggedEntity.getComponent(TowerComponent.class).deleteTowerInfo();
                         inc(MONEY,draggedEntity.getComponent(TowerComponent.class).getDataForTower().cost());
-                        //draggedEntity.getComponent(TowerComponent.class).rotateUp();
                     }
                 }
             }
         };
         input.addAction(drag, MouseButton.PRIMARY);
     }
-    private TowerMenuBox towerMenuBox;
     private void loadTowers(){
         String towerSpecifications = "towerdata.json";
         try {
             InputStream stream = getAssetLoader().getStream("/assets/towerdata/" + towerSpecifications);
-            dataForTowers = new ObjectMapper().readValue(stream, new TypeReference<List<DataForTower>>(){});
+            dataForTowers = new ObjectMapper().readValue(stream, new TypeReference<>(){});
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -174,10 +165,7 @@ public class TowerDefenseApp extends GameApplication {
         getGameWorld().addEntityFactory(new Factory());
         setLevelFromMap("tmx/FirstTilemap.tmx");//Level entities must be spawned AFTER setting the level
         testTDLevelMap = new TDLevelMap(45,22,16);
-        loadTowers();
-        towerMenuBox = new TowerMenuBox(dataForTowers);
-        towerMenuBox.setTranslateX(getAppWidth() - testTDLevelMap.TileSize * 3f/2 - 12);
-        towerMenuBox.setTranslateY(0.2 * getAppHeight());
+
 
         SpawnData enemySpawnData = new SpawnData();
         enemySpawnData.put("waypoints", testTDLevelMap.PathPoints);
@@ -185,8 +173,12 @@ public class TowerDefenseApp extends GameApplication {
     }
     @Override
     protected void initUI() {
+        loadTowers();
+        TowerMenuBox towerMenuBox = new TowerMenuBox(dataForTowers);
+        towerMenuBox.setTranslateX(getAppWidth() - testTDLevelMap.TileSize * 3f/2 - 12);
+        towerMenuBox.setTranslateY(0.2 * getAppHeight());
         addUINode(towerMenuBox);
-        currencySymbol = new CurrencySymbol();
+        CurrencySymbol currencySymbol = new CurrencySymbol();
         addUINode(currencySymbol,getAppWidth() - testTDLevelMap.TileSize * 3f/2 - 12,0.01 * getAppHeight());
         EventHandler<ActionEvent> readyClicked = event -> {
             List<Entity> currentlySpawnedEnemies = getGameWorld().getEntitiesByType(TowerDefenseApp.Type.ENEMY);
@@ -200,10 +192,6 @@ public class TowerDefenseApp extends GameApplication {
 
     @Override
     protected void onUpdate(double tpf) {
-        List<Entity> towers = getGameWorld().getEntitiesByType(Type.TOWER);
-        for(Entity tower: towers ) {
-            tower.getComponent(TowerComponent.class).initializeTowerInfo();
-        }
         List<Entity> currentlySpawnedEnemies = getGameWorld().getEntitiesByType(Type.ENEMY);
 
         //Defeat?
@@ -233,12 +221,19 @@ public class TowerDefenseApp extends GameApplication {
 
     }
     public void onTowerSelection(DataForTower towerData){
-        towerEntity = spawnWithScale("tower",
-                new SpawnData(getInput().getMousePositionWorld().getX()-TILE_SIZE/2,
-                        getInput().getMousePositionWorld().getY()-TILE_SIZE/2).put("dataForTower",towerData),
-                Duration.seconds(0),
-                Interpolator.DISCRETE);
-        inc(MONEY,-towerData.cost());
+        if(geti(MONEY) < towerData.cost()){
+            showMessage("Not enough money!");
+            return;
+        }else{
+            Entity towerEntity = spawnWithScale("tower",
+                    new SpawnData(getInput().getMousePositionWorld().getX()-TILE_SIZE/2,
+                            getInput().getMousePositionWorld().getY()-TILE_SIZE/2).put("dataForTower",towerData),
+                    Duration.seconds(0),
+                    Interpolator.DISCRETE);
+
+            towerEntity.getComponent(TowerComponent.class).initializeTowerInfo();
+            inc(MONEY,-towerData.cost());
+        }
     }
 
     public void onTowerSell(DataForTower data, TowerComponent tower){
