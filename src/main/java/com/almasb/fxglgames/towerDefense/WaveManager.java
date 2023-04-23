@@ -77,8 +77,8 @@ public class WaveManager {
                         TowerDefenseApp.EnemyType nextEnemyType = waveData.enemyQueue()[currentEntryIndex[0]];
 
                         if(nextEnemyType != null){
-                            Entity enemy = spawn(nextEnemyType.name(),enemySpawnData);
-                            Factory.reinitializeEnemy(enemy);
+                            Entity enemy = spawn(nextEnemyType.name(), enemySpawnData);
+                            //Factory.reinitializeEnemy(enemy, enemySpawnData);
                         }
 
                         numConsecutiveSpawnsOfCurrentEntry[0]++;

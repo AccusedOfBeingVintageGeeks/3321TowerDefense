@@ -16,7 +16,8 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
  */
 public class TDLevelMap {
     public int TileSize, NumRows, NumColumns;
-    public List<Point2D> PathPoints;
+    private List<Point2D> pathPoints;
+    public List<Point2D> getPathPoints(){return pathPoints;}
     private final boolean[][] isTileAvailable;
 
     /**
@@ -77,12 +78,12 @@ public class TDLevelMap {
                 offsetX = pathEntity.getX(),
                 offsetY = pathEntity.getY();
 
-        PathPoints = new ArrayList<>();
+        pathPoints = new ArrayList<>();
 
         for(int i = 0; i < polylineEntries.size(); i += 2) {
             double x = polylineEntries.get(i) + offsetX;
             double y = polylineEntries.get(i+1) + offsetY;
-            PathPoints.add(new Point2D(x,y));
+            pathPoints.add(new Point2D(x,y));
         }
     }
 

@@ -1,6 +1,6 @@
 [
   {
-    "enemyQueue": ["scrub", null, "scrub", "scrub", null, "scrub", "scrub", "scrub"],
+    "enemyQueue": ["scrub", "heavy", "scrub", "scrub", null, "scrub", "scrub", "scrub"],
     "spawnsPerQueueEntry": 1,
     "deltaSpawnInMilliseconds": 500
   },

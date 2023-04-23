@@ -57,10 +57,8 @@ public class Factory implements EntityFactory {
      *  Enemy entities
      */
     @Spawns("scrub")
-    public Entity newScrub(SpawnData data)
-    {
+    public Entity newScrubEnemy(SpawnData data) {
         final int SPEED = 100;
-
         List<Point2D> waypoints = data.get("waypoints");
 
         Entity entity = FXGL.entityBuilder(data)
@@ -73,15 +71,39 @@ public class Factory implements EntityFactory {
 
         return entity;
     }
-    public static void reinitializeEnemy(Entity enemyEntity/*, SpawnData data*/)
-    {
-        // Reset every property that needs to be reset here
-        // ^^^ Only call when entity.setReusable(true)
+    @Spawns("heavy")
+    public Entity newHeavyEnemy(SpawnData data) {
+        final int SPEED = 50;
+        List<Point2D> waypoints = data.get("waypoints");
 
-        //enemyEntity.setPosition();
-        //scrubEntity.getComponent(WaypointMoveComponent.class).
+        Entity entity = FXGL.entityBuilder(data)
+                .type(TowerDefenseApp.Type.ENEMY)
+                .viewWithBBox("test/redTestTexture.png")
+                .at(waypoints.get(0))
+                .with(new WaypointMoveComponent(SPEED, waypoints))
+                .build();
+        //entity.setReusable(true);
 
-        // Will need to fill this out later
+        return entity;
+    }
+
+    /**
+     * Given an enemy Entity and SpawnData, this method resets the properties and components of the enemyEntity
+     * necessary to perform a proper respawn.
+     * NOTE: It's only necessary to call this method if the entities reusable property is set to true.
+     * @param enemyEntity   The enemy that needs to be reinitialized.
+     * @param data          This data must contain the "waypoints" data.
+     */
+    public static void reinitializeEnemy(Entity enemyEntity, SpawnData data) {
+        /*
+        This works 99% of the time now, but occasionally an enemy is respawned and begins moving along the path at what appears to be twice the correct speed. It's speed property is correct, and I couldn't see any problems with the WaypointMoveComponent either. I suspect this is a bug in FXGL.
+         */
+
+        List<Point2D> waypoints = data.get("waypoints");
+
+        enemyEntity.setPosition(waypoints.get(0));
+        enemyEntity.getComponent(WaypointMoveComponent.class).move(waypoints);
+        //System.out.println("enemySpeed = " + enemyEntity.getComponent(WaypointMoveComponent.class).getSpeed());
     }
 
 

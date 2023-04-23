@@ -50,7 +50,13 @@ public class TowerDefenseApp extends GameApplication {
      * as the one passed to the factory @Spawns interface.
      */
     public enum EnemyType {
-        scrub
+        scrub(100), heavy(50);
+
+        EnemyType(int speed){
+            this.speed = speed;
+        }
+        final private int speed;
+        public int getSpeed(){return speed;}
     }
 
     /**
@@ -180,7 +186,7 @@ public class TowerDefenseApp extends GameApplication {
         levelMap = new TDLevelMap(45,22,16);
 
         SpawnData enemySpawnData = new SpawnData();
-        enemySpawnData.put("waypoints", levelMap.PathPoints);
+        enemySpawnData.put("waypoints", levelMap.getPathPoints());
         waveManager = new WaveManager(enemySpawnData, waveDataFilename + ".json");
     }
 
