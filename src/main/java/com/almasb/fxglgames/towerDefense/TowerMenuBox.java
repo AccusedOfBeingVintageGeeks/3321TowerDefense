@@ -1,7 +1,5 @@
 package com.almasb.fxglgames.towerDefense;
 
-import com.almasb.fxglgames.towerDefense.TowerDefenseApp;
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.dsl.FXGL;
 import javafx.scene.layout.VBox;
 import java.util.List;
@@ -23,13 +21,7 @@ public class TowerMenuBox extends VBox {
         towerNames.forEach(name -> {
             var symbol = new TowerSymbol(name);
             symbol.bindToMoney(getip(TowerDefenseApp.MONEY));
-            symbol.setOnMousePressed(e -> {
-                {
-                    FXGL.<TowerDefenseApp>getAppCast().onTowerSelection(name);
-
-                }
-            });
-
+            symbol.setOnMousePressed(e -> FXGL.<TowerDefenseApp>getAppCast().onTowerSelection(name));
             getChildren().add(symbol);
         });
     }

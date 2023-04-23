@@ -63,15 +63,13 @@ public class Factory implements EntityFactory {
 
         List<Point2D> waypoints = data.get("waypoints");
 
-        Entity entity = FXGL.entityBuilder(data)
+        return FXGL.entityBuilder(data)
                 .type(TowerDefenseApp.Type.ENEMY)
                 .viewWithBBox("enemies/scrub.png")
                 .at(waypoints.get(0))
                 .with(new WaypointMoveComponent(SPEED, waypoints))
                 .build();
         //entity.setReusable(true);
-
-        return entity;
     }
     public static void reinitializeEnemy(Entity enemyEntity/*, SpawnData data*/)
     {
@@ -98,15 +96,13 @@ public class Factory implements EntityFactory {
         bullet.setFitWidth(height);
         bullet.setFitHeight(width);
 
-        Entity entity = entityBuilder(data)
+        return entityBuilder(data)
                 .type(TowerDefenseApp.Type.PROJECTILE)
                 .viewWithBBox(bullet)
                 .collidable()
                 .with(new TowerProjectileComponent(tower,prey,speed))
                 .with(new AutoRotationComponent())
-                //.zIndex(444)
                 .build();
-        return entity;
     }
 
     /*
