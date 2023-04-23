@@ -96,13 +96,13 @@ public class Factory implements EntityFactory {
      */
     public static void reinitializeEnemy(Entity enemyEntity, SpawnData data) {
         /*
-        This works 99% of the time now, but occasionally an enemy is respawned and begins moving along the path at what appears to be twice the correct speed. It's speed property is correct, and I couldn't see any problems with the WaypointMoveComponent either. I suspect this is a bug in FXGL.
+        This works 99% of the time now, but occasionally an enemy is respawned and begins moving along the path at what appears to be twice the correct speed. It's speed property is correct, and I couldn't see any problems with the WaypointMoveComponent either. I suspect this is a bug in FXGL. If necessary, we could roll our own Entity pooling mechanism, but I'll just leave the code below commented out for now.
          */
 
-        List<Point2D> waypoints = data.get("waypoints");
+        //List<Point2D> waypoints = data.get("waypoints");
 
-        enemyEntity.setPosition(waypoints.get(0));
-        enemyEntity.getComponent(WaypointMoveComponent.class).move(waypoints);
+        //enemyEntity.setPosition(waypoints.get(0));
+        //enemyEntity.getComponent(WaypointMoveComponent.class).move(waypoints);
         //System.out.println("enemySpeed = " + enemyEntity.getComponent(WaypointMoveComponent.class).getSpeed());
     }
 

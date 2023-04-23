@@ -78,7 +78,7 @@ public class WaveManager {
 
                         if(nextEnemyType != null){
                             Entity enemy = spawn(nextEnemyType.name(), enemySpawnData);
-                            //Factory.reinitializeEnemy(enemy, enemySpawnData);
+                            Factory.reinitializeEnemy(enemy, enemySpawnData);
                         }
 
                         numConsecutiveSpawnsOfCurrentEntry[0]++;
