@@ -1,7 +1,8 @@
-package com.almasb.fxglgames.towerDefence;
+package com.almasb.fxglgames.towerDefense;
 
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.components.TransformComponent;
 import javafx.geometry.Point2D;
 
 /**
@@ -10,23 +11,27 @@ import javafx.geometry.Point2D;
  */
 public class TowerProjectileComponent extends Component {
 
-    private Entity tower;
+    private final Entity tower;
     private Entity prey;
-    //private Point2D aim;
+    private TransformComponent transformComponent;
+    private int speed;
 
-    private int speed = 1000;
+    public TransformComponent getTransformComponent() {
+        return transformComponent;
+    }
     //speed can probably put into a different class (data class) and be retrieved from there
     //this should make it easier to change game settings
 
     /**
      * Projectile that travels from a Tower towards an Enemy (prey)
-     * @param tower
-     * @param prey
+     * @param tower TowerComponent entity
+     * @param prey TowerComponent entity
+     * @param speed projectile speed
      */
-    public TowerProjectileComponent(Entity tower, Entity prey) { //, Point2D aim
-        this.tower = tower;
+    public TowerProjectileComponent(Entity tower, Entity prey, int speed) {
         this.prey = prey;
-        //this.aim = aim; -> put aim into parameter
+        this.speed = speed;
+        this.tower = tower;
     }
 
     /**
@@ -43,8 +48,8 @@ public class TowerProjectileComponent extends Component {
             preyHit();
             return;
         }
-        //entity.translateTowards(aim,speed * tpf);
         entity.translateTowards(prey.getCenter(),speed * tpf);
+
     }
 
 
@@ -55,8 +60,7 @@ public class TowerProjectileComponent extends Component {
         //actions if prey gets hit
         //remove projectile and prey from world
         //later on: start effects/animations,deal damage,if prey is killed -> call functions for money,etc..
-        TowerComponent data = tower.getComponent(TowerComponent.class);
-
+        //TowerComponent data = tower.getComponent(TowerComponent.class);
         entity.removeFromWorld();
         /*
         var HP = prey.getComponent(HealthIntComponent.class);

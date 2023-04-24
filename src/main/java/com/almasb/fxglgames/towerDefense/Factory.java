@@ -1,4 +1,4 @@
-package com.almasb.fxglgames.towerDefence;
+package com.almasb.fxglgames.towerDefense;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.WaypointMoveComponent;
@@ -9,43 +9,45 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.texture.Texture;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Circle;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 import java.util.List;
 
 public class Factory implements EntityFactory {
-    @Spawns("testEntity")
-    public Entity newTestEntity(SpawnData data)
-    {
-        return FXGL.entityBuilder(data)
-                .viewWithBBox("purpleTestTexture.png")
-                .type(TowerDefenceApp.Type.TOWER)
-                .zIndex(TowerDefenceApp.Layer.STANDARD.ZIndex)
-                .anchorFromCenter()
-                .with(new TowerComponent(5))
-                .build();
-    }
+
     //creating entity of type TOWER
-    @Spawns("towerComponent")
+    @Spawns("tower")
     public Entity newTestTower(SpawnData data)
     {
-        Texture texture = new Texture(image("cannon.png"));
+        DataForTower dataForTower = data.get("dataForTower");
+        Texture texture = new Texture(image("towers/" + dataForTower.imageName()));
         texture.setFitHeight(45);
         texture.setFitWidth(45);
+
+        var back = new Circle(25,25,25, Color.GRAY);
+        var pane = new StackPane(back,texture);
         Entity entity = FXGL.entityBuilder(data)
-                //.viewWithBBox("turretRescaled.png")
+                .with(new TowerComponent(dataForTower))
                 .viewWithBBox(texture)
-                .type(TowerDefenceApp.Type.TOWER)
-                .zIndex(TowerDefenceApp.Layer.TALL.ZIndex)
+                .type(TowerDefenseApp.Type.TOWER)
+                .zIndex(1000)
                 .anchorFromCenter()
-                .with(new TowerComponent(5))
+                //.view(new Circle(dataForTower.fireRadius(),Color.color(1,0,0,0.3)))
+
                 .build();
-        //entity.setLocalAnchor(new Point2D(entity.getWidth()/2,entity.getHeight()-entity.getWidth()/2));
+
+        //when mouse hovers above entity -> its opacity changes
+        texture.opacityProperty().bind(
+                Bindings.when(entity.getViewComponent().getParent().hoverProperty())
+                        .then(0.7)
+                        .otherwise(1)
+        );
 
         entity.setLocalAnchorFromCenter();
         return entity;
@@ -61,10 +63,9 @@ public class Factory implements EntityFactory {
 
         List<Point2D> waypoints = data.get("waypoints");
 
-        //List<Point2D>
         Entity entity = FXGL.entityBuilder(data)
-                .type(TowerDefenceApp.Type.ENEMY)
-                .viewWithBBox("scrub.png")
+                .type(TowerDefenseApp.Type.ENEMY)
+                .viewWithBBox("enemies/scrub.png")
                 .at(waypoints.get(0))
                 .with(new WaypointMoveComponent(SPEED, waypoints))
                 .build();
@@ -72,12 +73,12 @@ public class Factory implements EntityFactory {
 
         return entity;
     }
-    public static void reinitializeScrub(Entity scrubEntity/*, SpawnData data*/)
+    public static void reinitializeEnemy(Entity enemyEntity/*, SpawnData data*/)
     {
         // Reset every property that needs to be reset here
         // ^^^ Only call when entity.setReusable(true)
 
-        //scrubEntity.setPosition();
+        //enemyEntity.setPosition();
         //scrubEntity.getComponent(WaypointMoveComponent.class).
 
         // Will need to fill this out later
@@ -86,25 +87,26 @@ public class Factory implements EntityFactory {
 
     @Spawns("Projectile")
     public Entity newProjectile(SpawnData data){
-
-        Texture bullet = new Texture(image("projectile1.png"));
-        bullet.setFitWidth(10);
-        bullet.setFitHeight(10);
-        //Node view = new Rectangle(10,10,Color.BLUE);
-        //view.setRotate(90);
-
+        String textureName = data.get("projectile");
+        int speed = data.get("projectileSpeed");
+        int height = data.get("height");
+        int width = data.get("width");
         Entity tower = data.get("tower");
         Entity prey = data.get("prey");
-        //Point2D aim = prey.getCenter();
 
-        return entityBuilder(data)
-                .type(TowerDefenceApp.Type.PROJECTILE)
+        Texture bullet = new Texture(image("projectiles/" + textureName));
+        bullet.setFitWidth(height);
+        bullet.setFitHeight(width);
+
+        Entity entity = entityBuilder(data)
+                .type(TowerDefenseApp.Type.PROJECTILE)
                 .viewWithBBox(bullet)
                 .collidable()
-                .with(new TowerProjectileComponent(tower,prey))
+                .with(new TowerProjectileComponent(tower,prey,speed))
                 .with(new AutoRotationComponent())
                 //.zIndex(444)
                 .build();
+        return entity;
     }
 
     /*
@@ -119,7 +121,7 @@ public class Factory implements EntityFactory {
 
         return FXGL.entityBuilder(data)
                 .bbox(BoundingShape.box(WIDTH, HEIGHT))
-                .type(TowerDefenceApp.Type.BLOCKED_TILES)
+                .type(TowerDefenseApp.Type.BLOCKED_TILES)
                 //.view(new Rectangle(WIDTH, HEIGHT, Color.color(1, 0, 0, 0.3))) //uncomment for debugging
                 .build();
     }
@@ -127,7 +129,7 @@ public class Factory implements EntityFactory {
     public Entity newPath(SpawnData data)
     {
         return FXGL.entityBuilder(data)
-                .type(TowerDefenceApp.Type.PATH)
+                .type(TowerDefenseApp.Type.PATH)
                 .build();
     }
 }
