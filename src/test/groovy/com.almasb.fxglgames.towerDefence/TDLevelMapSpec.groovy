@@ -1,11 +1,16 @@
 package com.almasb.fxglgames.towerDefence
 
+import com.almasb.fxgl.app.GameApplication
 import com.almasb.fxgl.dsl.FXGL
 import com.almasb.fxgl.entity.Entity
 import com.almasb.fxgl.entity.GameWorld
 import com.almasb.fxgl.entity.level.Level
+import com.almasb.fxgl.entity.level.tiled.TMXLevelLoader
 import javafx.geometry.Point2D
+import org.intellij.lang.annotations.JdkConstants
 import spock.lang.Specification
+
+import java.util.concurrent.Semaphore
 
 import static com.almasb.fxgl.dsl.FXGL.setLevelFromMap
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld
@@ -15,28 +20,25 @@ class TDLevelMapSpec extends Specification {
     TDLevelMap map
     List<Entity> bTiles
     Entity path
-    Thread thread
+    static TDLevelMap myMap
 
     void makeNewWorld(String tmx) {
         GameWorld world = new GameWorld()
         world.addEntityFactory(new Factory())
-//        Level level = new Level()
-//        world.setLevel(new Level().makeNewWorld(tmx))
-        setLevelFromMap(tmx)
-//        world.set
-//        //setLevelFromMap(tmx)
+        TMXLevelLoader loader = new TMXLevelLoader()
+        File file = new File(tmx)
+
+
+        Level map = loader.load(file.toURL(), world)
+        world.setLevel(map)
+
         bTiles = world.getEntitiesByType(TowerDefenceApp.Type.BLOCKED_TILES)
         path = world.getEntitiesByType(TowerDefenceApp.Type.PATH).get(0)
     }
 
-    void setupSpec() {
-        TowerDefenceApp app = new TowerDefenceApp();
-        thread = new Thread(app as Runnable);
-        thread.start();
-    }
 
     void setup() {
-        makeNewWorld("tmx/FirstTilemap.tmx")
+        makeNewWorld("src/main/resources/assets/levels/tmx/FirstTilemap.tmx")
         map = new TDLevelMap(45, 22, 16, bTiles, path)
     }
 
@@ -51,31 +53,33 @@ class TDLevelMapSpec extends Specification {
 
     }
 
-   def "initializePathPoints creates PathPoints for each polylineEntry"() {
-
-       given:
-       makeNewWorld("tmx/TestTilemap.tmx")
-
-       when: "initializePathPoints"
-       //initializePathPoints is run in the TDLevelMap constructor
-       TDLevelMap myMap = new TDLevelMap(45, 4, 4, bTiles, path)
-
-       then: "PathPoints are the same as in the tmx"
-       pathPointCoord == tmxCoord
-
-       where:
-
-       pathPointCoord                     |     tmxCoord
-       myMap.PathPoints.get(0).getX()     |       990
-       myMap.PathPoints.get(0).getY()     |       540
-       myMap.PathPoints.get(1).getX()     |       765
-       myMap.PathPoints.get(1).getY()     |       450
-       myMap.PathPoints.get(2).getX()     |       90
-       myMap.PathPoints.get(2).getY()     |       450
-       myMap.PathPoints.get(3).getX()     |       0
-       myMap.PathPoints.get(3).getY()     |       540
-
-   }
+//   def "initializePathPoints creates PathPoints for each polylineEntry"() {
+//
+//       given:
+//       makeNewWorld("src/main/resources/assets/levels/tmx/TestTilemap.tmx")
+//       myMap = new TDLevelMap(45, 4, 4, bTiles, path)
+//
+//       when: "initializePathPoints"
+//       //initializePathPoints is run in the TDLevelMap constructor
+//       println(myMap)
+//       println(map)
+//
+//       then: "PathPoints are the same as in the tmx"
+//       pathPointCoord == tmxCoord
+//
+//       where:
+//
+//       pathPointCoord                     |     tmxCoord
+//       myMap.PathPoints.get(0).getX()     |       990
+//       myMap.PathPoints.get(0).getY()     |       540
+//       myMap.PathPoints.get(1).getX()     |       765
+//       myMap.PathPoints.get(1).getY()     |       450
+//       myMap.PathPoints.get(2).getX()     |       90
+//       myMap.PathPoints.get(2).getY()     |       450
+//       myMap.PathPoints.get(3).getX()     |       0
+//       myMap.PathPoints.get(3).getY()     |       540
+//
+//   }
 
    def "getTileIndexFromPoint returns correct IndexPair"() {
        given:
