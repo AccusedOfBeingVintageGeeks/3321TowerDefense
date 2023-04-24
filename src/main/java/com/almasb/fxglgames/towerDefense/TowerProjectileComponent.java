@@ -13,29 +13,18 @@ import static com.almasb.fxgl.dsl.FXGL.*;
  * Projectile entity that is shot from a TowerComponent to hit an enemy
  */
 public class TowerProjectileComponent extends Component {
-
-    private final Entity tower;
     private final Entity prey;
-    private TransformComponent transformComponent;
     private final int speed, damage;
-
-    public TransformComponent getTransformComponent() {
-        return transformComponent;
-    }
-    //speed can probably put into a different class (data class) and be retrieved from there
-    //this should make it easier to change game settings
 
     /**
      * Projectile that travels from a Tower towards an Enemy (prey)
-     * @param tower TowerComponent entity
      * @param prey TowerComponent entity
      * @param speed projectile speed
      */
-    public TowerProjectileComponent(Entity tower, Entity prey, int speed, int damage) {
+    public TowerProjectileComponent(Entity prey, int speed, int damage) {
         this.prey = prey;
         this.speed = speed;
         this.damage = damage;
-        this.tower = tower;
     }
 
     /**
@@ -67,7 +56,4 @@ public class TowerProjectileComponent extends Component {
             inc(TowerDefenseApp.MONEY,5);
         prey.getComponent(EnemyManagerComponent.class).dealDamage(damage);
     }
-
-
-
 }
