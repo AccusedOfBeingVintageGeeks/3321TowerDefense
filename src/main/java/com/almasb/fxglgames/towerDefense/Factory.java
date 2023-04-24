@@ -11,9 +11,11 @@ import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.texture.Texture;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import org.jetbrains.annotations.NotNull;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -56,33 +58,67 @@ public class Factory implements EntityFactory {
     /*
      *  Enemy entities
      */
+
+    /**
+     * This method returns an enemy Entity of type "scrub".
+     * @param data  SpawnData
+     * @return      Entity
+     */
     @Spawns("scrub")
     public Entity newScrubEnemy(SpawnData data) {
-        final int SPEED = 100, HEALTH = 100;
-        List<Point2D> waypoints = data.get("waypoints");
+        final int
+                SPEED = 100,
+                HEALTH = 100,
+                Z_INDEX = TowerDefenseApp.Layer.STANDARD.ZIndex;
 
-        Entity entity = FXGL.entityBuilder(data)
-                .type(TowerDefenseApp.Type.ENEMY)
-                .viewWithBBox("enemies/scrub.png")
-                .at(waypoints.get(0))
-                .with(new WaypointMoveComponent(SPEED, waypoints))
-                .with("health", HEALTH)
-                .build();
-        //entity.setReusable(true);
+        final Node[] HEALTH_NODES = new Node[]{//low index = low health
+                texture("enemies/scrub.png")
+        };
 
-        return entity;
+        return getEnemyEntity(data, SPEED, HEALTH, HEALTH_NODES, Z_INDEX);
     }
+
+    /**
+     * This method returns an enemy Entity of type "heavy".
+     * @param data  SpawnData
+     * @return      Entity
+     */
     @Spawns("heavy")
     public Entity newHeavyEnemy(SpawnData data) {
-        final int SPEED = 50, HEALTH = 300;
-        List<Point2D> waypoints = data.get("waypoints");
+        final int
+                SPEED = 50,
+                HEALTH = 300,
+                Z_INDEX = TowerDefenseApp.Layer.TALL.ZIndex;
+
+        final Node[] HEALTH_NODES = new Node[]{//low index = low health
+                texture("test/blackOutlineTestTexture.png"),
+                texture("test/purpleTestTexture.png"),
+                texture("test/redTestTexture.png"),
+                texture("test/yellowTestTexture.png")
+        };
+
+        return getEnemyEntity(data, SPEED, HEALTH, HEALTH_NODES, Z_INDEX);
+    }
+
+    /**
+     * This method is only meant to be used for enemy Entities inside the Factory. It constructs and returns an enemy Entity with the data passed in.
+     * @param data              This should have a "waypoints" property put in it.
+     * @param speed             How fast should this enemy move along the path?
+     * @param health            How much health should this enemy start with?
+     * @param healthNodes       This should be an array of Nodes (probably textures) that this component can switch to as the enemy takes damage. They should be ordered from most to least damaged (low index = low health).
+     * @return                  An Entity, an enemy with the stats and properties argued.
+     */
+    @NotNull
+    private static Entity getEnemyEntity(SpawnData data, int speed, int health, Node[] healthNodes, int zIndex) {
+        final List<Point2D> waypoints = data.get("waypoints");
 
         Entity entity = FXGL.entityBuilder(data)
                 .type(TowerDefenseApp.Type.ENEMY)
-                .viewWithBBox("test/redTestTexture.png")
+                .viewWithBBox(healthNodes[healthNodes.length - 1])
                 .at(waypoints.get(0))
-                .with(new WaypointMoveComponent(SPEED, waypoints))
-                .with("health", HEALTH)
+                .with(new WaypointMoveComponent(speed, waypoints))
+                .with(new EnemyManagerComponent(health, healthNodes))
+                .zIndex(zIndex)
                 .build();
         //entity.setReusable(true);
 
@@ -113,6 +149,7 @@ public class Factory implements EntityFactory {
     public Entity newProjectile(SpawnData data){
         String textureName = data.get("projectile");
         int speed = data.get("projectileSpeed");
+        int damage = data.get("damage");
         int height = data.get("height");
         int width = data.get("width");
         Entity tower = data.get("tower");
@@ -126,7 +163,7 @@ public class Factory implements EntityFactory {
                 .type(TowerDefenseApp.Type.PROJECTILE)
                 .viewWithBBox(bullet)
                 .collidable()
-                .with(new TowerProjectileComponent(tower,prey,speed))
+                .with(new TowerProjectileComponent(tower,prey,speed, damage))
                 .with(new AutoRotationComponent())
                 //.zIndex(444)
                 .build();

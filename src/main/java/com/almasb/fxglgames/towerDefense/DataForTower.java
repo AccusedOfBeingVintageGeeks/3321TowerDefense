@@ -21,6 +21,7 @@ public record DataForTower (
             double fireRadius,
             double fireRate,
             int projectileSpeed,
+            int projectileDamage,
             String projectileImageName,
             int projectileHeight,
             int projectileWidth,

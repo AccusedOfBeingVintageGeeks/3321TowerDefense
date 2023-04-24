@@ -25,7 +25,7 @@ public class TowerComponent extends Component {
     private final LocalTimer shotFrequency;
     private final TowerInfo info;
     private final Circle circle;
-    private TransformComponent transformComponent;
+    private final TransformComponent transformComponent;
     private boolean isPlaced;
     public boolean getPlacedStatus(){ return isPlaced; }
     public void setPlacedStatus(boolean placedStatus){ isPlaced = placedStatus; }
@@ -63,6 +63,7 @@ public class TowerComponent extends Component {
                         .put("prey", enemy)
                         .put("projectile",data.projectileImageName())
                         .put("projectileSpeed",data.projectileSpeed())
+                        .put("damage",data.projectileDamage())
                         .put("height",data.projectileHeight())
                         .put("width",data.projectileWidth())
         );
@@ -79,11 +80,7 @@ public class TowerComponent extends Component {
         circle.setTranslateX(entity.getAnchoredPosition().getX());
         circle.setTranslateY(entity.getAnchoredPosition().getY());
         this.circle.setVisible(!this.isPlaced);
-        entity.getViewComponent().getParent().setOnMouseClicked(e ->{
-            {
-                this.info.setVisible(!this.info.isVisible());
-            }
-        });
+        entity.getViewComponent().getParent().setOnMouseClicked(e -> this.info.setVisible(!this.info.isVisible()));
     }
     public void deleteTowerInfo(){
         removeUINode(circle);

@@ -50,13 +50,7 @@ public class TowerDefenseApp extends GameApplication {
      * as the one passed to the factory @Spawns interface.
      */
     public enum EnemyType {
-        scrub(100), heavy(50);
-
-        EnemyType(int speed){
-            this.speed = speed;
-        }
-        final private int speed;
-        public int getSpeed(){return speed;}
+        scrub, heavy;
     }
 
     /**
@@ -75,10 +69,11 @@ public class TowerDefenseApp extends GameApplication {
     TDLevelMap levelMap;
     WaveManager waveManager;
 
-    final int
+    static final int
             WINDOW_WIDTH = 1080,
             WINDOW_HEIGHT = 720,
             TILE_SIZE = 45;
+    static public int getTileSize(){return TILE_SIZE;}
 
     String levelName, waveDataFilename;
 
@@ -91,7 +86,6 @@ public class TowerDefenseApp extends GameApplication {
         this.levelName = levelName;
         this.waveDataFilename = waveDataFilename;
     }
-
 
     @Override
     protected void initSettings(GameSettings settings) {
@@ -109,8 +103,8 @@ public class TowerDefenseApp extends GameApplication {
             public FXGLMenu newMainMenu() {return new MainMenu();}
         });
 
-        //settings.setFullScreenAllowed(true);
-        //settings.setFullScreenFromStart(true);
+        settings.setFullScreenAllowed(true);
+        settings.setFullScreenFromStart(true);
     }
 
     @Override
