@@ -112,7 +112,7 @@ public class Factory implements EntityFactory {
     private static Entity getEnemyEntity(SpawnData data, int speed, int health, Node[] healthNodes, int zIndex) {
         final List<Point2D> waypoints = data.get("waypoints");
 
-        Entity entity = FXGL.entityBuilder(data)
+        return FXGL.entityBuilder(data)
                 .type(TowerDefenseApp.Type.ENEMY)
                 .viewWithBBox(healthNodes[healthNodes.length - 1])
                 .at(waypoints.get(0))
@@ -121,8 +121,6 @@ public class Factory implements EntityFactory {
                 .zIndex(zIndex)
                 .build();
         //entity.setReusable(true);
-
-        return entity;
     }
 
     /**
@@ -159,15 +157,13 @@ public class Factory implements EntityFactory {
         bullet.setFitWidth(height);
         bullet.setFitHeight(width);
 
-        Entity entity = entityBuilder(data)
+        return entityBuilder(data)
                 .type(TowerDefenseApp.Type.PROJECTILE)
                 .viewWithBBox(bullet)
                 .collidable()
                 .with(new TowerProjectileComponent(tower,prey,speed, damage))
                 .with(new AutoRotationComponent())
-                //.zIndex(444)
                 .build();
-        return entity;
     }
 
     /*

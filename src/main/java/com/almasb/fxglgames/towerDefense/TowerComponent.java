@@ -49,6 +49,10 @@ public class TowerComponent extends Component {
         addUINode(circle);
     }
 
+    public DataForTower getDataForTower(){
+        return data;
+    }
+
     /**
      * Method enables TowerComponent to shoot Enemy using TowerProjectileComponent
      * @param enemy target that gets shot
@@ -74,6 +78,9 @@ public class TowerComponent extends Component {
         transformComponent.rotateBy(90);
     }
 
+    /**
+     * creates UI including TowerInfo displaying towerData and a circle displaying the fireRadius
+     */
     public void initializeTowerInfo(){
         info.setTranslateX(entity.getX() + 40);
         info.setTranslateY(entity.getY());
@@ -93,6 +100,7 @@ public class TowerComponent extends Component {
     @Override
     public void onUpdate(double tpf)
     {
+        initializeTowerInfo();
         TowerDefenseApp.Type targetType = TowerDefenseApp.Type.ENEMY;
         Duration firePause = Duration.seconds(data.fireRate());
         if(this.isPlaced && shotFrequency.elapsed(firePause)){

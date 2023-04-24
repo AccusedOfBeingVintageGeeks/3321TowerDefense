@@ -36,6 +36,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class TowerDefenseApp extends GameApplication {
 
+    public static final String MONEY = "money";
     /**
      * Types of entities in this game. May be assigned to entities in the factory with the .type() method.
      */
@@ -52,7 +53,6 @@ public class TowerDefenseApp extends GameApplication {
     public enum EnemyType {
         scrub, heavy;
     }
-
     /**
      * Standard sorting layers.
      */
@@ -64,7 +64,6 @@ public class TowerDefenseApp extends GameApplication {
         final int ZIndex = ordinal() * 100;
     }
     private List<DataForTower> dataForTowers;
-    Entity towerEntity;
     ReadyUINode readyUINode;
     TDLevelMap levelMap;
     WaveManager waveManager;
@@ -73,7 +72,6 @@ public class TowerDefenseApp extends GameApplication {
             WINDOW_WIDTH = 1080,
             WINDOW_HEIGHT = 720,
             TILE_SIZE = 45;
-    static public int getTileSize(){return TILE_SIZE;}
 
     String levelName, waveDataFilename;
 
@@ -109,6 +107,7 @@ public class TowerDefenseApp extends GameApplication {
 
     @Override
     protected void initGameVars(Map<String, Object> vars) {
+        vars.put(MONEY,50);
         //I believe this is important for saving state, but I need to do more research.
     }
 
@@ -164,7 +163,7 @@ public class TowerDefenseApp extends GameApplication {
                         //draggedEntity.setAnchoredPosition(initPoint);
                         draggedEntity.removeFromWorld();
                         draggedEntity.getComponent(TowerComponent.class).deleteTowerInfo();
-                        //draggedEntity.getComponent(TowerComponent.class).rotateUp();
+                        inc(MONEY,draggedEntity.getComponent(TowerComponent.class).getDataForTower().cost());
                     }
                 }
             }
@@ -184,7 +183,7 @@ public class TowerDefenseApp extends GameApplication {
         waveManager = new WaveManager(enemySpawnData, waveDataFilename + ".json");
     }
 
-    private TowerMenuBox towerMenuBox;
+    //private TowerMenuBox towerMenuBox;
     private void loadTowers(){
         String towerSpecifications = "towerdata.json";
         try {
@@ -203,14 +202,20 @@ public class TowerDefenseApp extends GameApplication {
 
         getGameWorld().addEntityFactory(new Factory());
         loadLevel();
-        loadTowers();
-        towerMenuBox = new TowerMenuBox(dataForTowers);
+        //loadTowers();
+        /*towerMenuBox = new TowerMenuBox(dataForTowers);
         towerMenuBox.setTranslateX(getAppWidth() - levelMap.TileSize * 3f/2 - 12);
-        towerMenuBox.setTranslateY(0.1 * getAppHeight());
+        towerMenuBox.setTranslateY(0.1 * getAppHeight());*/
     }
     @Override
     protected void initUI() {
+        loadTowers();
+        TowerMenuBox towerMenuBox = new TowerMenuBox(dataForTowers);
+        towerMenuBox.setTranslateX(getAppWidth() - levelMap.TileSize * 3f/2 - 12);
+        towerMenuBox.setTranslateY(0.2 * getAppHeight());
         addUINode(towerMenuBox);
+        CurrencySymbol currencySymbol = new CurrencySymbol();
+        addUINode(currencySymbol,getAppWidth() - levelMap.TileSize * 3f/2 - 12,0.01 * getAppHeight());
         EventHandler<ActionEvent> readyClicked = event -> {
             List<Entity> currentlySpawnedEnemies = getGameWorld().getEntitiesByType(TowerDefenseApp.Type.ENEMY);
             if(currentlySpawnedEnemies.size() == 0 && !waveManager.areAllWavesSpawned())
@@ -223,10 +228,6 @@ public class TowerDefenseApp extends GameApplication {
 
     @Override
     protected void onUpdate(double tpf) {
-        List<Entity> towers = getGameWorld().getEntitiesByType(Type.TOWER);
-        for(Entity tower: towers ) {
-            tower.getComponent(TowerComponent.class).initializeTowerInfo();
-        }
         List<Entity> currentlySpawnedEnemies = getGameWorld().getEntitiesByType(Type.ENEMY);
 
         //Defeat?
@@ -256,16 +257,25 @@ public class TowerDefenseApp extends GameApplication {
 
     }
     public void onTowerSelection(DataForTower towerData){
-        towerEntity = spawnWithScale("tower",
-                new SpawnData(getInput().getMousePositionWorld().getX()-TILE_SIZE/2f,
-                        getInput().getMousePositionWorld().getY()-TILE_SIZE/2f).put("dataForTower",towerData),
-                Duration.seconds(0),
-                Interpolator.DISCRETE);
+        if(geti(MONEY) < towerData.cost()){
+            showMessage("Not enough money!");
+            return;
+        }else{
+            Entity towerEntity = spawnWithScale("tower",
+                    new SpawnData(getInput().getMousePositionWorld().getX()-TILE_SIZE/2f,
+                            getInput().getMousePositionWorld().getY()-TILE_SIZE/2f).put("dataForTower",towerData),
+                    Duration.seconds(0),
+                    Interpolator.DISCRETE);
+
+            towerEntity.getComponent(TowerComponent.class).initializeTowerInfo();
+            inc(MONEY,-towerData.cost());
+        }
     }
 
     public void onTowerSell(DataForTower data, TowerComponent tower){
         //data.cost(); increase amount of money by about a third of tower cost
         IndexPair tileIndices = levelMap.getTileIndexFromPoint(tower.getEntity().getPosition());
+        inc(MONEY,data.cost() / 3); // increase amount of money by about a third of tower cost
         tower.deleteTowerInfo();
         tower.getEntity().getAnchoredPosition(levelMap.getTilePositionCenter(tileIndices));
         levelMap.setTileAvailability(true, tileIndices);

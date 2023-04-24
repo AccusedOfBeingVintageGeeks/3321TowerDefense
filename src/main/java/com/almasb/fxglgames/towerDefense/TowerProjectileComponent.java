@@ -3,10 +3,14 @@ package com.almasb.fxglgames.towerDefense;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.components.TransformComponent;
+import static com.almasb.fxgl.dsl.FXGL.*;
+
 
 /**
  * based on code from AlmasB
  * -<a href="https://github.com/AlmasB/FXGLGames/tree/master/TowerDefense/src/main/java/com/almasb/fxglgames/td/components/BulletComponent">https://github.com/AlmasB/FXGLGames/tree/master/TowerDefense/src/main/java/com/almasb/fxglgames/td/components/BulletComponent</a>
+ * author: Andreas Kramer
+ * Projectile entity that is shot from a TowerComponent to hit an enemy
  */
 public class TowerProjectileComponent extends Component {
 
@@ -57,11 +61,10 @@ public class TowerProjectileComponent extends Component {
      * removes Projectile and Enemy (prey) from world
      */
     private void preyHit(){
-        //actions if prey gets hit
-        //remove projectile and prey from world
-        //later on: start effects/animations,deal damage,if prey is killed -> call functions for money,etc.
-        //TowerComponent data = tower.getComponent(TowerComponent.class);
         entity.removeFromWorld();
+        int remainingHealth = prey.getComponent(EnemyManagerComponent.class).getRemainingHealth();
+        if(damage >= remainingHealth)
+            inc(TowerDefenseApp.MONEY,5);
         prey.getComponent(EnemyManagerComponent.class).dealDamage(damage);
     }
 
