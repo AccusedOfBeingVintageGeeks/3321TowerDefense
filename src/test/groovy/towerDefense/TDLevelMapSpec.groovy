@@ -1,19 +1,15 @@
-package com.almasb.fxglgames.towerDefence
+package towerDefense
 
-import com.almasb.fxgl.app.GameApplication
-import com.almasb.fxgl.dsl.FXGL
 import com.almasb.fxgl.entity.Entity
 import com.almasb.fxgl.entity.GameWorld
 import com.almasb.fxgl.entity.level.Level
 import com.almasb.fxgl.entity.level.tiled.TMXLevelLoader
+import com.almasb.fxglgames.towerDefense.Factory
+import com.almasb.fxglgames.towerDefense.IndexPair
+import com.almasb.fxglgames.towerDefense.TDLevelMap
 import javafx.geometry.Point2D
-import org.intellij.lang.annotations.JdkConstants
 import spock.lang.Specification
 
-import java.util.concurrent.Semaphore
-
-import static com.almasb.fxgl.dsl.FXGL.setLevelFromMap
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld
 
 class TDLevelMapSpec extends Specification {
 
@@ -32,8 +28,8 @@ class TDLevelMapSpec extends Specification {
         Level map = loader.load(file.toURL(), world)
         world.setLevel(map)
 
-        bTiles = world.getEntitiesByType(TowerDefenceApp.Type.BLOCKED_TILES)
-        path = world.getEntitiesByType(TowerDefenceApp.Type.PATH).get(0)
+        bTiles = world.getEntitiesByType(TowerDefenseApp.Type.BLOCKED_TILES)
+        path = world.getEntitiesByType(TowerDefenseApp.Type.PATH).get(0)
     }
 
 

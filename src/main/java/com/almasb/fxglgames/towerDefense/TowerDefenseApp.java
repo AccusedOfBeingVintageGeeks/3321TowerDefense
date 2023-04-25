@@ -169,7 +169,7 @@ public class TowerDefenseApp extends GameApplication {
 
         getGameWorld().addEntityFactory(new Factory());
         setLevelFromMap("tmx/FirstTilemap.tmx");//Level entities must be spawned AFTER setting the level
-        testTDLevelMap = new TDLevelMap(45,22,16);
+        testTDLevelMap = new TDLevelMap(45,22,16, getGameWorld().getEntitiesByType(TowerDefenseApp.Type.BLOCKED_TILES), getGameWorld().getEntitiesByType(TowerDefenseApp.Type.PATH).get(0));
         loadTowers();
         towerMenuBox = new TowerMenuBox(dataForTowers);
         towerMenuBox.setTranslateX(getAppWidth() - testTDLevelMap.TileSize * 3f/2 - 12);

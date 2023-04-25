@@ -1,8 +1,13 @@
-package com.almasb.fxglgames.towerDefence
+package towerDefense
 
+import com.almasb.fxgl.app.GameApplication
 import spock.lang.Specification
 
 class FactorySpec extends Specification {
+
+//    @shared
+//    GameApplication gameApp = new GameApplication()
+
 //    def "test newTestEntity"() {
 //        given:
 //

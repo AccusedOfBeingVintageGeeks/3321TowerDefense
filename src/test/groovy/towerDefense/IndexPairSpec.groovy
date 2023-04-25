@@ -1,5 +1,6 @@
-package com.almasb.fxglgames.towerDefence
+package towerDefense
 
+import com.almasb.fxglgames.towerDefense.IndexPair
 import spock.lang.Specification
 
 class IndexPairSpec extends Specification {

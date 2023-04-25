@@ -1,7 +1,8 @@
-package com.almasb.fxglgames.towerDefence;
+package com.almasb.fxglgames.towerDefense;
 
 import com.almasb.fxgl.core.math.FXGLMath;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxglgames.towerDefense.IndexPair;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Polyline;
 import java.util.ArrayList;
