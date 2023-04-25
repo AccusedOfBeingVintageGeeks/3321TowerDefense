@@ -7,6 +7,7 @@ import com.almasb.fxgl.entity.level.tiled.TMXLevelLoader
 import com.almasb.fxglgames.towerDefense.Factory
 import com.almasb.fxglgames.towerDefense.IndexPair
 import com.almasb.fxglgames.towerDefense.TDLevelMap
+import com.almasb.fxglgames.towerDefense.TowerDefenseApp
 import javafx.geometry.Point2D
 import spock.lang.Specification
 

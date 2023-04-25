@@ -1,9 +1,9 @@
-package com.almasb.fxglgames.towerDefence
+package towerDefense
 
 import com.almasb.fxgl.app.GameSettings
 import spock.lang.Specification
 
-class TowerDefenceAppSpec extends Specification {
+class TowerDefenseAppSpec extends Specification {
 //    def "test initSettings"() {
 //        given:
 //
