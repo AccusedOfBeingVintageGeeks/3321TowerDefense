@@ -19,7 +19,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.texture;
  * TowerSymbol consisting of background, texture of the tower and a display for its cost
  */
 public class TowerSymbol extends VBox{
-    private Texture texture;
+    private StackPane stackPane;
     private DataForTower data;
     private Entity entity;
 
@@ -31,7 +31,7 @@ public class TowerSymbol extends VBox{
 
         var text = FXGLForKtKt.getUIFactoryService().newText(data.cost() + "");
         text.setStroke(Color.BLACK);
-        texture = texture("towers/" + data.imageName());
+        Texture texture = texture("towers/" + data.imageName());
         texture.setFitHeight(60);
         texture.setFitWidth(60);
 
@@ -40,10 +40,9 @@ public class TowerSymbol extends VBox{
         setSpacing(5);
         setAlignment(Pos.TOP_CENTER);
         getChildren().addAll(stackPane,text);
-
     }
     public void bindToMoney(IntegerProperty property) {
-        texture.opacityProperty().bind(
+        this.opacityProperty().bind(
                 Bindings.when(property.greaterThanOrEqualTo(data.cost()))
                         .then(1.0)
                         .otherwise(0.25)

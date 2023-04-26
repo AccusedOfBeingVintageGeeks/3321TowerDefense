@@ -32,8 +32,8 @@ public class Factory implements EntityFactory {
         texture.setFitHeight(45);
         texture.setFitWidth(45);
 
-        var back = new Circle(25,25,25, Color.GRAY);
-        var pane = new StackPane(back,texture);
+        //var back = new Circle(25,25,25, Color.GRAY);
+        //var pane = new StackPane(back,texture);
         Entity entity = FXGL.entityBuilder(data)
                 .with(new TowerComponent(dataForTower))
                 .viewWithBBox(texture)
@@ -69,6 +69,7 @@ public class Factory implements EntityFactory {
         final int
                 SPEED = 100,
                 HEALTH = 150,
+                REWARD = 5,
                 Z_INDEX = TowerDefenseApp.Layer.STANDARD.ZIndex;
 
         final Node[] HEALTH_NODES = new Node[]{//low index = low health
@@ -77,7 +78,7 @@ public class Factory implements EntityFactory {
                 texture("enemies/scrub/healthy.png")
         };
 
-        return getEnemyEntity(data, SPEED, HEALTH, HEALTH_NODES, Z_INDEX);
+        return getEnemyEntity(data, SPEED, HEALTH, HEALTH_NODES, REWARD, Z_INDEX);
     }
 
     /**
@@ -90,6 +91,7 @@ public class Factory implements EntityFactory {
         final int
                 SPEED = 50,
                 HEALTH = 300,
+                REWARD = 10,
                 Z_INDEX = TowerDefenseApp.Layer.TALL.ZIndex;
 
         final Node[] HEALTH_NODES = new Node[]{//low index = low health
@@ -99,7 +101,7 @@ public class Factory implements EntityFactory {
                 texture("enemies/heavy/healthy.png")
         };
 
-        return getEnemyEntity(data, SPEED, HEALTH, HEALTH_NODES, Z_INDEX);
+        return getEnemyEntity(data, SPEED, HEALTH, HEALTH_NODES, REWARD, Z_INDEX);
     }
 
     /**
@@ -111,7 +113,7 @@ public class Factory implements EntityFactory {
      * @return                  An Entity, an enemy with the stats and properties argued.
      */
     @NotNull
-    private static Entity getEnemyEntity(SpawnData data, int speed, int health, Node[] healthNodes, int zIndex) {
+    private static Entity getEnemyEntity(SpawnData data, int speed, int health, Node[] healthNodes, int reward, int zIndex) {
         final List<Point2D> waypoints = data.get("waypoints");
 
         Entity entity = FXGL.entityBuilder(data)
@@ -119,11 +121,10 @@ public class Factory implements EntityFactory {
                 .viewWithBBox(healthNodes[healthNodes.length - 1])
                 .at(waypoints.get(0))
                 .with(new WaypointMoveComponent(speed, waypoints))
-                .with(new EnemyManagerComponent(health, healthNodes))
+                .with(new EnemyManagerComponent(health, healthNodes, reward))
                 .zIndex(zIndex)
                 .build();
         //entity.setReusable(true);
-
         return entity;
     }
 
@@ -137,6 +138,7 @@ public class Factory implements EntityFactory {
     public static void reinitializeEnemy(Entity enemyEntity, SpawnData data) {
         /*
         This works 99% of the time now, but occasionally an enemy is respawned and begins moving along the path at what appears to be twice the correct speed. It's speed property is correct, and I couldn't see any problems with the WaypointMoveComponent either. I suspect this is a bug in FXGL. If necessary, we could roll our own Entity pooling mechanism, but I'll just leave the code below commented out for now.
+         ^^^ Note: Updating sprites according to damage broke this further.
          */
 
         //List<Point2D> waypoints = data.get("waypoints");
@@ -161,15 +163,13 @@ public class Factory implements EntityFactory {
         bullet.setFitWidth(height);
         bullet.setFitHeight(width);
 
-        Entity entity = entityBuilder(data)
+        return entityBuilder(data)
                 .type(TowerDefenseApp.Type.PROJECTILE)
                 .viewWithBBox(bullet)
                 .collidable()
-                .with(new TowerProjectileComponent(tower,prey,speed, damage))
+                .with(new TowerProjectileComponent(prey,speed, damage))
                 .with(new AutoRotationComponent())
-                //.zIndex(444)
                 .build();
-        return entity;
     }
 
     /*
