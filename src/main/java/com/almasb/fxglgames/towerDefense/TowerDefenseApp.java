@@ -108,7 +108,6 @@ public class TowerDefenseApp extends GameApplication {
     @Override
     protected void initGameVars(Map<String, Object> vars) {
         vars.put(MONEY,50);
-        //I believe this is important for saving state, but I need to do more research.
     }
 
 
@@ -157,10 +156,6 @@ public class TowerDefenseApp extends GameApplication {
                     }
                     else {
                         // Abort drag
-                        // initPoint (the tower's position on the sidebar) needs to be a property of tower entities or their TowerComponent.
-                        // Or maybe it gets it from the sidebar class if there will be such a thing?
-                        //Point2D initPoint = new Point2D(getAppWidth() - testTDLevelMap.TileSize,getAppHeight() * 0.4);
-                        //draggedEntity.setAnchoredPosition(initPoint);
                         draggedEntity.removeFromWorld();
                         draggedEntity.getComponent(TowerComponent.class).deleteTowerInfo();
                         inc(MONEY,draggedEntity.getComponent(TowerComponent.class).getDataForTower().cost());
@@ -268,7 +263,6 @@ public class TowerDefenseApp extends GameApplication {
     }
 
     public void onTowerSell(DataForTower data, TowerComponent tower){
-        //data.cost(); increase amount of money by about a third of tower cost
         IndexPair tileIndices = levelMap.getTileIndexFromPoint(tower.getEntity().getPosition());
         inc(MONEY,data.cost() / 3); // increase amount of money by about a third of tower cost
         tower.deleteTowerInfo();
