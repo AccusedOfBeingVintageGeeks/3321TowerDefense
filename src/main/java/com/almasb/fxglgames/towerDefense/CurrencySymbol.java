@@ -4,7 +4,7 @@ import com.almasb.fxgl.texture.Texture;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-
+import javafx.scene.text.Text;
 
 
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -16,11 +16,15 @@ public class CurrencySymbol extends HBox {
 
     public CurrencySymbol(){
         Texture texture = new Texture(image("currency/" + "money.png"));
-        texture.setFitHeight(30);
-        texture.setFitWidth(30);
-        var text = getUIFactoryService().newText("", Color.WHITE,20);
+        texture.setFitHeight(20);
+        texture.setFitWidth(20);
+        texture.setTranslateY(3);
+
+        Text text = getUIFactoryService().newText("", Color.WHITE,18);
         text.textProperty().bind(getip("money").asString());
-        setSpacing(10);
+        //text.setTranslateY(15);
+
+        setSpacing(5);
         setAlignment(Pos.BASELINE_RIGHT);
 
         getChildren().addAll(texture,text);
