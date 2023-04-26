@@ -183,7 +183,6 @@ public class TowerDefenseApp extends GameApplication {
         waveManager = new WaveManager(enemySpawnData, waveDataFilename + ".json");
     }
 
-    //private TowerMenuBox towerMenuBox;
     private void loadTowers(){
         String towerSpecifications = "towerdata.json";
         try {
@@ -202,10 +201,6 @@ public class TowerDefenseApp extends GameApplication {
 
         getGameWorld().addEntityFactory(new Factory());
         loadLevel();
-        //loadTowers();
-        /*towerMenuBox = new TowerMenuBox(dataForTowers);
-        towerMenuBox.setTranslateX(getAppWidth() - levelMap.TileSize * 3f/2 - 12);
-        towerMenuBox.setTranslateY(0.1 * getAppHeight());*/
     }
     @Override
     protected void initUI() {
