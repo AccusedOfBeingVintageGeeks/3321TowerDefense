@@ -68,11 +68,13 @@ public class Factory implements EntityFactory {
     public Entity newScrubEnemy(SpawnData data) {
         final int
                 SPEED = 100,
-                HEALTH = 100,
+                HEALTH = 150,
                 Z_INDEX = TowerDefenseApp.Layer.STANDARD.ZIndex;
 
         final Node[] HEALTH_NODES = new Node[]{//low index = low health
-                texture("enemies/scrub.png")
+                texture("enemies/scrub/injured.png"),
+                texture("enemies/scrub/dirty.png"),
+                texture("enemies/scrub/healthy.png")
         };
 
         return getEnemyEntity(data, SPEED, HEALTH, HEALTH_NODES, Z_INDEX);
@@ -91,10 +93,10 @@ public class Factory implements EntityFactory {
                 Z_INDEX = TowerDefenseApp.Layer.TALL.ZIndex;
 
         final Node[] HEALTH_NODES = new Node[]{//low index = low health
-                texture("test/blackOutlineTestTexture.png"),
-                texture("test/purpleTestTexture.png"),
-                texture("test/redTestTexture.png"),
-                texture("test/yellowTestTexture.png")
+                texture("enemies/heavy/very_injured.png"),
+                texture("enemies/heavy/injured.png"),
+                texture("enemies/heavy/dirty.png"),
+                texture("enemies/heavy/healthy.png")
         };
 
         return getEnemyEntity(data, SPEED, HEALTH, HEALTH_NODES, Z_INDEX);
