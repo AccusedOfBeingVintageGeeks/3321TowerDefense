@@ -199,6 +199,7 @@ public class TowerDefenseApp extends GameApplication {
     }
     @Override
     protected void initUI() {
+        addUINode(explosionSymbol,50,50);
         loadTowers();
         TowerMenuBox towerMenuBox = new TowerMenuBox(dataForTowers);
         towerMenuBox.setTranslateX(getAppWidth() - levelMap.TileSize * 3f/2 - 12);
@@ -261,7 +262,7 @@ public class TowerDefenseApp extends GameApplication {
             inc(MONEY,-towerData.cost());
         }
     }
-
+    private ExplosionSymbol explosionSymbol = new ExplosionSymbol(Color.GREEN);
     public void onTowerSell(DataForTower data, TowerComponent tower){
         IndexPair tileIndices = levelMap.getTileIndexFromPoint(tower.getEntity().getPosition());
         inc(MONEY,data.cost() / 3); // increase amount of money by about a third of tower cost

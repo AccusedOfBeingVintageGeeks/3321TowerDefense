@@ -13,6 +13,7 @@ import javafx.beans.binding.Bindings;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import org.jetbrains.annotations.NotNull;
@@ -165,7 +166,7 @@ public class Factory implements EntityFactory {
                 .type(TowerDefenseApp.Type.PROJECTILE)
                 .viewWithBBox(bullet)
                 .collidable()
-                .with(new TowerProjectileComponent(prey,speed, damage))
+                .with(new TowerProjectileComponent(tower,prey,speed, damage))
                 .with(new AutoRotationComponent())
                 .build();
     }
@@ -191,6 +192,24 @@ public class Factory implements EntityFactory {
     {
         return FXGL.entityBuilder(data)
                 .type(TowerDefenseApp.Type.PATH)
+                .build();
+    }
+    @Spawns("visualEffectSlow")
+    public Entity newVisualEffectSlow(SpawnData data) {
+        var icon1 = new ExplosionSymbol(Color.YELLOW);
+        var icon2 = new ExplosionSymbol(Color.ORANGE);
+
+        var icon3 = new ExplosionSymbol(Color.YELLOW);
+        var icon4 = new ExplosionSymbol(Color.ORANGE);
+
+        var box = new VBox(-5, icon3, icon4);
+        box.setTranslateX(64.0);
+        box.setTranslateY(-25.0);
+
+        return entityBuilder(data)
+                .viewWithBBox(new VBox(-5, icon1, icon2))
+                .viewWithBBox(box)
+                .scale(0.3, 0.3)
                 .build();
     }
 }

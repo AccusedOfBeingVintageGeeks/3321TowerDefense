@@ -1,5 +1,6 @@
 package com.almasb.fxglgames.towerDefense;
 
+import com.almasb.fxgl.dsl.effects.SlowTimeEffect;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.components.TransformComponent;
 import javafx.geometry.Point2D;
@@ -9,6 +10,8 @@ import com.almasb.fxgl.time.LocalTimer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
+
+import java.util.List;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 
@@ -115,5 +118,10 @@ public class TowerComponent extends Component {
                     });
         }
         //do nothing
+    }
+    public List<OnHitEffect> onHitEffects() {
+        return List.of(
+                new OnHitEffect(new SlowTimeEffect(0.2, Duration.seconds(3)), 0.75)
+        );
     }
 }
