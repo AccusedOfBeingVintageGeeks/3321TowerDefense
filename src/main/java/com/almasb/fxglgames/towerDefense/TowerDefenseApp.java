@@ -51,14 +51,14 @@ public class TowerDefenseApp extends GameApplication {
      * as the one passed to the factory @Spawns interface.
      */
     public enum EnemyType {
-        scrub, heavy;
+        scrub, heavy
     }
     /**
      * Standard sorting layers.
      */
     public enum Layer{
         //These MUST be ordered from lowest zIndex to highest
-        GROUNDED, SHORT, STANDARD, TALL, AIRBORNE;
+        GROUNDED, SHORT, STANDARD, TALL, AIRBORNE, UI;
 
         //This is multiplied by 100 for edge cases where we want to have an entity between layers
         final int ZIndex = ordinal() * 100;
@@ -197,7 +197,7 @@ public class TowerDefenseApp extends GameApplication {
     protected void initGame() {
         Rectangle background = new Rectangle(WINDOW_WIDTH - TILE_SIZE*2, 0,TILE_SIZE*2,getAppHeight());
         background.setFill(Color.gray(0.2));
-        getGameScene().addGameView(new GameView(background,Layer.SHORT.ZIndex));
+        getGameScene().addGameView(new GameView(background,Layer.UI.ZIndex));
 
         getGameWorld().addEntityFactory(new Factory());
         loadLevel();
@@ -254,7 +254,6 @@ public class TowerDefenseApp extends GameApplication {
     public void onTowerSelection(DataForTower towerData){
         if(geti(MONEY) < towerData.cost()){
             showMessage("Not enough money!");
-            return;
         }else{
             Entity towerEntity = spawnWithScale("tower",
                     new SpawnData(getInput().getMousePositionWorld().getX()-TILE_SIZE/2f,
