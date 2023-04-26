@@ -25,7 +25,7 @@ public class TowerComponent extends Component {
     private final LocalTimer shotFrequency;
     private final TowerInfo info;
     private final Circle circle;
-    private TransformComponent transformComponent;
+    private final TransformComponent transformComponent;
     private boolean isPlaced;
     public boolean getPlacedStatus(){ return isPlaced; }
     public void setPlacedStatus(boolean placedStatus){ isPlaced = placedStatus; }
@@ -49,6 +49,10 @@ public class TowerComponent extends Component {
         addUINode(circle);
     }
 
+    public DataForTower getDataForTower(){
+        return data;
+    }
+
     /**
      * Method enables TowerComponent to shoot Enemy using TowerProjectileComponent
      * @param enemy target that gets shot
@@ -63,6 +67,7 @@ public class TowerComponent extends Component {
                         .put("prey", enemy)
                         .put("projectile",data.projectileImageName())
                         .put("projectileSpeed",data.projectileSpeed())
+                        .put("damage",data.projectileDamage())
                         .put("height",data.projectileHeight())
                         .put("width",data.projectileWidth())
         );
@@ -73,17 +78,16 @@ public class TowerComponent extends Component {
         transformComponent.rotateBy(90);
     }
 
+    /**
+     * creates UI including TowerInfo displaying towerData and a circle displaying the fireRadius
+     */
     public void initializeTowerInfo(){
         info.setTranslateX(entity.getX() + 40);
         info.setTranslateY(entity.getY());
         circle.setTranslateX(entity.getAnchoredPosition().getX());
         circle.setTranslateY(entity.getAnchoredPosition().getY());
         this.circle.setVisible(!this.isPlaced);
-        entity.getViewComponent().getParent().setOnMouseClicked(e ->{
-            {
-                this.info.setVisible(!this.info.isVisible());
-            }
-        });
+        entity.getViewComponent().getParent().setOnMouseClicked(e -> this.info.setVisible(!this.info.isVisible()));
     }
     public void deleteTowerInfo(){
         removeUINode(circle);
@@ -96,6 +100,7 @@ public class TowerComponent extends Component {
     @Override
     public void onUpdate(double tpf)
     {
+        initializeTowerInfo();
         TowerDefenseApp.Type targetType = TowerDefenseApp.Type.ENEMY;
         Duration firePause = Duration.seconds(data.fireRate());
         if(this.isPlaced && shotFrequency.elapsed(firePause)){

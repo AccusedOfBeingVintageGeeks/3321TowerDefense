@@ -66,8 +66,7 @@ public class WaveManager {
      * Begin regularly spawning a wave of enemies according to the passed waveData object.
      * @param waveData Includes the enemyQueue, spawnsPerQueueEntry, and deltaSpawnInMilliseconds.
      */
-    private void spawnWave(WaveData waveData)
-    {
+    private void spawnWave(WaveData waveData) {
         isActivelySpawning = true;
 
         final int[] currentEntryIndex = {0}, numConsecutiveSpawnsOfCurrentEntry = {0};
@@ -77,28 +76,32 @@ public class WaveManager {
                         TowerDefenseApp.EnemyType nextEnemyType = waveData.enemyQueue()[currentEntryIndex[0]];
 
                         if(nextEnemyType != null){
-                            Entity enemy = spawn(nextEnemyType.name(),enemySpawnData);
-                            Factory.reinitializeEnemy(enemy);
+                            Entity enemy = spawn(nextEnemyType.name(), enemySpawnData);
+                            Factory.reinitializeEnemy(enemy, enemySpawnData);
                         }
 
                         numConsecutiveSpawnsOfCurrentEntry[0]++;
-                        if(numConsecutiveSpawnsOfCurrentEntry[0] >= waveData.spawnsPerQueueEntry())
-                        {
+                        if(numConsecutiveSpawnsOfCurrentEntry[0] >= waveData.spawnsPerQueueEntry()) {
                             numConsecutiveSpawnsOfCurrentEntry[0] = 0;
                             currentEntryIndex[0]++;
 
                             if(currentEntryIndex[0] == waveData.enemyQueue().length)// if we just spawned the last enemyEntry
-                            {
-                                isActivelySpawning = false;
-                                startBreakPeriod(WAVE_BREAK_TIME);
-                                currentWaveIndex++;
-                            }
-
+                                onLastSpawnInWave();
                         }
                     },
                 Duration.millis(waveData.deltaSpawnInMilliseconds()),
                 waveData.enemyQueue().length * waveData.spawnsPerQueueEntry()
         );
+    }
+
+    /**
+     * This method is called once per wave, after the last enemy has been spawned
+     */
+    private void onLastSpawnInWave(){
+        inc(TowerDefenseApp.MONEY, waveDataLevelList.get(currentWaveIndex).funding());
+        isActivelySpawning = false;
+        startBreakPeriod(WAVE_BREAK_TIME);
+        currentWaveIndex++;
     }
 
     /**

@@ -24,3 +24,12 @@
 .wave_info_text{
     -fx-font-size: 10;
 }
+
+.title_text{
+    -fx-font-family: Broadway;
+    -fx-font-size: 50;
+    -fx-fill: lightgreen;
+    -fx-text-alignment: center;
+}
+.menu_button{
+}

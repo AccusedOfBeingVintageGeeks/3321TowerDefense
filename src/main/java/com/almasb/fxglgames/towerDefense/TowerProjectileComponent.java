@@ -3,35 +3,28 @@ package com.almasb.fxglgames.towerDefense;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.components.TransformComponent;
-import javafx.geometry.Point2D;
+import static com.almasb.fxgl.dsl.FXGL.*;
+
 
 /**
  * based on code from AlmasB
- * -https://github.com/AlmasB/FXGLGames/tree/master/TowerDefense/src/main/java/com/almasb/fxglgames/td/components/BulletComponent
+ * -<a href="https://github.com/AlmasB/FXGLGames/tree/master/TowerDefense/src/main/java/com/almasb/fxglgames/td/components/BulletComponent">https://github.com/AlmasB/FXGLGames/tree/master/TowerDefense/src/main/java/com/almasb/fxglgames/td/components/BulletComponent</a>
+ * author: Andreas Kramer
+ * Projectile entity that is shot from a TowerComponent to hit an enemy
  */
 public class TowerProjectileComponent extends Component {
-
-    private final Entity tower;
-    private Entity prey;
-    private TransformComponent transformComponent;
-    private int speed;
-
-    public TransformComponent getTransformComponent() {
-        return transformComponent;
-    }
-    //speed can probably put into a different class (data class) and be retrieved from there
-    //this should make it easier to change game settings
+    private final Entity prey;
+    private final int speed, damage;
 
     /**
      * Projectile that travels from a Tower towards an Enemy (prey)
-     * @param tower TowerComponent entity
      * @param prey TowerComponent entity
      * @param speed projectile speed
      */
-    public TowerProjectileComponent(Entity tower, Entity prey, int speed) {
+    public TowerProjectileComponent(Entity prey, int speed, int damage) {
         this.prey = prey;
         this.speed = speed;
-        this.tower = tower;
+        this.damage = damage;
     }
 
     /**
@@ -57,19 +50,10 @@ public class TowerProjectileComponent extends Component {
      * removes Projectile and Enemy (prey) from world
      */
     private void preyHit(){
-        //actions if prey gets hit
-        //remove projectile and prey from world
-        //later on: start effects/animations,deal damage,if prey is killed -> call functions for money,etc..
-        //TowerComponent data = tower.getComponent(TowerComponent.class);
         entity.removeFromWorld();
-        /*
-        var HP = prey.getComponent(HealthIntComponent.class);
-        HP.damage(data.getDamage()); //needs method in TowerComponent to get damage
-        */
-        prey.removeFromWorld();
-
+        int remainingHealth = prey.getComponent(EnemyManagerComponent.class).getRemainingHealth();
+        if(damage >= remainingHealth)
+            inc(TowerDefenseApp.MONEY,5);
+        prey.getComponent(EnemyManagerComponent.class).dealDamage(damage);
     }
-
-
-
 }

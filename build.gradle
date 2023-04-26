@@ -20,8 +20,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-js:1.8.10'
-    implementation 'com.github.almasb:fxgl:17.2'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-js:1.6.21'
+    implementation 'com.github.almasb:fxgl:17.3'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
 
     implementation platform('org.apache.groovy:groovy-bom:4.0.5')
@@ -36,7 +36,7 @@ dependencies {
 }
 
 javafx {
-    version = "18"
+    version = "20"
     modules = [ 'javafx.controls', 'javafx.graphics', 'javafx.fxml', 'javafx.media' ]
 }
 
