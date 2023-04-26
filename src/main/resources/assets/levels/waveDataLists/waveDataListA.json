@@ -1,37 +1,57 @@
 [
   {
-    "enemyQueue": ["heavy"],
+    "enemyQueue": ["scrub", "scrub", "scrub"],
     "spawnsPerQueueEntry": 1,
-    "deltaSpawnInMilliseconds": 500
+    "deltaSpawnInMilliseconds": 1500,
+    "funding": 0
   },
   {
-    "enemyQueue": ["scrub", "heavy", "scrub", "scrub", null, "scrub", "scrub", "scrub"],
+    "enemyQueue": ["scrub", null, null, "scrub", null, null, "scrub", "scrub"],
     "spawnsPerQueueEntry": 1,
-    "deltaSpawnInMilliseconds": 500
+    "deltaSpawnInMilliseconds": 500,
+    "funding": 50
   },
   {
     "enemyQueue": ["scrub", null, "scrub", "scrub", null, "scrub", "scrub", "scrub"],
     "spawnsPerQueueEntry": 3,
-    "deltaSpawnInMilliseconds": 500
+    "deltaSpawnInMilliseconds": 500,
+    "funding": 75
   },
   {
-    "enemyQueue": ["scrub", "scrub", "scrub", null, "scrub", "scrub", "scrub", null, "scrub"],
+    "enemyQueue": ["heavy"],
+    "spawnsPerQueueEntry": 1,
+    "deltaSpawnInMilliseconds": 500,
+    "funding": 100
+  },
+  {
+    "enemyQueue": ["heavy", "heavy", null, "scrub", "scrub", "scrub", "scrub", "scrub", null, "heavy", "heavy"],
+    "spawnsPerQueueEntry": 2,
+    "deltaSpawnInMilliseconds": 500,
+    "funding": 150
+  },
+
+  {
+    "enemyQueue": ["scrub", "heavy", "scrub", null, "scrub", "scrub", "scrub", null, "scrub"],
     "spawnsPerQueueEntry": 5,
-    "deltaSpawnInMilliseconds": 500
+    "deltaSpawnInMilliseconds": 500,
+    "funding": 200
   },
   {
-    "enemyQueue": ["scrub", null, "scrub", null, "scrub", null, "scrub", "scrub"],
+    "enemyQueue": ["scrub", null, "scrub", null, "scrub", null, null, "heavy"],
     "spawnsPerQueueEntry": 10,
-    "deltaSpawnInMilliseconds": 200
+    "deltaSpawnInMilliseconds": 200,
+    "funding": 250
   },
   {
-    "enemyQueue": ["scrub", "scrub", "scrub", null, "scrub", null, "scrub", "scrub", "scrub"],
+    "enemyQueue": ["scrub", "scrub", "scrub", null, "scrub", null, "scrub", "scrub", "heavy"],
     "spawnsPerQueueEntry": 5,
-    "deltaSpawnInMilliseconds": 300
+    "deltaSpawnInMilliseconds": 300,
+    "funding": 350
   },
   {
-    "enemyQueue": ["scrub", "scrub", "scrub", null, "scrub", null, "scrub", "scrub", "scrub"],
+    "enemyQueue": ["scrub", "scrub", "scrub", null, "scrub", null, "heavy", "heavy", "heavy"],
     "spawnsPerQueueEntry": 10,
-    "deltaSpawnInMilliseconds": 150
+    "deltaSpawnInMilliseconds": 150,
+    "funding": 500
   }
 ]
