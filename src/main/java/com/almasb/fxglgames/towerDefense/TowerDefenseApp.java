@@ -172,7 +172,13 @@ public class TowerDefenseApp extends GameApplication {
      */
     private void loadLevel(){
         setLevelFromMap("tmx/" + levelName + ".tmx");
-        levelMap = new TDLevelMap(45,22,16);
+        levelMap = new TDLevelMap(
+                45,
+                22,
+                16,
+                getGameWorld().getEntitiesByType(TowerDefenseApp.Type.BLOCKED_TILES),
+                getGameWorld().getEntitiesByType(TowerDefenseApp.Type.PATH).get(0)
+                );
 
         SpawnData enemySpawnData = new SpawnData();
         enemySpawnData.put("waypoints", levelMap.getPathPoints());

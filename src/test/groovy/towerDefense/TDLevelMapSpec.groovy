@@ -35,7 +35,7 @@ class TDLevelMapSpec extends Specification {
 
 
     void setup() {
-        makeNewWorld("src/main/resources/assets/levels/tmx/FirstTilemap.tmx")
+        makeNewWorld("src/main/resources/assets/levels/tmx/first_level.tmx")
         map = new TDLevelMap(45, 22, 16, bTiles, path)
     }
 
