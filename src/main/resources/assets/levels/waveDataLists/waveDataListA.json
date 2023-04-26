@@ -3,7 +3,7 @@
     "enemyQueue": ["scrub", "scrub", "scrub"],
     "spawnsPerQueueEntry": 1,
     "deltaSpawnInMilliseconds": 1500,
-    "funding": 0
+    "funding": 25
   },
   {
     "enemyQueue": ["scrub", null, null, "scrub", null, null, "scrub", "scrub"],
