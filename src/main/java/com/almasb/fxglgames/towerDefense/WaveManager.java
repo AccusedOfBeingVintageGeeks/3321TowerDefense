@@ -55,8 +55,6 @@ public class WaveManager {
      * Spawns the next wave of enemies. Will throw an exception if called after the last wave has already been spawned.
      */
     public void spawnNextWave(){
-        inc(TowerDefenseApp.MONEY, waveDataLevelList.get(currentWaveIndex).funding());
-
         waveBreakTimer.clear();
         if(currentWaveIndex >= waveDataLevelList.size())
             throw new IndexOutOfBoundsException("Last wave for this level has already been spawned");
@@ -87,16 +85,23 @@ public class WaveManager {
                             numConsecutiveSpawnsOfCurrentEntry[0] = 0;
                             currentEntryIndex[0]++;
 
-                            if(currentEntryIndex[0] == waveData.enemyQueue().length) {// if we just spawned the last enemyEntry
-                                isActivelySpawning = false;
-                                startBreakPeriod(WAVE_BREAK_TIME);
-                                currentWaveIndex++;
-                            }
+                            if(currentEntryIndex[0] == waveData.enemyQueue().length)// if we just spawned the last enemyEntry
+                                onLastSpawnInWave();
                         }
                     },
                 Duration.millis(waveData.deltaSpawnInMilliseconds()),
                 waveData.enemyQueue().length * waveData.spawnsPerQueueEntry()
         );
+    }
+
+    /**
+     * This method is called once per wave, after the last enemy has been spawned
+     */
+    private void onLastSpawnInWave(){
+        inc(TowerDefenseApp.MONEY, waveDataLevelList.get(currentWaveIndex).funding());
+        isActivelySpawning = false;
+        startBreakPeriod(WAVE_BREAK_TIME);
+        currentWaveIndex++;
     }
 
     /**
