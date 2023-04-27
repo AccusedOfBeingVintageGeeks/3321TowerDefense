@@ -2,7 +2,7 @@ plugins {
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.13'
     id 'org.jetbrains.kotlin.jvm' version '1.6.21'
-    id 'jacoco'
+    //id 'jacoco'
     id 'groovy'
 }
 
@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-js:1.6.21'
-    implementation 'com.github.almasb:fxgl:17.3'
+    implementation 'com.github.almasb:fxgl:17.2'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
 
     implementation platform('org.apache.groovy:groovy-bom:4.0.5')
@@ -36,7 +36,7 @@ dependencies {
 }
 
 javafx {
-    version = "20"
+    version = "18"
     modules = [ 'javafx.controls', 'javafx.graphics', 'javafx.fxml', 'javafx.media' ]
 }
 
