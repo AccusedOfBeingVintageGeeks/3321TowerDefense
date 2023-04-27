@@ -1,73 +1,38 @@
 package towerDefense
 
 import com.almasb.fxgl.app.GameApplication
+import com.almasb.fxgl.entity.Entity
+import com.almasb.fxglgames.towerDefense.TowerComponent
+import com.almasb.fxglgames.towerDefense.TowerDefenseApp
+import spock.lang.Shared
 import spock.lang.Specification
+
+import static com.almasb.fxgl.dsl.FXGL.getGameWorld
 
 class FactorySpec extends Specification {
 
-//    @shared
-//    GameApplication gameApp = new GameApplication()
-
+//    @Shared
+//    GameApplication gameApp = new TowerDefenseApp()
+//
+//    def setupSpec() {
+//        // Start the FXGL engine before running tests
+//        gameApp.embeddedLaunch(TowerDefenseApp.main())
+//        wait(5000)
+//        gameApp.setLevel("first_level", "waveDataListA")
+//    }
+//
+//    def cleanupSpec() {
+//        // Shutdown the FXGL engine after all tests have completed
+//        gameApp.embeddedShutdown()
+//    }
+//
 //    def "test newTestEntity"() {
 //        given:
-//
-//        when:
-//        // TODO implement stimulus
-//        then:
-//        // TODO implement assertions
+//        boolean xkcd
+//        when: "fdjkl"
+//        List<Entity> towerEntities = getGameWorld().getEntitiesByComponent(TowerComponent.class)
+//        then: "fhdjkls"
+//        1 == 1
 //    }
-//
-//    def "test newTestTower"() {
-//        given:
-//
-//        when:
-//        // TODO implement stimulus
-//        then:
-//        // TODO implement assertions
-//    }
-//
-//    def "test newScrub"() {
-//        given:
-//
-//        when:
-//        // TODO implement stimulus
-//        then:
-//        // TODO implement assertions
-//    }
-//
-//    def "test reinitializeScrub"() {
-//        given:
-//
-//        when:
-//        // TODO implement stimulus
-//        then:
-//        // TODO implement assertions
-//    }
-//
-//    def "test newProjectile"() {
-//        given:
-//
-//        when:
-//        // TODO implement stimulus
-//        then:
-//        // TODO implement assertions
-//    }
-//
-//    def "test newBlockedTile"() {
-//        given:
-//
-//        when:
-//        // TODO implement stimulus
-//        then:
-//        // TODO implement assertions
-//    }
-//
-//    def "test newPath"() {
-//        given:
-//
-//        when:
-//        // TODO implement stimulus
-//        then:
-//        // TODO implement assertions
-//    }
+
 }
