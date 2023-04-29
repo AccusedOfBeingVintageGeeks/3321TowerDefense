@@ -4,6 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.6.21'
     //id 'jacoco'
     id 'groovy'
+    id 'org.cyclonedx.bom' version '1.6.1'
 }
 
 application {
@@ -80,3 +81,15 @@ test {
      classpath = configurations.runtimeClasspath
      destinationDir = file("${rootDir}/docs/javadoc")
  }
+
+cyclonedxBom {
+    includeConfigs = ["runtimeClasspath"]
+    skipConfigs = ["compileClasspath", "testCompileClasspath"]
+    projectType = "application"
+    schemaVersion = "1.4"
+    destination = file("build/reports")
+    outputName = "SBOM"
+    //outputFormat = "json"
+    includeBomSerialNumber = true
+    //componentVersion = "2.0.0"
+}
