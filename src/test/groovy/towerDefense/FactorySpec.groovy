@@ -10,7 +10,7 @@ import spock.lang.Specification
 
 import java.sql.Time
 
-import static com.almasb.fxgl.dsl.FXGL.getGameWorld
+import static com.almasb.fxgl.dsl.FXGL.*
 
 class FactorySpec extends Specification {
 
@@ -30,11 +30,13 @@ class FactorySpec extends Specification {
 
         thread = Thread.start {
             gameApp.embeddedLaunch(TowerDefenseApp.main())
+            //pause()
+            world = getGameWorld()
+            gameApp.setLevel("first_level", "waveDataListA")
+            getGameController().startNewGame()
         }
         pause()
-        world = getGameWorld()
-        gameApp.setLevel("first_level", "waveDataListA")
-        pause()
+        //pause()
 
     }
 
