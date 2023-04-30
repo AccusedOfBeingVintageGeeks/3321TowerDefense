@@ -2,6 +2,7 @@ package com.almasb.fxglgames.towerDefense;
 
 import com.almasb.fxgl.entity.component.Component;
 import javafx.scene.Node;
+
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 
@@ -47,17 +48,24 @@ public class EnemyManagerComponent extends Component {
      * This method checks this enemy's remaining health and, if necessary, updates its sprite to reflect remaining health.
      */
     private void updateSprite(){
-        int tempHealthIndex = (int) Math.floor((double) remainingHealth /healthCapacity * (healthTextures.length-0.0000001));
-
-        if (tempHealthIndex<0)
-            tempHealthIndex=0;
-        if(tempHealthIndex>=healthTextures.length)
-            tempHealthIndex=healthTextures.length -1;
-
+        int tempHealthIndex = getHealthIndex();
         if(tempHealthIndex != healthIndex){
             healthIndex = tempHealthIndex;
             getEntity().getViewComponent().clearChildren();
             getEntity().getViewComponent().addChild(healthTextures[healthIndex]);
         }
+    }
+
+    /**
+     * This method returns the correct healthIndex according to the enemy's health stats and number of health state textures.
+     * @return  an int between 0 and the number of health textures minus 1.
+     */
+    private int getHealthIndex(){
+        int i = (int) Math.ceil((double) remainingHealth/healthCapacity * healthTextures.length) - 1;
+
+        if(i < 0)
+            i = 0;
+
+        return i;
     }
 }
