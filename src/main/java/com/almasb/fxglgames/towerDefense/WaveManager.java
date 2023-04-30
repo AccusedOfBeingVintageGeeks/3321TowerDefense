@@ -71,37 +71,62 @@ public class WaveManager {
 
         final int[] currentEntryIndex = {0}, numConsecutiveSpawnsOfCurrentEntry = {0};
         getGameTimer().runAtInterval(
-                ()->{
-                        //Check waveData
-                        TowerDefenseApp.EnemyType nextEnemyType = waveData.enemyQueue()[currentEntryIndex[0]];
-
-                        if(nextEnemyType != null){
-                            Entity enemy = spawn(nextEnemyType.name(), enemySpawnData);
-                            Factory.reinitializeEnemy(enemy, enemySpawnData);
-                        }
-
-                        numConsecutiveSpawnsOfCurrentEntry[0]++;
-                        if(numConsecutiveSpawnsOfCurrentEntry[0] >= waveData.spawnsPerQueueEntry()) {
-                            numConsecutiveSpawnsOfCurrentEntry[0] = 0;
-                            currentEntryIndex[0]++;
-
-                            if(currentEntryIndex[0] == waveData.enemyQueue().length)// if we just spawned the last enemyEntry
-                                onLastSpawnInWave();
-                        }
-                    },
+                getSpawnNextEnemyAction(waveData, currentEntryIndex, numConsecutiveSpawnsOfCurrentEntry),
                 Duration.millis(waveData.deltaSpawnInMilliseconds()),
                 waveData.enemyQueue().length * waveData.spawnsPerQueueEntry()
         );
     }
 
     /**
+     * This method returns a runnable that will perform the next enemy spawn.
+     * @param waveData                              The data object containing the number and types of enemies in this specific wave.
+     * @param currentEntryIndex                     Which entry are we spawning?
+     * @param numConsecutiveSpawnsOfCurrentEntry    How many times has this particular WaveData enemy entry been spawned already?
+     * @return                                      A runnable that will perform the next enemy spawn.
+     */
+    private Runnable getSpawnNextEnemyAction(WaveData waveData, int[] currentEntryIndex, int[] numConsecutiveSpawnsOfCurrentEntry){
+        return ()->{
+            TowerDefenseApp.EnemyType nextEnemyType = waveData.enemyQueue()[currentEntryIndex[0]];
+
+            if(nextEnemyType != null)
+                spawnEnemy(nextEnemyType.name());
+
+            numConsecutiveSpawnsOfCurrentEntry[0]++;
+            if(numConsecutiveSpawnsOfCurrentEntry[0] >= waveData.spawnsPerQueueEntry()) {
+                numConsecutiveSpawnsOfCurrentEntry[0] = 0;
+                currentEntryIndex[0]++;
+
+                if(currentEntryIndex[0] == waveData.enemyQueue().length)
+                    onLastSpawnInWave();
+            }
+        };
+    }
+
+    /**
+     * This method spawns an enemy and calls it's reinitialization method (pooling only).
+     * @param enemyName     This should match the name of the enemy's "Spawns()" annotation in the Factory.
+     */
+    private void spawnEnemy(String enemyName){
+        Entity enemy = spawn(enemyName, enemySpawnData);
+        Factory.reinitializeEnemy(enemy, enemySpawnData);
+    }
+
+    /**
      * This method is called once per wave, after the last enemy has been spawned
      */
     private void onLastSpawnInWave(){
-        inc(TowerDefenseApp.MONEY, waveDataLevelList.get(currentWaveIndex).funding());
+        fundPlayer(waveDataLevelList.get(currentWaveIndex).funding());
         isActivelySpawning = false;
         startBreakPeriod(WAVE_BREAK_TIME);
         currentWaveIndex++;
+    }
+
+    /**
+     * Increase the players funds.
+     * @param funding   How much should the player receive in funding?
+     */
+    private void fundPlayer(int funding){
+        inc(TowerDefenseApp.MONEY, funding);
     }
 
     /**
