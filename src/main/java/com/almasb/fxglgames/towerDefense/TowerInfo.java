@@ -13,6 +13,9 @@ import javafx.scene.text.Text;
  * Ui to display information about a selected tower
  * author: Andreas Kramer
  */
+/*
+This is a purely UI thing. this is not going to be tested.
+ */
 public class TowerInfo extends VBox {
 
     private final DataForTower data;

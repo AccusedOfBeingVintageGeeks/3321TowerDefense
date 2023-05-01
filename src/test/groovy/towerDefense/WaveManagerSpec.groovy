@@ -51,9 +51,9 @@ class WaveManagerSpec extends Specification {
 
         def gSNEA_Method = waveManager.getClass().getDeclaredMethod(
                 "getSpawnNextEnemyAction",
-                WaveData.class,
-                int[].class,
-                int[].class
+                WaveData,
+                int[],
+                int[]
         )
         gSNEA_Method.setAccessible(true)
 
@@ -61,10 +61,10 @@ class WaveManagerSpec extends Specification {
         //wDL_Field.setAccessible(true)
 
         TowerDefenseApp.EnemyType[] enemyQueue = [TowerDefenseApp.EnemyType.scrub]
-        def wd = new WaveData(enemyQueue, 1, 500, 25)
+        WaveData wd = new WaveData(enemyQueue, 1, 500, 25)
         //def wdl = (List<WaveData>) wDL_Field.get(waveManager)
-        def currentEntryIndex = [0]
-        def numConsecutiveSpawnsOfCurrentEntry = [0]
+        int[] currentEntryIndex = [0]
+        int[] numConsecutiveSpawnsOfCurrentEntry = [0]
 
 
         when:

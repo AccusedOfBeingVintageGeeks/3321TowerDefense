@@ -18,6 +18,9 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.texture;
  * author: Andreas Kramer
  * TowerSymbol consisting of background, texture of the tower and a display for its cost
  */
+/*
+This will not be tested since it is a UI class.
+ */
 public class TowerSymbol extends VBox{
     private StackPane stackPane;
     private DataForTower data;

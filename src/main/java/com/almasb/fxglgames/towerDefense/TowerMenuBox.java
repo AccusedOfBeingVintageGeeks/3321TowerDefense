@@ -11,6 +11,9 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getip;
  * based on code by AlmasB:-<a href="https://github.com/AlmasB/FXGLGames/tree/master/TowerDefense/src/main/java/com/almasb/fxglgames/td/ui/TowerSelectionBox">...</a>
  * Description: UI for sidebar, Player clicks on TowerSymbol and receives a TowerComponent
  */
+/*
+This is a purely UI thing. this is not going to be tested.
+ */
 public class TowerMenuBox extends VBox {
     /**
      * Creates a UI on the right side of the map, with clickable TowerSymbols
