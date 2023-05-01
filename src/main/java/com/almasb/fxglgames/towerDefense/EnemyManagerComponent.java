@@ -9,6 +9,9 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 /**
  * All entities with the Type ENEMY must have this component. The EnemyManagerComponent keeps track of the enemies health and visuals, and is capable of removing the Entity that it is attached to from the GameWorld.
  */
+/*
+This class will not be tested because it is nearly entirely FXGL calls
+ */
 public class EnemyManagerComponent extends Component {
 
     private final int healthCapacity, reward;
