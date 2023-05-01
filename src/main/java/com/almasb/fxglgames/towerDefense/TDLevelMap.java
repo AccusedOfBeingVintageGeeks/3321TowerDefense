@@ -30,7 +30,7 @@ public class TDLevelMap {
      * @param numRows          The number of tiles in the vertical axis.
      * @param numColumns       The number of tiles in the horizontal axis.
      */
-    TDLevelMap(int tileSize, int numColumns, int numRows, List <Entity> blockedEntities, Entity pathEntity) {
+    public TDLevelMap(int tileSize, int numColumns, int numRows, List<Entity> blockedEntities, Entity pathEntity) {
         this.blockedEntities = blockedEntities;
         this.pathEntity = pathEntity;
         TileSize = tileSize;

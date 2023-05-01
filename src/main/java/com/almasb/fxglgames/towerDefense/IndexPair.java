@@ -6,7 +6,7 @@ package com.almasb.fxglgames.towerDefense;
  */
 public class IndexPair {
     public int X, Y;
-    IndexPair(int x, int y)
+    public IndexPair(int x, int y)
     {
         this.X = x;
         this.Y = y;

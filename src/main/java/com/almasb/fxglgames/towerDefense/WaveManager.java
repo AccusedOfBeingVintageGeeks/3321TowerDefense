@@ -19,7 +19,7 @@ public class WaveManager {
     private final SpawnData enemySpawnData;
     final int WAVE_BREAK_TIME = 45;
 
-    private List<WaveData> waveDataLevelList;
+    private List<WaveData> waveDataList;
     private int currentWaveIndex = 0, countdown = WAVE_BREAK_TIME;
     private Timer waveBreakTimer = new Timer();
     private boolean isActivelySpawning;
@@ -30,24 +30,30 @@ public class WaveManager {
     /**
      * @return true iff the last enemy in the last wave has been spawned.
      */
-    public Boolean areAllWavesSpawned(){return currentWaveIndex >= waveDataLevelList.size();}
+    public Boolean areAllWavesSpawned(){return currentWaveIndex >= waveDataList.size();}
 
     /**
      * WaveManager objects manage the spawning of waves of enemy entities.
      * @param enemySpawnData            Must include the key-value: "waypoints" - List of Point2D
-     * @param waveDataLevelListFileName The name of the json file at the path /assets/levels/waveDataLists/
+     * @param waveDataLevelListName The name of the json file at the path /assets/levels/waveDataLists/
      */
-    WaveManager(SpawnData enemySpawnData, String waveDataLevelListFileName){
+    public WaveManager(SpawnData enemySpawnData, String waveDataLevelListName){
         this.enemySpawnData = enemySpawnData;
         try{
-            InputStream stream = getAssetLoader().getStream("/assets/levels/waveDataLists/" + waveDataLevelListFileName);
-            waveDataLevelList = new ObjectMapper().readValue(stream, new TypeReference<>(){});
+            InputStream stream = getAssetLoader().getStream("/assets/levels/waveDataLists/" + waveDataLevelListName + ".json");
+            waveDataList = new ObjectMapper().readValue(stream, new TypeReference<>(){});
         }
         catch (Exception e) {
             //Failed to find or parse data, not sure how to handle it right now.
             //Seems like it would be a game-breaking problem.
             System.out.println(e.getMessage());
         }
+    }
+
+    /**
+     * Call this method to activate the WaveManager at the start of the game.
+     */
+    public void activate(){
         startBreakPeriod(WAVE_BREAK_TIME);
     }
 
@@ -56,10 +62,10 @@ public class WaveManager {
      */
     public void spawnNextWave(){
         waveBreakTimer.clear();
-        if(currentWaveIndex >= waveDataLevelList.size())
+        if(currentWaveIndex >= waveDataList.size())
             throw new IndexOutOfBoundsException("Last wave for this level has already been spawned");
 
-        spawnWave(waveDataLevelList.get(currentWaveIndex));
+        spawnWave(waveDataList.get(currentWaveIndex));
     }
 
     /**
@@ -115,7 +121,7 @@ public class WaveManager {
      * This method is called once per wave, after the last enemy has been spawned
      */
     private void onLastSpawnInWave(){
-        fundPlayer(waveDataLevelList.get(currentWaveIndex).funding());
+        fundPlayer(waveDataList.get(currentWaveIndex).funding());
         isActivelySpawning = false;
         startBreakPeriod(WAVE_BREAK_TIME);
         currentWaveIndex++;
@@ -143,7 +149,7 @@ public class WaveManager {
                         countdown--;
                     else {
                         countdown = durationInSec;
-                        if(currentWaveIndex <waveDataLevelList.size())
+                        if(currentWaveIndex < waveDataList.size())
                             spawnNextWave();
                     }
                 },
