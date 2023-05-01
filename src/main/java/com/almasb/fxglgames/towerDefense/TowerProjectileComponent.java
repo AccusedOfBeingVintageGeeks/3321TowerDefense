@@ -31,6 +31,7 @@ public class TowerProjectileComponent extends Component {
      * keeps projectile moving and headed towards prey
      * @param tpf time per frame
      */
+    //Cannot test due to FXGL calls
     @Override
     public void onUpdate(double tpf){
         if(!prey.isActive()){
@@ -49,6 +50,7 @@ public class TowerProjectileComponent extends Component {
     /**
      * removes Projectile and Enemy (prey) from world
      */
+    //Cannot test due to FXGL calls
     private void preyHit(){
         entity.removeFromWorld();
         int remainingHealth = prey.getComponent(EnemyManagerComponent.class).getRemainingHealth();

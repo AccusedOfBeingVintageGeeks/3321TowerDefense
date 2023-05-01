@@ -50,6 +50,7 @@ class TDLevelMapSpec extends Specification {
 
     }
 
+    //Unable to test due to reliance on FXGL tmx parser. It doesn't initialize path until the game is launched.
 //   def "initializePathPoints creates PathPoints for each polylineEntry"() {
 //
 //       given:

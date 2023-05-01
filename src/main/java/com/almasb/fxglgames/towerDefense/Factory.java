@@ -21,6 +21,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 import java.util.List;
 
+//Unable to test class. Everything relies on FXGL calls.
 public class Factory implements EntityFactory {
 
     //creating entity of type TOWER

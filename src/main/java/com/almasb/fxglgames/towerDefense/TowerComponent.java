@@ -19,6 +19,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
  * TowerComponent shoots Entities of type Enemy once set in place
  */
 
+//Unable to test. Every method relies on FXGL calls.
 public class TowerComponent extends Component {
 
     private final DataForTower data;
