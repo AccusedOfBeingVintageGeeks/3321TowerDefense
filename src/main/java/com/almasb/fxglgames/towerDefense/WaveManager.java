@@ -35,12 +35,12 @@ public class WaveManager {
     /**
      * WaveManager objects manage the spawning of waves of enemy entities.
      * @param enemySpawnData            Must include the key-value: "waypoints" - List of Point2D
-     * @param waveDataLevelListName The name of the json file at the path /assets/levels/waveDataLists/
+     * @param waveDataLevelListPath The name of the json file at the path /assets/levels/waveDataLists/
      */
-    public WaveManager(SpawnData enemySpawnData, String waveDataLevelListName){
+    public WaveManager(SpawnData enemySpawnData, String waveDataLevelListPath){
         this.enemySpawnData = enemySpawnData;
         try{
-            InputStream stream = getAssetLoader().getStream("/assets/levels/waveDataLists/" + waveDataLevelListName + ".json");
+            InputStream stream = getAssetLoader().getStream(waveDataLevelListPath + ".json");
             waveDataList = new ObjectMapper().readValue(stream, new TypeReference<>(){});
         }
         catch (Exception e) {
@@ -51,7 +51,7 @@ public class WaveManager {
     }
 
     /**
-     * Call this method to activate the WaveManager at the start of the game.
+     * Call this method to activate the WaveManager at the start of the game, i.e. when you're GO to start spawning
      */
     public void activate(){
         startBreakPeriod(WAVE_BREAK_TIME);

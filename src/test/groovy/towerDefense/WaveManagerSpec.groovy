@@ -33,7 +33,7 @@ class WaveManagerSpec extends Specification {
 
     void setup(){
         makeNewWorld("src/main/resources/assets/levels/tmx/first_level.tmx")
-        waveManager = new WaveManager(new SpawnData(),"waveDataListA")
+        waveManager = new WaveManager(new SpawnData(),"src/main/resources/assets/levels/waveDataLists/waveDataListA")
     }
 
 //    def "test spawnWave"() {

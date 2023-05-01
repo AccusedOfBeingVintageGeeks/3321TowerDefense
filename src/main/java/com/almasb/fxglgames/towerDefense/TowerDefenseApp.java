@@ -182,7 +182,7 @@ public class TowerDefenseApp extends GameApplication {
 
         SpawnData enemySpawnData = new SpawnData();
         enemySpawnData.put("waypoints", levelMap.getPathPoints());
-        waveManager = new WaveManager(enemySpawnData, waveDataFilename);
+        waveManager = new WaveManager(enemySpawnData, "/assets/levels/waveDataLists/" + waveDataFilename);
     }
 
     private void loadTowers(){
