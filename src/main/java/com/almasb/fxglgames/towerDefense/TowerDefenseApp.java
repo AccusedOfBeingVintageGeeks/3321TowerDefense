@@ -86,6 +86,7 @@ public class TowerDefenseApp extends GameApplication {
         this.waveDataFilename = waveDataFilename;
     }
 
+    //not tested since these are all methods of FXGL
     @Override
     protected void initSettings(GameSettings settings) {
         // initialize common game / window settings.
@@ -106,12 +107,14 @@ public class TowerDefenseApp extends GameApplication {
         settings.setFullScreenFromStart(true);
     }
 
+    //TODO
     @Override
     protected void initGameVars(Map<String, Object> vars) {
         vars.put(MONEY,50);
     }
 
 
+    //Not tested, this is all FXGL
     @Override
     protected void initInput() {
         Input input = getInput();
@@ -170,6 +173,7 @@ public class TowerDefenseApp extends GameApplication {
     /**
      * Call this method to load the next level. Specifically, it initializes the tile map and wave manager.
      */
+    //Not tested, is FXGL calls
     private void loadLevel(){
         setLevelFromMap("tmx/" + levelName + ".tmx");
         levelMap = new TDLevelMap(
@@ -185,6 +189,7 @@ public class TowerDefenseApp extends GameApplication {
         waveManager = new WaveManager(enemySpawnData, "/assets/levels/waveDataLists/" + waveDataFilename);
     }
 
+    //Not tested, FXGL calls
     private void loadTowers(){
         String towerSpecifications = "towerdata.json";
         try {
@@ -195,6 +200,7 @@ public class TowerDefenseApp extends GameApplication {
         }
     }
 
+    //Not tested, FXGL calls
     @Override
     protected void initGame() {
         Rectangle background = new Rectangle(WINDOW_WIDTH - TILE_SIZE*2, 0,TILE_SIZE*2,getAppHeight());
@@ -205,6 +211,8 @@ public class TowerDefenseApp extends GameApplication {
         loadLevel();
         waveManager.activate();
     }
+
+    //Not tested, FXGL calls
     @Override
     protected void initUI() {
         loadTowers();
@@ -224,6 +232,7 @@ public class TowerDefenseApp extends GameApplication {
         addUINode(readyUINode,WINDOW_WIDTH - TILE_SIZE*2,WINDOW_HEIGHT - TILE_SIZE);
     }
 
+    //Not tested, FXGL calls
     @Override
     protected void onUpdate(double tpf) {
         List<Entity> currentlySpawnedEnemies = getGameWorld().getEntitiesByType(Type.ENEMY);
@@ -254,6 +263,8 @@ public class TowerDefenseApp extends GameApplication {
         );
 
     }
+
+    //Not tested, FXGL calls
     public void onTowerSelection(DataForTower towerData){
         if(geti(MONEY) < towerData.cost()){
             showMessage("Not enough money!");
@@ -269,6 +280,7 @@ public class TowerDefenseApp extends GameApplication {
         }
     }
 
+    //Not tested, FXGL calls
     public void onTowerSell(DataForTower data, TowerComponent tower){
         IndexPair tileIndices = levelMap.getTileIndexFromPoint(tower.getEntity().getPosition());
         inc(MONEY,data.cost() / 3); // increase amount of money by about a third of tower cost
@@ -277,7 +289,6 @@ public class TowerDefenseApp extends GameApplication {
         levelMap.setTileAvailability(true, tileIndices);
         tower.getEntity().removeFromWorld();
     }
-
 
     public static void main(String[] args) {
         launch(args);
