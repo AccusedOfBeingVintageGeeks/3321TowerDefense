@@ -12,6 +12,9 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 /**
  * The ReadyUINode is for the button itself and the wave info text above it.
  */
+/*
+TODO decide whether it is worth it to test the JavaFX in this
+ */
 public class ReadyUINode extends Parent {
     Button button;
     Text waveInfoText;

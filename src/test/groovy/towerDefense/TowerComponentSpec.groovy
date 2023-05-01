@@ -1,4 +1,4 @@
-package com.almasb.fxglgames.towerDefence
+package towerDefense
 
 import spock.lang.Specification
 

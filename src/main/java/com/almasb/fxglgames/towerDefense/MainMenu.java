@@ -20,6 +20,10 @@ public class MainMenu extends FXGLMenu {
     /**
      * This is the constructor for the main menu.
      */
+    /*
+    We decided that this class doesn't need testing since it is entirely FXGL calls. We are also unable to
+    get testing to work with FXGL calls.
+     */
     public MainMenu() {
         super(MenuType.MAIN_MENU);
 

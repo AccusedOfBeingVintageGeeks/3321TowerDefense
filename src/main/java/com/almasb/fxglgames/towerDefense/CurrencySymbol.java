@@ -12,6 +12,9 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 /**
  * UI node to display the player's current amount of money
  */
+/*
+Not testing since this a part of UI
+ */
 public class CurrencySymbol extends HBox {
 
     public CurrencySymbol(){
