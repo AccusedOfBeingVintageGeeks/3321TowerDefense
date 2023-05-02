@@ -1,4 +1,4 @@
-package com.almasb.fxglgames.towerDefence;
+package com.almasb.fxglgames.towerDefense;
 
 /**
  * A pair of integers. Useful for methods dealing with 2-dimensional arrays.
@@ -6,9 +6,14 @@ package com.almasb.fxglgames.towerDefence;
  */
 public class IndexPair {
     public int X, Y;
-    IndexPair(int x, int y)
+    public IndexPair(int x, int y)
     {
         this.X = x;
         this.Y = y;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + X + "," + Y + ")";
     }
 }

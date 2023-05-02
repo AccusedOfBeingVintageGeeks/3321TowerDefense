@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>C:/Users/dakoz/Documents/FXGL/3321TowerDefense/src/main</OriginalElement>
+  <nodes>
+    <node x="1776.4018987341772" y="589.0">com.almasb.fxglgames.towerDefense.WaveData</node>
+    <node x="434.4857594936708" y="-14.0">com.almasb.fxglgames.towerDefense.DataForTower</node>
+    <node x="2007.0" y="1298.0">com.almasb.fxglgames.towerDefense.TowerDefenseApp</node>
+    <node x="1770.4018987341772" y="915.0">com.almasb.fxglgames.towerDefense.WaveManager</node>
+    <node x="2202.25" y="1688.0">com.almasb.fxglgames.towerDefense.TowerDefenseApp.Layer</node>
+    <node x="1849.4018987341772" y="366.5">com.almasb.fxglgames.towerDefense.TowerDefenseApp.EnemyType</node>
+    <node x="2144.901898734177" y="612.0">com.almasb.fxglgames.towerDefense.IndexPair</node>
+    <node x="759.0" y="552.5">com.almasb.fxglgames.towerDefense.EnemyManagerComponent</node>
+    <node x="1253.25" y="600.5">com.almasb.fxglgames.towerDefense.TowerProjectileComponent</node>
+    <node x="438.0" y="542.0">com.almasb.fxglgames.towerDefense.TowerComponent</node>
+    <node x="435.125" y="355.0">com.almasb.fxglgames.towerDefense.TowerInfo</node>
+    <node x="166.0" y="986.0">com.almasb.fxglgames.towerDefense.MainMenu</node>
+    <node x="739.4018987341772" y="905.5">com.almasb.fxglgames.towerDefense.Factory</node>
+    <node x="-121.0" y="378.0">com.almasb.fxglgames.towerDefense.TowerSymbol</node>
+    <node x="1170.4018987341772" y="998.5">com.almasb.fxglgames.towerDefense.CurrencySymbol</node>
+    <node x="1370.4018987341772" y="962.0">com.almasb.fxglgames.towerDefense.ReadyUINode</node>
+    <node x="178.0" y="624.5">com.almasb.fxglgames.towerDefense.MenuButton</node>
+    <node x="2058.401898734177" y="823.0">com.almasb.fxglgames.towerDefense.TDLevelMap</node>
+    <node x="-130.0" y="624.5">com.almasb.fxglgames.towerDefense.TowerMenuBox</node>
+    <node x="2002.25" y="1688.0">com.almasb.fxglgames.towerDefense.TowerDefenseApp.Type</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerDefenseApp" target="com.almasb.fxglgames.towerDefense.TowerMenuBox" relationship="CREATE">
+      <point x="-124.0" y="-170.0" />
+      <point x="2069.0" y="1277.0" />
+      <point x="1234.5" y="1277.0" />
+      <point x="1234.5" y="1267.0" />
+      <point x="14.0" y="1267.0" />
+      <point x="0.0" y="31.0" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.MainMenu" target="com.almasb.fxglgames.towerDefense.MenuButton" relationship="CREATE">
+      <point x="0.0" y="-43.5" />
+      <point x="0.0" y="31.0" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerInfo" target="com.almasb.fxglgames.towerDefense.DataForTower" relationship="TO_ONE">
+      <point x="0.0" y="-66.5" />
+      <point x="646.625" y="329.0" />
+      <point x="624.4857594936708" y="329.0" />
+      <point x="0.0" y="158.5" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerDefenseApp" target="com.almasb.fxglgames.towerDefense.ReadyUINode" relationship="TO_ONE">
+      <point x="0.0" y="-170.0" />
+      <point x="2193.0" y="1277.0" />
+      <point x="2205.1550632911394" y="1277.0" />
+      <point x="2205.1550632911394" y="1257.0" />
+      <point x="1647.1518987341772" y="1257.0" />
+      <point x="92.25" y="67.5" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerComponent" target="com.almasb.fxglgames.towerDefense.TowerInfo" relationship="TO_ONE">
+      <point x="-75.25" y="-113.5" />
+      <point x="513.25" y="520.0" />
+      <point x="583.5" y="520.0" />
+      <point x="583.5" y="510.0" />
+      <point x="540.875" y="510.0" />
+      <point x="-105.75" y="66.5" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerDefenseApp" target="com.almasb.fxglgames.towerDefense.TDLevelMap" relationship="TO_ONE">
+      <point x="0.0" y="-170.0" />
+      <point x="2193.0" y="1277.0" />
+      <point x="2205.1550632911394" y="1277.0" />
+      <point x="2205.1550632911394" y="1257.0" />
+      <point x="2308.151898734177" y="1257.0" />
+      <point x="83.25" y="206.5" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.WaveManager" target="com.almasb.fxglgames.towerDefense.WaveData" relationship="TO_MANY">
+      <point x="0.0" y="-114.5" />
+      <point x="0.0" y="66.5" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerDefenseApp.Layer" target="com.almasb.fxglgames.towerDefense.TowerDefenseApp" relationship="INNER_CLASS">
+      <point x="0.0" y="-55.0" />
+      <point x="2293.75" y="1663.0" />
+      <point x="2193.0" y="1663.0" />
+      <point x="0.0" y="170.0" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerDefenseApp" target="com.almasb.fxglgames.towerDefense.ReadyUINode" relationship="CREATE">
+      <point x="-124.0" y="-170.0" />
+      <point x="2069.0" y="1277.0" />
+      <point x="1234.5" y="1277.0" />
+      <point x="1234.5" y="1267.0" />
+      <point x="1462.6518987341772" y="1267.0" />
+      <point x="-92.25" y="67.5" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.Factory" target="com.almasb.fxglgames.towerDefense.TowerProjectileComponent" relationship="CREATE">
+      <point x="0.0" y="-124.0" />
+      <point x="944.9018987341772" y="796.0" />
+      <point x="1409.25" y="796.0" />
+      <point x="0.0" y="55.0" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerComponent" target="com.almasb.fxglgames.towerDefense.TowerInfo" relationship="CREATE">
+      <point x="75.25" y="-113.5" />
+      <point x="663.75" y="520.0" />
+      <point x="752.375" y="520.0" />
+      <point x="105.75" y="66.5" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerMenuBox" target="com.almasb.fxglgames.towerDefense.TowerSymbol" relationship="CREATE">
+      <point x="0.0" y="-31.0" />
+      <point x="0.0" y="43.5" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerDefenseApp" target="com.almasb.fxglgames.towerDefense.MainMenu" relationship="CREATE">
+      <point x="-124.0" y="-170.0" />
+      <point x="2069.0" y="1277.0" />
+      <point x="1234.5" y="1277.0" />
+      <point x="1234.5" y="1267.0" />
+      <point x="298.0" y="1267.0" />
+      <point x="0.0" y="43.5" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.WaveData" target="com.almasb.fxglgames.towerDefense.TowerDefenseApp.EnemyType" relationship="TO_MANY">
+      <point x="0.0" y="-66.5" />
+      <point x="-55.0" y="55.0" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.Factory" target="com.almasb.fxglgames.towerDefense.TowerComponent" relationship="CREATE">
+      <point x="0.0" y="-124.0" />
+      <point x="944.9018987341772" y="796.0" />
+      <point x="588.5" y="796.0" />
+      <point x="0.0" y="113.5" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerDefenseApp" target="com.almasb.fxglgames.towerDefense.WaveManager" relationship="TO_ONE">
+      <point x="0.0" y="-170.0" />
+      <point x="2193.0" y="1277.0" />
+      <point x="2205.1550632911394" y="1277.0" />
+      <point x="2205.1550632911394" y="1257.0" />
+      <point x="1971.401898734177" y="1257.0" />
+      <point x="67.0" y="114.5" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerDefenseApp" target="com.almasb.fxglgames.towerDefense.Factory" relationship="CREATE">
+      <point x="-124.0" y="-170.0" />
+      <point x="2069.0" y="1277.0" />
+      <point x="1234.5" y="1277.0" />
+      <point x="1234.5" y="1267.0" />
+      <point x="944.9018987341772" y="1267.0" />
+      <point x="0.0" y="124.0" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerDefenseApp.Type" target="com.almasb.fxglgames.towerDefense.TowerDefenseApp" relationship="INNER_CLASS">
+      <point x="0.0" y="-55.0" />
+      <point x="2092.25" y="1663.0" />
+      <point x="2193.0" y="1663.0" />
+      <point x="0.0" y="170.0" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerDefenseApp" target="com.almasb.fxglgames.towerDefense.WaveManager" relationship="CREATE">
+      <point x="-124.0" y="-170.0" />
+      <point x="2069.0" y="1277.0" />
+      <point x="1234.5" y="1277.0" />
+      <point x="1234.5" y="1267.0" />
+      <point x="1837.4018987341772" y="1267.0" />
+      <point x="-67.0" y="114.5" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerSymbol" target="com.almasb.fxglgames.towerDefense.DataForTower" relationship="TO_ONE">
+      <point x="0.0" y="-43.5" />
+      <point x="14.0" y="329.0" />
+      <point x="624.4857594936708" y="329.0" />
+      <point x="0.0" y="158.5" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerDefenseApp.EnemyType" target="com.almasb.fxglgames.towerDefense.TowerDefenseApp" relationship="INNER_CLASS">
+      <point x="55.0" y="55.0" />
+      <point x="2014.401898734177" y="520.0" />
+      <point x="2412.901898734177" y="520.0" />
+      <point x="2412.901898734177" y="1277.0" />
+      <point x="2317.0" y="1277.0" />
+      <point x="124.0" y="-170.0" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerDefenseApp" target="com.almasb.fxglgames.towerDefense.DataForTower" relationship="TO_MANY">
+      <point x="0.0" y="-170.0" />
+      <point x="2193.0" y="1277.0" />
+      <point x="2205.1550632911394" y="1277.0" />
+      <point x="2205.1550632911394" y="1257.0" />
+      <point x="2401.901898734177" y="1257.0" />
+      <point x="2401.901898734177" y="329.0" />
+      <point x="624.4857594936708" y="329.0" />
+      <point x="0.0" y="158.5" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TDLevelMap" target="com.almasb.fxglgames.towerDefense.IndexPair" relationship="CREATE">
+      <point x="0.0" y="-206.5" />
+      <point x="0.0" y="43.5" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerDefenseApp" target="com.almasb.fxglgames.towerDefense.TDLevelMap" relationship="CREATE">
+      <point x="-124.0" y="-170.0" />
+      <point x="2069.0" y="1277.0" />
+      <point x="1234.5" y="1277.0" />
+      <point x="1234.5" y="1267.0" />
+      <point x="2141.651898734177" y="1267.0" />
+      <point x="-83.25" y="206.5" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerComponent" target="com.almasb.fxglgames.towerDefense.DataForTower" relationship="TO_ONE">
+      <point x="-75.25" y="-113.5" />
+      <point x="513.25" y="520.0" />
+      <point x="583.5" y="520.0" />
+      <point x="583.5" y="510.0" />
+      <point x="424.625" y="510.0" />
+      <point x="424.625" y="329.0" />
+      <point x="624.4857594936708" y="329.0" />
+      <point x="0.0" y="158.5" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.Factory" target="com.almasb.fxglgames.towerDefense.EnemyManagerComponent" relationship="CREATE">
+      <point x="0.0" y="-124.0" />
+      <point x="944.9018987341772" y="796.0" />
+      <point x="919.0" y="796.0" />
+      <point x="0.0" y="103.0" />
+    </edge>
+    <edge source="com.almasb.fxglgames.towerDefense.TowerDefenseApp" target="com.almasb.fxglgames.towerDefense.CurrencySymbol" relationship="CREATE">
+      <point x="-124.0" y="-170.0" />
+      <point x="2069.0" y="1277.0" />
+      <point x="1234.5" y="1277.0" />
+      <point x="1234.5" y="1267.0" />
+      <point x="1260.4018987341772" y="1267.0" />
+      <point x="0.0" y="31.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.26692139737991266" showDependencies="true" x="1151.5" y="902.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

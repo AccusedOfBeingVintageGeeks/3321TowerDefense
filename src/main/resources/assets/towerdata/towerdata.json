@@ -1,0 +1,41 @@
+[
+  {
+    "name": "Turret",
+    "imageName": "cannon.png",
+    "cost": 50,
+    "fireRadius": 200,
+    "fireRate": 0.9,
+    "projectileSpeed": 500,
+    "projectileDamage": 50,
+    "projectileImageName": "bullet.png",
+    "projectileHeight": 13,
+    "projectileWidth": 8,
+    "effects": null
+  },
+  {
+    "name": "Machine-gun",
+    "imageName": "machinegun.png",
+    "cost": 100,
+    "fireRadius": 150,
+    "fireRate": 0.3,
+    "projectileSpeed": 300,
+    "projectileDamage": 25,
+    "projectileImageName": "projectile.png",
+    "projectileHeight": 10,
+    "projectileWidth": 10,
+    "effects": null
+  },
+  {
+    "name": "Missile-launcher",
+    "imageName": "missilelauncher.png",
+    "cost": 200,
+    "fireRadius": 300,
+    "fireRate": 2.0,
+    "projectileSpeed": 150,
+    "projectileDamage": 150,
+    "projectileImageName": "Missile.png",
+    "projectileHeight": 20,
+    "projectileWidth": 15,
+    "effects": null
+  }
+]
