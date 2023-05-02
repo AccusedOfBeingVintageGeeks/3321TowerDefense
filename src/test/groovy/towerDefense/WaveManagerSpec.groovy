@@ -1,5 +1,6 @@
 package towerDefense
 
+import com.almasb.fxgl.dsl.FXGL
 import com.almasb.fxgl.entity.Entity
 import com.almasb.fxgl.entity.GameWorld
 import com.almasb.fxgl.entity.SpawnData
@@ -9,6 +10,7 @@ import com.almasb.fxglgames.towerDefense.Factory
 import com.almasb.fxglgames.towerDefense.TowerDefenseApp
 import com.almasb.fxglgames.towerDefense.WaveData
 import com.almasb.fxglgames.towerDefense.WaveManager
+import javafx.util.Duration
 import spock.lang.Specification
 
 class WaveManagerSpec extends Specification {
@@ -46,8 +48,6 @@ class WaveManagerSpec extends Specification {
 //    }
     def "test getSpawnNextEnemyAction"(){
         given:
-        //makeNewWorld("src/main/resources/assets/levels/tmx/first_level.tmx")
-        //waveManager = new WaveManager(new SpawnData(),"waveDataListA")
 
         def gSNEA_Method = waveManager.getClass().getDeclaredMethod(
                 "getSpawnNextEnemyAction",
@@ -57,25 +57,28 @@ class WaveManagerSpec extends Specification {
         )
         gSNEA_Method.setAccessible(true)
 
-        //def wDL_Field = waveManager.getClass().getDeclaredField("waveDataList")
-        //wDL_Field.setAccessible(true)
-
-        TowerDefenseApp.EnemyType[] enemyQueue = [TowerDefenseApp.EnemyType.scrub]
+        TowerDefenseApp.EnemyType[] enemyQueue = [null, TowerDefenseApp.EnemyType.scrub, null]
         WaveData wd = new WaveData(enemyQueue, 1, 500, 25)
-        //def wdl = (List<WaveData>) wDL_Field.get(waveManager)
-        int[] currentEntryIndex = [0]
-        int[] numConsecutiveSpawnsOfCurrentEntry = [0]
+        int[] currentEntryIndex = [0], numConsecutiveSpawnsOfCurrentEntry = [0]
+        int ogIndex = currentEntryIndex[0], ogNum = numConsecutiveSpawnsOfCurrentEntry[0]
 
 
         when:
-        def action = gSNEA_Method.invoke(//java.lang.IllegalArgumentException: argument type mismatch
+
+        def actionResult = gSNEA_Method.invoke(
                 waveManager,
                 wd,
-                //wdl.get(0),//wd is null? Should've been initialized in the WaveManager constructor in setup()
                 currentEntryIndex,
                 numConsecutiveSpawnsOfCurrentEntry)
 
+        def thread = new Thread(actionResult as Runnable)
+        thread.run()
+        thread.join()
+
+
         then:
-        2==2
+
+        currentEntryIndex[0] == ogIndex + 1 //should increment since there's more enemies in the queue for this test
+        numConsecutiveSpawnsOfCurrentEntry[0] == ogNum //should increment, but decrement again because for this test spawnsPerQueueEntry is just 1
     }
 }
