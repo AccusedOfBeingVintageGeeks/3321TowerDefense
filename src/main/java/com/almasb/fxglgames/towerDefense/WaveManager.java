@@ -120,6 +120,7 @@ public class WaveManager {
     /**
      * This method is called once per wave, after the last enemy has been spawned
      */
+    //Can't test because fundplayer requires FXGL to be initialized
     private void onLastSpawnInWave(){
         fundPlayer(waveDataList.get(currentWaveIndex).funding());
         isActivelySpawning = false;

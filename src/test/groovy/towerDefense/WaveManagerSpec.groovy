@@ -13,6 +13,8 @@ import com.almasb.fxglgames.towerDefense.WaveManager
 import javafx.util.Duration
 import spock.lang.Specification
 
+import static com.almasb.fxgl.dsl.FXGL.inc
+
 class WaveManagerSpec extends Specification {
     List<Entity> bTiles
     Entity path
@@ -78,7 +80,26 @@ class WaveManagerSpec extends Specification {
 
         then:
 
-        currentEntryIndex[0] == ogIndex + 1 //should increment since there's more enemies in the queue for this test
-        numConsecutiveSpawnsOfCurrentEntry[0] == ogNum //should increment, but decrement again because for this test spawnsPerQueueEntry is just 1
+        (currentEntryIndex[0] == ogIndex + 1 //should increment since there's more enemies in the queue for this test
+        && numConsecutiveSpawnsOfCurrentEntry[0] == ogNum) //should increment, but decrement again because for this test spawnsPerQueueEntry is just 1
     }
+    
+
+    def "areAllWavesSpawned returns correct value"() {
+
+        given:
+        def waveDataList = waveManager.getClass().getDeclaredField("waveDataList")
+        waveDataList.setAccessible(true)
+        List<WaveData> data = new LinkedList<WaveData>()
+        data.add(new WaveData([TowerDefenseApp.EnemyType.scrub, TowerDefenseApp.EnemyType.scrub] as TowerDefenseApp.EnemyType[], 1, 1, 1))
+
+        when:
+        waveDataList.set(waveManager, data)
+
+        then:
+        !waveManager.areAllWavesSpawned()
+
+
+    }
+
 }
