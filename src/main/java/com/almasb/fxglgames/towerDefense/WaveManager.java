@@ -37,6 +37,7 @@ public class WaveManager {
      * @param enemySpawnData            Must include the key-value: "waypoints" - List of Point2D
      * @param waveDataLevelListPath The name of the json file at the path /assets/levels/waveDataLists/
      */
+    //Can't test due to FXGL
     public WaveManager(SpawnData enemySpawnData, String waveDataLevelListPath){
         this.enemySpawnData = enemySpawnData;
         try{
@@ -53,6 +54,7 @@ public class WaveManager {
     /**
      * Call this method to activate the WaveManager at the start of the game, i.e. when you're GO to start spawning
      */
+    //Can't test due to FXGL
     public void activate(){
         startBreakPeriod(WAVE_BREAK_TIME);
     }
@@ -60,6 +62,7 @@ public class WaveManager {
     /**
      * Spawns the next wave of enemies. Will throw an exception if called after the last wave has already been spawned.
      */
+    //Can't test due to FXGL
     public void spawnNextWave(){
         waveBreakTimer.clear();
         if(currentWaveIndex >= waveDataList.size())
@@ -72,6 +75,7 @@ public class WaveManager {
      * Begin regularly spawning a wave of enemies according to the passed waveData object.
      * @param waveData Includes the enemyQueue, spawnsPerQueueEntry, and deltaSpawnInMilliseconds.
      */
+    //Can't test due to FXGL
     private void spawnWave(WaveData waveData) {
         isActivelySpawning = true;
 
@@ -112,6 +116,7 @@ public class WaveManager {
      * This method spawns an enemy and calls it's reinitialization method (pooling only).
      * @param enemyName     This should match the name of the enemy's "Spawns()" annotation in the Factory.
      */
+    //Can't test due to FXGL
     private void spawnEnemy(String enemyName){
         Entity enemy = spawn(enemyName, enemySpawnData);
         Factory.reinitializeEnemy(enemy, enemySpawnData);
@@ -132,6 +137,7 @@ public class WaveManager {
      * Increase the players funds.
      * @param funding   How much should the player receive in funding?
      */
+    //Can't test due to FXGL
     private void fundPlayer(int funding){
         inc(TowerDefenseApp.MONEY, funding);
     }
@@ -140,6 +146,7 @@ public class WaveManager {
      * This method starts or restarts the waveBreakTimer.
      * @param durationInSec An integer, how long should the next break be?
      */
+    //Can't test due to FXGL
     private void startBreakPeriod(int durationInSec){
         waveBreakTimer.clear();
         waveBreakTimer = getGameTimer();

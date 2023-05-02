@@ -83,7 +83,7 @@ class WaveManagerSpec extends Specification {
         (currentEntryIndex[0] == ogIndex + 1 //should increment since there's more enemies in the queue for this test
         && numConsecutiveSpawnsOfCurrentEntry[0] == ogNum) //should increment, but decrement again because for this test spawnsPerQueueEntry is just 1
     }
-    
+
 
     def "areAllWavesSpawned returns correct value"() {
 
