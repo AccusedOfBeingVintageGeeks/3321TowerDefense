@@ -39,6 +39,9 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         gradle-version: current
-    
+
+    - name: Create SBOM
+      run: ./gradlew cyclonedxBom
+
     - name: Execute Gradle build
       run: ./gradlew build
