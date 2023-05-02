@@ -91,7 +91,7 @@ public class TowerDefenseApp extends GameApplication {
     protected void initSettings(GameSettings settings) {
         // initialize common game / window settings.
         settings.setTitle("Tower Defense");
-        settings.setVersion("0.05");
+        settings.setVersion("1.0");
         settings.setWidth(WINDOW_WIDTH);
         settings.setHeight(WINDOW_HEIGHT);
         settings.setGameMenuEnabled(true);
